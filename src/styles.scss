@@ -1,0 +1,20 @@
+// ✅ All `@use` rules MUST be at the top of the file!
+//@use '@angular/material' as mat;
+@use 'styles/material-theme'; // ✅ Import the Material theme
+
+// ✅ Now CSS rules can follow AFTER `@use`
+//html {
+//  @include mat.theme((
+//    color: (
+//      theme-type: light,
+//      primary: mat.$m2-indigo-palette,  // ✅ Fix color reference
+//      tertiary: mat.$m2-blue-palette,
+//    ),
+//    typography: Roboto,
+//    density: 0,
+//  ));
+//}
+
+/* ✅ Global styles */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
