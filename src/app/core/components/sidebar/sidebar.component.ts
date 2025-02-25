@@ -9,6 +9,6 @@ import {RouterModule} from '@angular/router';
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
-    @Input() isOpen = true;
+    @Input() isOpen = false;
 
 }

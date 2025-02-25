@@ -1,6 +1,10 @@
-// ✅ All `@use` rules MUST be at the top of the file!
-//@use '@angular/material' as mat;
-@use 'styles/material-theme'; // ✅ Import the Material theme
+@use 'app/styles/material-theme'; // ✅ Import Material theme
+//@use 'app/styles/typography';     // ✅ Import typography styles
+//@use 'app/styles/variables';      // ✅ Import global variables
+//@use 'app/styles/components';     // ✅ Import component styles
+//@use 'app/styles/utilities';      // ✅ Import utility styles
+//@use 'app/styles/animations';     // ✅ Import global animations
+
 
 // ✅ Now CSS rules can follow AFTER `@use`
 //html {
