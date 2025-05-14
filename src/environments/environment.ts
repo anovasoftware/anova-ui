@@ -1,3 +1,4 @@
 export const environment = {
-  production: true // ✅ Development mode
+  production: false, // ✅ Development mode
+  apiBaseUrl: 'http://localhost:8000/'
 };
