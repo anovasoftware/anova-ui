@@ -1,0 +1,63 @@
+@use './variables' as *;
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-spacer {
+  flex: 1 1 auto;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.hide-on-mobile {
+  @media (max-width: 600px) {
+    display: none !important;
+  }
+}
+
+.show-on-mobile {
+  display: none;
+
+  @media (max-width: 600px) {
+    display: inline-block !important;
+  }
+}
+
+.px-2 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.mr-2 {
+  margin-right: 16px;
+}
+
+.anova {
+  color: $brand-anova;
+  font-weight: 600;
+}
+
+.sea {
+  color: $brand-sea;
+  font-weight: 600;
+}
+
+.app-title {
+  font-size: 20px;
+  //text-transform: uppercase;
+  letter-spacing: 1px;
+}

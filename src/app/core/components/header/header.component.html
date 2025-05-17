@@ -1,6 +1,18 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="toggleSidebar()">
+<mat-toolbar color="primary" class="flex-row px-2">
+  <button mat-icon-button (click)="toggleSidebar()" class="mr-2">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>anovasea</span>
+
+  <!-- Text-based logo/title -->
+  <span class="app-title">
+    <span class="anova">anova</span><span class="sea">sea</span>
+  </span>
+  <span class="flex-spacer"></span>
+
+  <div class="flex-row align-center" *ngIf="user">
+    <span class="user-name hide-on-mobile mr-2">{{ user.name }}</span>
+    <button mat-icon-button>
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
 </mat-toolbar>
