@@ -3,16 +3,26 @@
     <mat-icon>menu</mat-icon>
   </button>
 
-  <!-- Text-based logo/title -->
   <span class="app-title">
-    <span class="anova">anova</span><span class="sea">sea</span>
+    <span class="anovaX">anova</span>
+    <span class="sea-wrapper">
+      <img src="icons/seagull.svg" alt="Seagull" class="seagull-icon" />
+      <span class="sea">sea</span>
+    </span>
   </span>
+
   <span class="flex-spacer"></span>
 
+  <!-- Logged-in state -->
   <div class="flex-row align-center" *ngIf="user">
     <span class="user-name hide-on-mobile mr-2">{{ user.name }}</span>
     <button mat-icon-button>
       <mat-icon>account_circle</mat-icon>
     </button>
+  </div>
+
+  <!-- Logged-out state -->
+  <div *ngIf="!user">
+    <button mat-raised-button color="accent" (click)="onLogin()">Login</button>
   </div>
 </mat-toolbar>

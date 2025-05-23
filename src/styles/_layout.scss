@@ -1,4 +1,4 @@
-@use './variables' as *;
+@use 'variables' as *;
 
 .flex-row {
   display: flex;
@@ -46,18 +46,3 @@
   margin-right: 16px;
 }
 
-.anova {
-  color: $brand-anova;
-  font-weight: 600;
-}
-
-.sea {
-  color: $brand-sea;
-  font-weight: 600;
-}
-
-.app-title {
-  font-size: 20px;
-  //text-transform: uppercase;
-  letter-spacing: 1px;
-}

@@ -1,0 +1,46 @@
+@use '../../../../styles/variables' as *;
+@use '@angular/material' as mat;
+
+$brand-anova: mat.m2-get-color-from-palette($custom-blue-palette, 50);
+$brand-sea: #00c4cc;
+$brand-sea-dark: darken($brand-sea, 50%);
+
+.app-title {
+  font-size: 20px;
+  letter-spacing: 1px;
+
+  .anova {
+    color: $brand-anova;
+    font-weight: 400;
+  }
+
+  .sea-wrapper {
+    position: relative;
+    display: inline-block;
+
+    .seagull-icon {
+      position: absolute;
+      top: -14px;              // adjust as needed
+      right: 0;
+      width: 18px;             // smaller size
+      height: auto;
+      filter:
+        brightness(0)
+        saturate(100%)
+        invert(83%)
+        sepia(12%)
+        saturate(488%)
+        hue-rotate(183deg)
+        brightness(96%)
+        contrast(90%);
+      // 👆 Approximates $brand-anova color
+    }
+
+    .sea {
+      color: $brand-sea-dark;
+      font-weight: 400;
+      display: inline-block;
+      padding-right: 6px;
+    }
+  }
+}

@@ -5,11 +5,13 @@ import {CommonModule} from '@angular/common';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 
+
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, MatToolbarModule, MatIconModule, MatButtonModule],
   templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   @Output() toggleSidebarEvent = new EventEmitter<void>();
@@ -22,6 +24,10 @@ export class HeaderComponent implements OnInit {
       next: (data) => this.user = data,
       error: () => this.user = { name: 'Guest' }
     });
+  }
+
+  onLogin(): void {
+
   }
 
   toggleSidebar() {

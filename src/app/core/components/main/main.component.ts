@@ -21,24 +21,28 @@ import { ApiService } from '../../../services/api.service';
 })
 export class MainComponent implements OnInit {
   public message = 'Loading...';
+  public user: { name: string } | null = null;
 
   constructor(
     private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
-    console.log('MainComponent.ngOnInit');
+    // // Sample API call
+    // this.apiService.get('public/test-api/', { param1: 'yoyo' }).subscribe({
+    //   next: (response) => {
+    //     this.message = response.message;
+    //   },
+    //   error: (error) => {
+    //     console.error('Failed to fetch message:', error);
+    //     this.message = 'Error connecting to Django API';
+    //   }
+    // });
 
-    // ✅ Use generic get() call
-    this.apiService.get('public/test-api/', { param1: 'yoyo' }).subscribe({
-      next: (response) => {
-        this.message = response.message;
-        console.log('API response:', response);
-      },
-      error: (error) => {
-        console.error('Failed to fetch message:', error);
-        this.message = 'Error connecting to Django API';
-      }
+    // ✅ Fetch user info
+    this.apiService.get('public/user/').subscribe({
+      next: (data) => this.user = data,
+      error: () => this.user = { name: 'Guest' }
     });
   }
 }

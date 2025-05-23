@@ -1,4 +1,8 @@
-@use 'app/styles/material-theme'; // ✅ Import Material theme
+@use 'styles/material-theme'; // ✅ Import Material theme
+
+@use 'styles/layout'; // ✅ without the underscore or file extension
+
+
 //@use 'app/styles/typography';     // ✅ Import typography styles
 //@use 'app/styles/variables';      // ✅ Import global variables
 //@use 'app/styles/components';     // ✅ Import component styles
