@@ -28,21 +28,10 @@ export class MainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // // Sample API call
-    // this.apiService.get('public/test-api/', { param1: 'yoyo' }).subscribe({
-    //   next: (response) => {
-    //     this.message = response.message;
-    //   },
-    //   error: (error) => {
-    //     console.error('Failed to fetch message:', error);
-    //     this.message = 'Error connecting to Django API';
-    //   }
+    // // ✅ Fetch user info
+    // this.apiService.get('public/user/').subscribe({
+    //   next: (data) => this.user = data,
+    //   error: () => this.user = { name: 'Guest' }
     // });
-
-    // ✅ Fetch user info
-    this.apiService.get('public/user/').subscribe({
-      next: (data) => this.user = data,
-      error: () => this.user = { name: 'Guest' }
-    });
   }
 }

@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 @use 'variables' as *;
 
 .flex-row {
@@ -46,3 +47,21 @@
   margin-right: 16px;
 }
 
+.header-toolbar {
+  min-height: 48px;   // default is 64px for desktop, 56px for mobile
+  height: 48px;
+  padding-left: 0;
+  background-color: mat.m2-get-color-from-palette($custom-blue-palette, 500);
+
+  .mat-toolbar-row {
+    height: 48px;     // ensures inner row also adjusts
+    min-height: 48px;
+  }
+}
+
+.printable-area {
+  width: 80%;           // or max-width: 1200px
+  margin: 0 auto;        // center the content
+  display: flex;
+  align-items: center;
+}

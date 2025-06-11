@@ -1,28 +1,30 @@
-<mat-toolbar color="primary" class="flex-row px-2">
-  <button mat-icon-button (click)="toggleSidebar()" class="mr-2">
-    <mat-icon>menu</mat-icon>
-  </button>
-
-  <span class="app-title">
-    <span class="anovaX">anova</span>
-    <span class="sea-wrapper">
-      <img src="icons/seagull.svg" alt="Seagull" class="seagull-icon" />
-      <span class="sea">sea</span>
-    </span>
-  </span>
-
-  <span class="flex-spacer"></span>
-
-  <!-- Logged-in state -->
-  <div class="flex-row align-center" *ngIf="user">
-    <span class="user-name hide-on-mobile mr-2">{{ user.name }}</span>
-    <button mat-icon-button>
-      <mat-icon>account_circle</mat-icon>
+<div class="header-toolbar">
+  <div class="printable-area">
+    <button mat-icon-button (click)="toggleSidebar()" class="mr-2">
+      <mat-icon>menu</mat-icon>
     </button>
+
+    <span class="app-title" title="version: {{version}}">
+      <span class="anova">anova</span>
+      <span class="sea-wrapper">
+        <img src="icons/seagull.svg" alt="Seagull" class="seagull-icon"/>
+        <span class="sea">sea</span>
+      </span>
+    </span>
+
+    <span class="flex-spacer"></span>
+
+    <!-- Logged-in state -->
+    <div class="flex-row align-center" *ngIf="isLoggedIn">
+      <span class="user-name hide-on-mobile mr-2">{{ user?.name }}</span>
+      <button mat-icon-button>
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+
+    <!-- Logged-out state -->
+    <div *ngIf="!isLoggedIn">
+      <a class="header-link" (click)="onLogin()" href="javascript:void(0)">LOGIN</a>
+    </div>
   </div>
 
-  <!-- Logged-out state -->
-  <div *ngIf="!user">
-    <button mat-raised-button color="accent" (click)="onLogin()">Login</button>
-  </div>
-</mat-toolbar>
