@@ -59,6 +59,22 @@
   }
 }
 
+.header-breadcrumb {
+  min-height: 32px;   // default is 64px for desktop, 56px for mobile
+  height: 32px;
+  padding-left: 0;
+  background-color: mat.m2-get-color-from-palette($custom-blue-palette, 50);
+
+  display: flex;               // enables flex alignment
+  align-items: center;         // centers child content vertically
+
+  .mat-toolbar-row {
+    height: 32px;     // ensures inner row also adjusts
+    min-height: 32px;
+  }
+}
+
+
 .printable-area {
   width: 80%;           // or max-width: 1200px
   margin: 0 auto;        // center the content
