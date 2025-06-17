@@ -4,7 +4,8 @@ import {CommonModule} from '@angular/common';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {GlobalService} from '../../../services/global.service';
-
+import {Constants} from '../../../../constants/constants';
+// import {Constants} from 'src/constants/constants';
 
 @Component({
   selector: 'app-header',
@@ -15,9 +16,12 @@ import {GlobalService} from '../../../services/global.service';
 })
 export class HeaderComponent implements OnInit {
   @Output() toggleSidebarEvent = new EventEmitter<void>();
+
+  public const = Constants;
   isLoggedIn = false;
   userName: string | null = null;
-  version = 'TBA';
+  feVersion = `${this.const.VERSION}`;
+  beVersion = `not connected`;
   user: { name: string } | null = null;
 
   constructor(
@@ -28,7 +32,7 @@ export class HeaderComponent implements OnInit {
     this.globalService.user$.subscribe(global => {
       this.userName = global?.user?.name ?? 'Guest';
       this.isLoggedIn = global?.user?.loggedIn ?? false;
-      this.version = global?.meta?.version;
+      this.beVersion = `${global?.meta?.version}`;
     });
    // this.api.get('public/table/base/user').subscribe({
    //    next: (response) => {
@@ -43,10 +47,25 @@ export class HeaderComponent implements OnInit {
    //  });
   }
   onLogin(): void {
-
   }
 
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
   }
+
+  get version(): string {
+  const feVersion = this?.feVersion;
+  const beVersion = this?.beVersion;
+
+  let version = '';
+  if (!beVersion) {
+    version = `FE: ${feVersion} - BE: not connected`;
+  } else if (feVersion === beVersion) {
+    version = `${this.const.VERSION}`;
+  } else {
+    version = `FE: ${feVersion} - BE: ${beVersion}`;
+  }
+  return version
+}
+
 }

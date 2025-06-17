@@ -1,0 +1,4 @@
+node_modules/
+*.log
+*.md
+# DO NOT EXCLUDE dist/
