@@ -24,11 +24,12 @@
 .header-link {
   @extend .nav-link;
   color: mat.m2-get-color-from-palette($custom-blue-palette, 50);
+  margin-right:16px;
 }
 
 .breadcrumb-link {
   @extend .nav-link;
-  color: mat.m2-get-color-from-palette($custom-blue-palette, 500);
+  color: $fg-main;
   margin-top: 5px;
   margin-right: 5px;
 }

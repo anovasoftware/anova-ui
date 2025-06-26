@@ -1,0 +1,31 @@
+@use 'styles/variables' as *;
+
+.landing-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 40px;
+  flex-wrap: wrap; // allows it to stack on small screens
+}
+
+.landing-image img {
+  max-width: 500px;
+  height: auto;
+  border-radius: 12px;
+  border-width: 2px;
+  border-color: green;
+}
+
+.landing-text {
+  max-width: 500px;
+  //font-size: 18px;
+  color: $fg-main;
+}
+
+.landing-title {
+  text-align: left;
+  margin-top: 40px;
+}
+
+

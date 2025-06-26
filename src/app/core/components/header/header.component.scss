@@ -1,16 +1,38 @@
-@use '../../../../styles/variables' as *;
 @use '@angular/material' as mat;
+@use 'sass:map';
+@use 'styles/variables' as *;
+@use 'styles/themes' as theme;
 
-$brand-anova: mat.m2-get-color-from-palette($custom-blue-palette, 50);
-$brand-sea: #00c4cc;
-$brand-sea-dark: darken($brand-sea, 50%);
+.header-toolbar {
+  $fg: map.get(theme.$primary-palette, 95);
+
+  display: flex;               // ✅ required for vertical centering to work
+  align-items: center;         // ✅ vertically center children
+
+  min-height: 56px;   // default is 64px for desktop, 56px for mobile
+  height: 56px;
+  padding-left: 0;
+  //background-color: mat.m2-get-color-from-palette($custom-blue-palette, 500);
+  color: $fg;
+  background-color: map.get(theme.$primary-palette, 40);
+
+  .mat-icon,
+  .mat-icon-button {
+    color: $fg;
+  }
+  .mat-toolbar-row {
+    height: 48px;     // ensures inner row also adjusts
+    min-height: 48px;
+  }
+}
+
 
 .app-title {
   font-size: 20px;
   letter-spacing: 1px;
 
   .anova {
-    color: $brand-anova;
+    color: map.get(theme.$primary-palette, 95);
     font-weight: 400;
   }
 
@@ -37,7 +59,7 @@ $brand-sea-dark: darken($brand-sea, 50%);
     }
 
     .sea {
-      color: $brand-sea-dark;
+      color: $fg-sea;
       font-weight: 400;
       display: inline-block;
       padding-right: 6px;

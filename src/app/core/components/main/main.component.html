@@ -1,7 +1,13 @@
-<app-header></app-header>  <!-- ✅ Ensure this exists -->
+<app-header></app-header>
 <!--<app-sidebar></app-sidebar>  &lt;!&ndash; ✅ Ensure this exists &ndash;&gt;-->
-<app-breadcrumb></app-breadcrumb>  <!-- ✅ Ensure this exists -->
+<!--<app-breadcrumb></app-breadcrumb>-->
+
+<!-- Page Title -->
+<div class="page-title-container printable-area">
+  <h1>{{ title }}</h1>
+</div>
 
 <div class="main-content">
-  <router-outlet></router-outlet>  <!-- ✅ Ensure this exists -->
+  <router-outlet></router-outlet>
 </div>
+

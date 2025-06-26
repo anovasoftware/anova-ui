@@ -1,5 +1,7 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 @use 'variables' as *;
+@use 'themes' as theme;
 
 .flex-row {
   display: flex;
@@ -47,23 +49,26 @@
   margin-right: 16px;
 }
 
-.header-toolbar {
-  min-height: 48px;   // default is 64px for desktop, 56px for mobile
-  height: 48px;
-  padding-left: 0;
-  background-color: mat.m2-get-color-from-palette($custom-blue-palette, 500);
 
-  .mat-toolbar-row {
-    height: 48px;     // ensures inner row also adjusts
-    min-height: 48px;
-  }
+.printable-area {
+  //padding-top: 16px;
+  width: 80%;           // or max-width: 1200px
+  margin: 0 auto;        // center the content
+  //align-items: center;
+}
+.printable-area-flex {
+  @extend .printable-area;         // ✅ inherits width and centering
+  display: flex;
+  //flex-direction: column;          // or row, depending on use
+  align-items: center;
+  //gap: 16px;                       // optional: vertical spacing between children
 }
 
-.header-breadcrumb {
+.breadcrumb {
   min-height: 32px;   // default is 64px for desktop, 56px for mobile
   height: 32px;
   padding-left: 0;
-  background-color: mat.m2-get-color-from-palette($custom-blue-palette, 50);
+  //background-color: mat.m2-get-color-from-palette($custom-blue-palette, 50);
 
   display: flex;               // enables flex alignment
   align-items: center;         // centers child content vertically
@@ -74,10 +79,17 @@
   }
 }
 
+.page-title-container {
+  margin-top: 8px;
+  margin-bottom: 24px;
+  text-align: left; // or center if preferred
+}
 
-.printable-area {
-  width: 80%;           // or max-width: 1200px
-  margin: 0 auto;        // center the content
-  display: flex;
-  align-items: center;
+.error {
+  background-color: map.get(theme.$error-palette, 90);
+  //color: #a94442;
+  padding: 1rem;
+  border-left: 4px solid map.get(theme.$error-palette, 25);
+  border-radius: 4px;
+  margin-bottom: 1rem;
 }

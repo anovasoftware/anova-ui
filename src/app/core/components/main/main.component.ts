@@ -15,13 +15,14 @@ import { ApiService } from '../../../services/api.service';
     RouterModule,
     RouterOutlet,
     HeaderComponent,
-    SidebarComponent,
+    // SidebarComponent,
     BreadcrumbComponent
   ],
 })
 export class MainComponent implements OnInit {
   public message = 'Loading...';
   public user: { name: string } | null = null;
+  public title = 'Welcome!';
 
   constructor(
     private apiService: ApiService

@@ -1,8 +1,8 @@
 <div class="header-toolbar">
-  <div class="printable-area">
-    <button mat-icon-button (click)="toggleSidebar()" class="mr-2">
-      <mat-icon>menu</mat-icon>
-    </button>
+  <div class="printable-area-flex">
+<!--    <button mat-icon-button (click)="toggleSidebar()" class="mr-2">-->
+<!--      <mat-icon>menu</mat-icon>-->
+<!--    </button>-->
 
     <span class="app-title" title="version: {{version}}">
       <span class="anova">anova</span>
@@ -13,6 +13,21 @@
     </span>
 
     <span class="flex-spacer"></span>
+
+
+    <nav class="header-nav">
+      <a *ngFor="let item of headerMenus"
+         [routerLink]="item.route"
+         routerLinkActive="active-link"
+         class="header-link">
+        {{ item.description }}
+      </a>
+    </nav>
+
+<!--    <div>-->
+<!--      <a class="header-link" href="javascript:void(0)">ABOUT</a>-->
+<!--      <a class="header-link" href="javascript:void(0)">MODULES</a>-->
+<!--    </div>-->
 
     <!-- Logged-in state -->
     <div class="flex-row align-center" *ngIf="isLoggedIn">
@@ -27,4 +42,4 @@
       <a class="header-link" (click)="onLogin()" href="javascript:void(0)">LOGIN</a>
     </div>
   </div>
-
+</div>

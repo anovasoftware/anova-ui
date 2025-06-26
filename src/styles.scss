@@ -1,31 +1,41 @@
+@use 'sass:map';
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
 @use 'styles/material-theme'; // ✅ Import Material theme
-
+@use 'styles/themes' as theme;
+@use 'styles/variables';
 @use 'styles/layout'; // ✅ without the underscore or file extension
 @use 'styles/links';
 
-//@use 'app/styles/typography';     // ✅ Import typography styles
-//@use 'app/styles/variables';      // ✅ Import global variables
-//@use 'app/styles/components';     // ✅ Import component styles
-//@use 'app/styles/utilities';      // ✅ Import utility styles
-//@use 'app/styles/animations';     // ✅ Import global animations
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
 
-
-// ✅ Now CSS rules can follow AFTER `@use`
-//html {
-//  @include mat.theme((
-//    color: (
-//      theme-type: light,
-//      primary: mat.$m2-indigo-palette,  // ✅ Fix color reference
-//      tertiary: mat.$m2-blue-palette,
-//    ),
-//    typography: Roboto,
-//    density: 0,
-//  ));
-//}
 
 /* ✅ Global styles */
 html, body {
   height: 100%;
   font-size: 14px;
+  color: variables.$fg-main;
 }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+h1 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+body, p, span, div, h1, h2, h3, h4, h5, h6, mat-card, mat-toolbar {
+  color: variables.$fg-main;
+}
