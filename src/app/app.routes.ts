@@ -14,13 +14,7 @@ export const routes: Routes = [
     component: MainComponent,  // ✅ Main layout wraps pages
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },  // ✅ Redirect to home page
-      {
-        path: 'home',
-        component: HomeComponent,
-        data: {
-          title: 'Welcome!'
-        }
-      },
+      { path: 'home', component: Page001Component},
       { path: 'navigator/:id', component: NavigatorComponent },
       // pages
       { path: 'page001', component: Page001Component },

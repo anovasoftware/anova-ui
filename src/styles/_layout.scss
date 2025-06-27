@@ -79,11 +79,6 @@
   }
 }
 
-.page-title-container {
-  margin-top: 8px;
-  margin-bottom: 24px;
-  text-align: left; // or center if preferred
-}
 
 .error {
   background-color: map.get(theme.$error-palette, 90);

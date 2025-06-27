@@ -4,10 +4,16 @@
 
 <!-- Page Title -->
 <div class="page-title-container printable-area">
-  <h1>{{ title }}</h1>
+  <h1 class="page-title">{{ currentMenu?.title }}</h1>
+  <h3 class="page-sub-title">{{ currentMenu?.subTitle }}</h3>
 </div>
 
 <div class="main-content">
   <router-outlet></router-outlet>
 </div>
 
+<div class="printable-area">
+  <footer class="app-footer">
+    <small *ngIf="referenceId">Ref. {{ referenceId }}</small>
+  </footer>
+</div>
