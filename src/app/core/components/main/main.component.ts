@@ -28,6 +28,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public user: { name: string } | null = null;
   public title = 'Welcome!';
   public currentMenu: MenuItem | null = null;
+  public componentLoaded = false;
 
   private destroy$ = new Subject<void>();
 
@@ -37,23 +38,37 @@ export class MainComponent implements OnInit, OnDestroy {
   ) {
   }
 
+  // ngOnInit(): void {
+  //   this.menuService.selectedMenu$
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe(menu => {
+  //       setTimeout(() => {
+  //         this.currentMenu = menu;
+  //
+  //         // const docTitle = 'AnovaSea';
+  //         // if (menu) {
+  //         // } else {
+  //         //   document.title = 'My App';
+  //         // }
+  //         document.title = 'AnovaSea';
+  //         this.componentLoaded = true;
+  //       });
+  //     });
+  // }
+
   ngOnInit(): void {
+    this.menuService.loadMenus();
+
     this.menuService.selectedMenu$
       .pipe(takeUntil(this.destroy$))
       .subscribe(menu => {
         setTimeout(() => {
           this.currentMenu = menu;
-
-          // const docTitle = 'AnovaSea';
-          // if (menu) {
-          // } else {
-          //   document.title = 'My App';
-          // }
           document.title = 'AnovaSea';
+          this.componentLoaded = true;
         });
       });
   }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -67,6 +82,9 @@ export class MainComponent implements OnInit, OnDestroy {
     const pagePart = this.currentMenu.page?.pageId?.padStart(3, '0') ?? '---';
 
     return `M${menuPart}-P${pagePart}`;
+  }
+  get showPageHeader(): boolean {
+    return !!(this.currentMenu?.title || this.currentMenu?.subTitle);
   }
 
 }

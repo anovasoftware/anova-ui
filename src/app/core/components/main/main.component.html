@@ -1,9 +1,10 @@
+<ng-container *ngIf="componentLoaded; else loading">
 <app-header></app-header>
 <!--<app-sidebar></app-sidebar>  &lt;!&ndash; ✅ Ensure this exists &ndash;&gt;-->
 <!--<app-breadcrumb></app-breadcrumb>-->
 
 <!-- Page Title -->
-<div class="page-title-container printable-area">
+<div class="page-title-container printable-area" *ngIf="showPageHeader">
   <h1 class="page-title">{{ currentMenu?.title }}</h1>
   <h3 class="page-sub-title">{{ currentMenu?.subTitle }}</h3>
 </div>
@@ -17,3 +18,8 @@
     <small *ngIf="referenceId">Ref. {{ referenceId }}</small>
   </footer>
 </div>
+</ng-container>
+
+<ng-template #loading>
+  <div class="app-loading">Loading...</div>
+</ng-template>

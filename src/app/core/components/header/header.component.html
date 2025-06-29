@@ -4,18 +4,20 @@
 <!--      <mat-icon>menu</mat-icon>-->
 <!--    </button>-->
 
-    <span class="app-title" title="version: {{version}}">
+    <a [routerLink]="'/navigator/001'" class="app-title logo-link" title="version: {{version}}">
+<!--    <span class="app-title" title="version: {{version}}">-->
       <span class="anova">anova</span>
       <span class="sea-wrapper">
         <img src="icons/seagull.svg" alt="Seagull" class="seagull-icon"/>
         <span class="sea">sea</span>
       </span>
-    </span>
+<!--    </span>-->
+    </a>
 
     <span class="flex-spacer"></span>
 
 
-    <nav class="header-nav">
+    <nav class="header-nav" *ngIf="headerMenus.length > 0">
       <a *ngFor="let item of headerMenus"
          [routerLink]="item.route"
          routerLinkActive="active-link"
@@ -39,7 +41,7 @@
 
     <!-- Logged-out state -->
     <div *ngIf="!isLoggedIn">
-      <a class="header-link" (click)="onLogin()" href="javascript:void(0)">LOGIN</a>
+      <a class="header-link" [routerLink]="'/navigator/004'" (click)="onLogin()" href="javascript:void(0)">LOGIN</a>
     </div>
   </div>
 </div>

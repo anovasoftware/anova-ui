@@ -1,0 +1,48 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'variables' as *;
+@use 'themes' as theme;
+
+.banner {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background-color: map.get(theme.$primary-palette, 100);
+  background-image: url('/assets/images/landing-image-006.jpg'); // Replace with your asset
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); // Dark overlay for text contrast
+  }
+}
+
+.banner-overlay {
+  position: relative;
+  color: white;
+  text-align: left;
+  padding: 20px;
+  z-index: 1;
+}
+
+.banner-title {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.banner-subtitle {
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
+  opacity: 0.85;
+}
+
+.rotated-banner {
+  transform: rotate(90deg);
+}

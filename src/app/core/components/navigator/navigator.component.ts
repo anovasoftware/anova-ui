@@ -3,14 +3,20 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MenuItem, MenuService, PageItem} from '../../../services/menu.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-navigator',
   standalone: true,
+  imports: [CommonModule, ],
   templateUrl: './navigator.component.html',
 })
 
+
 export class NavigatorComponent implements OnInit, OnDestroy {
+  public componentLoaded = true;
+  menuId = '';
   selectedMenu: MenuItem | null = null;
   page: PageItem | null = null;
 
@@ -24,39 +30,35 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.paramMap
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        const menuId = params.get('id') ?? '';
-        const menu = this.menuService.getMenuById(menuId);
+    combineLatest([
+      this.route.paramMap,
+      this.menuService.menus$
+    ])
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(([params, menus]) => {
+      const menuId = params.get('id') ?? '';
+      this.menuId = menuId;
+
+      if (menus.length > 0) {
+        const menu = menus.find(m => m.menuId === menuId) || null;
         this.selectedMenu = menu;
         this.page = menu?.page ?? null;
+
         this.menuService.setSelectedMenu(menu);
 
         if (menu?.page?.pageId) {
-          // Navigate to /page001, /page002, etc.
           const route = `page${menu.page.pageId}`;
-          console.log(route);
-
-          // const routeExists = this.router.config.some(r => r.path === route);
-          const routeExists = this.routeExistsInConfig(route);
-          if (routeExists) {
-            this.router.navigate([`/${route}`])
-              .then(success => {
-                if (success) {
-                  console.log('Navigation succeeded');
-                } else {
-                  console.warn('Navigation failed');
-                }
-              })
-              .catch(err => {
-                console.error('Navigation error:', err);
-              });
-
+          if (this.routeExistsInConfig(route)) {
+            this.router.navigate([`/${route}`]);
           }
         }
-      });
+      } else {
+        console.warn('Menus not loaded yet');
+      }
+      this.componentLoaded = true;
+    });
   }
+
 
   ngOnDestroy() {
     this.destroy$.next();
@@ -78,63 +80,39 @@ export class NavigatorComponent implements OnInit, OnDestroy {
 
 }
 
-
-// import { Component, OnInit } from '@angular/core';
-// import { ActivatedRoute } from '@angular/router';
-// import {MenuItem, MenuService} from '../../../services/menu.service';
-//
-// @Component({
-//   selector: 'app-navigator',
-//   templateUrl: './navigator.component.html',
-// })
-// export class NavigatorComponent implements OnInit {
-//   menuId: string = '';
-//   headerMenu: MenuItem[] = [];
-//
-//   constructor(
-//     private route: ActivatedRoute,
-//     private menuService: MenuService
-//   ) {}
-//
-//   ngOnInit() {
-//     this.route.paramMap.subscribe(params => {
-//       this.menuId = params.get('id') ?? '';
-//       this.loadContent();
-//     });
-//   }
-//
-//   loadContent() {
-//     this.menuService.menuList$.subscribe(menu => this.headerMenu = menu);
-//     this.menuService.getMenu(this.menuId);
-//     // this.menuService.loadMenu('', this.menuId);
-//     // switch (this.menuId) {
-//     //   case '000':
-//     //     this.content = 'Welcome to Anova!';
-//     //     break;
-//     //   case '001':
-//     //     this.content = 'About Us';
-//     //     break;
-//     //   case '002':
-//     //     this.content = 'Modules Overview';
-//     //     break;
-//     //   default:
-//     //     this.content = 'Page not found.';
-//     // }
-//   }}
-
-
-// ngOnInit() {
-//   this.menuService.menus$
-//     .pipe(takeUntil(this.destroy$))
-//     .subscribe(menu => {
-//       this.headerMenu = menu;
-//       this.selectedMenu = menu.length > 0 ? menu[0] : null;
-//     });
-//
-//   this.route.paramMap
-//     .pipe(takeUntil(this.destroy$))
-//     .subscribe(params => {
-//       this.menuId = params.get('id') ?? '';
-//       this.menuService.loadMenu('', this.menuId);  // just call loadMenu
-//     });
-// }
+  // ngOnInit(): void {
+  //   this.route.paramMap
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe(params => {
+  //       const menuId = params.get('id') ?? '';
+  //       const menu = this.menuService.getMenuById(menuId);
+  //
+  //       this.menuId = menuId;
+  //       this.selectedMenu = menu;
+  //       this.page = menu?.page ?? null;
+  //       this.menuService.setSelectedMenu(menu);
+  //
+  //       if (menu?.page?.pageId) {
+  //         // Navigate to /page001, /page002, etc.
+  //         const route = `page${menu.page.pageId}`;
+  //         console.log(route);
+  //
+  //         // const routeExists = this.router.config.some(r => r.path === route);
+  //         const routeExists = this.routeExistsInConfig(route);
+  //         if (routeExists) {
+  //           this.router.navigate([`/${route}`])
+  //             .then(success => {
+  //               if (success) {
+  //                 console.log('Navigation succeeded');
+  //               } else {
+  //                 console.warn('Navigation failed');
+  //               }
+  //             })
+  //             .catch(err => {
+  //               console.error('Navigation error:', err);
+  //             });
+  //
+  //         }
+  //       }
+  //     });
+  // }

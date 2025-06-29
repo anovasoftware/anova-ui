@@ -6,6 +6,7 @@
     "start": "node server.js",
     "start-dev": "ng serve",
     "build": "ng build --configuration production",
+    "deploy": "npm-run-all build deploy-only",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

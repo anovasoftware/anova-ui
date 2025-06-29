@@ -26,12 +26,32 @@ export class MenuService {
   constructor(private api: ApiService) {
   }
 
+  // loadMenus(): void {
+  //   console.log('loading menus');
+  //   this.api.get('public/table/static/menu/').subscribe({
+  //     next: (res) => this.menusSubject.next(res?.detail || []),
+  //     error: () => this.menusSubject.next([]),
+  //   });
+  // }
   loadMenus(): void {
+    console.log('loading menus');
     this.api.get('public/table/static/menu/').subscribe({
-      next: (res) => this.menusSubject.next(res?.detail || []),
-      error: () => this.menusSubject.next([]),
+      next: (res) => {
+       const menus: MenuItem[] = res?.detail || [];
+        this.menusSubject.next(menus);
+
+        // ✅ Set selectedMenu if it's empty
+        if (!this.selectedMenuSubject.value && menus.length > 0) {
+          const defaultMenu = menus.find(m => m.menuId === '001') || menus[0];
+          this.selectedMenuSubject.next(defaultMenu);
+        }
+      },
+      error: () => {
+        this.menusSubject.next([]);
+        this.selectedMenuSubject.next(null);
+      },
     });
-  }
+}
 
   getMenusByType(typeId: string): MenuItem[] {
     return this.menusSubject.getValue().filter(m => m.typeId === typeId);

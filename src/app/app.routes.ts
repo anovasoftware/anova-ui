@@ -13,7 +13,7 @@ export const routes: Routes = [
     path: '',
     component: MainComponent,  // ✅ Main layout wraps pages
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' },  // ✅ Redirect to home page
+      { path: '', redirectTo: '/navigator/001', pathMatch: 'full' },  // ✅ Redirect to home page
       { path: 'home', component: Page001Component},
       { path: 'navigator/:id', component: NavigatorComponent },
       // pages
@@ -24,5 +24,5 @@ export const routes: Routes = [
     ],
   },
   { path: 'login', component: LoginComponent },  // ✅ Ensure login route exists
-  { path: '**', redirectTo: 'home' },  // ✅ Catch-all for invalid routes
+  { path: '**', redirectTo: '/navigator/001' },  // ✅ Catch-all for invalid routes
 ];
