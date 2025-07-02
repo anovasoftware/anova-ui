@@ -6,6 +6,7 @@ import {DashboardComponent} from './core/components/dashboard/dashboard.componen
 import {LoginComponent} from './core/components/login/login.component';
 import {NavigatorComponent} from './core/components/navigator/navigator.component';
 import {Page001Component} from './core/pages/page001/page001.component';
+import {Page004Component} from './core/pages/page004/page004.component';
 
 
 export const routes: Routes = [
@@ -18,6 +19,7 @@ export const routes: Routes = [
       { path: 'navigator/:id', component: NavigatorComponent },
       // pages
       { path: 'page001', component: Page001Component },
+      { path: 'page004', component: Page004Component },
 
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
