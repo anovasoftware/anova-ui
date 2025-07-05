@@ -1,0 +1,4 @@
+export class StatusConstants {
+// AUTO GENERATED
+  static readonly ACTIVE = '001';  static readonly ALL_NO = '006';  static readonly ALL_NOT_DISCLOSED = '007';  static readonly ALL_YES = '005';  static readonly DELETED = '003';  static readonly FAILED = '00C';  static readonly INACTIVE = '002';  static readonly NOT_APPLICABLE = '000';  static readonly QUEUED = '004';  static readonly SUCCESS = '00B';  static readonly TO_BE_ANNOUNCED = '999';  static readonly EFFECTIVE_STATUS_CURRENT = '021';  static readonly EFFECTIVE_STATUS_EXPIRED = '023';  static readonly EFFECTIVE_STATUS_FUTURE = '022';  static readonly EFFECTIVE_STATUS_STALE = '024';  static readonly CANCELLED = '009';  static readonly POSTED = '008';}
+

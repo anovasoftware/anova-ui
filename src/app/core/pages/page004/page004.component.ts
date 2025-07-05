@@ -1,12 +1,20 @@
 import { Component } from '@angular/core';
 import {AuthService} from '../../../services/auth.service';
 import {FormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {HeroComponent} from '../page001/hero/hero.component';
+import {FormManagerComponent} from '../../components/form-manager/form-manager.component';
+import {FormConstants} from '../../../../constants/form_constants';
+
 
 @Component({
   selector: 'app-page004',
   standalone: true,
   imports: [
     FormsModule,
+    CommonModule,
+    HeroComponent,
+    FormManagerComponent
   ],
   templateUrl: './page004.component.html',
   styleUrls: ['./page004.component.scss'],
@@ -38,4 +46,5 @@ export class Page004Component {
   }
 
 
+  protected readonly FormConstants = FormConstants;
 }
