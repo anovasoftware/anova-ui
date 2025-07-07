@@ -1,0 +1,20 @@
+<div [formGroup]="formGroup" class="widget-textbox">
+  <label [for]="field.name">{{ field.label }}</label>
+
+  <input
+    [type]="field.controlType"
+    class="form-control"
+    [formControlName]="field.name"
+    [id]="field.name"
+    [attr.placeholder]="field.placeholder || ''"/>
+
+  <!-- Validation errors -->
+  <div class="error-message"
+       *ngIf="formGroup.get(field.name)?.invalid
+             && (formGroup.get(field.name)?.dirty || formGroup.get(field.name)?.touched)">
+    <small *ngIf="formGroup.get(field.name)?.errors?.['required']">
+      This field is required.
+    </small>
+    <!-- Add more validation messages here if you want -->
+  </div>
+</div>

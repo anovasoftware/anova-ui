@@ -1,3 +1,28 @@
-<div class="printable-area">
-  <p>Form loaded {{form?.formId}}</p>
-</div>
+<h3>{{form?.header}}</h3>
+<form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form">
+  <div *ngFor="let control of form.formFields" class="form-row">
+<!--    <label>{{ control.label }}</label>-->
+
+    <ng-container [ngSwitch]="control.typeId">
+      <app-widget-textbox
+        *ngSwitchCase="TypeConstants.CONTROL_TEXTBOX"
+        [field]="control"
+        [formGroup]="formGroup">
+      </app-widget-textbox>
+
+      <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"
+        type="hidden"
+        [formControlName]="control.name"
+      >
+
+      <!-- Not yet implemented types -->
+      <div *ngSwitchDefault class="unknown-type-warning">
+        ⚠️ {{ control.label }}: Type '{{ control.type.description }}' not defined yet!
+      </div>
+
+    </ng-container>
+  </div>
+  <button type="submit">
+    {{ form.saveButtonLabel }}
+  </button>
+</form>

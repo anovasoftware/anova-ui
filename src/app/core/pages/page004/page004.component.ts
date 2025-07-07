@@ -21,30 +21,29 @@ import {FormConstants} from '../../../../constants/form_constants';
 })
 export class Page004Component {
   username: string = 'j';
-  password: string = '';  // 102129!!
-  errorMessage: string = '';
+  pk: string = 'new';
+  // password: string = '';  // 102129!!
+  // errorMessage: string = '';
 
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.username = localStorage.getItem('last_username') || '';
   }
-  onSubmit() {
-    localStorage.setItem('last_username', this.username);
-
-    this.authService.login(this.username, this.password)
-      .subscribe({
-        next: () => {
-          console.log('Login successful!');
-          // Optionally route to another page here
-        },
-        error: (err) => {
-          console.error('Login error', err);
-          this.errorMessage = 'Invalid username or password';
-        }
-      });
-  }
-
-
+  // onSubmit() {
+  //   localStorage.setItem('last_username', this.username);
+  //
+  //   this.authService.login(this.username, this.password)
+  //     .subscribe({
+  //       next: () => {
+  //         console.log('Login successful!');
+  //         // Optionally route to another page here
+  //       },
+  //       error: (err) => {
+  //         console.error('Login error', err);
+  //         this.errorMessage = 'Invalid username or password';
+  //       }
+  //     });
+  // }
   protected readonly FormConstants = FormConstants;
 }

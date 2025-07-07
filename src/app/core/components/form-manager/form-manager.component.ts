@@ -1,25 +1,39 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormService} from '../../../services/form.service';
-import {Form} from '../../../models/form';
+import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormService } from '../../../services/form.service';
+import { Form } from '../../../models/form';
+import { WidgetTextboxComponent } from '../../widgets/widget-textbox/widget-textbox.component';
+import { TypeConstants } from '../../../../constants/type_constants';
 
 @Component({
   selector: 'app-form-manager',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, WidgetTextboxComponent],
   templateUrl: './form-manager.component.html',
   styleUrl: './form-manager.component.scss'
 })
-export class FormManagerComponent implements OnInit{
+export class FormManagerComponent implements OnInit {
   @Input() formId!: string;
-  @Input() action!: string;
+  @Input() pk!: string;
+  @Input() action?: string;
   @Input() params?: any;
 
+  // The loaded form metadata (from your service)
   form?: Form;
+
+  // The reactive form group
+  formGroup: FormGroup;
+
   loading = false;
   error: string | null = null;
 
-  constructor(private service: FormService) {}
+  constructor(
+    private service: FormService,
+    private fb: FormBuilder
+  ) {
+    this.formGroup = this.fb.group({});
+  }
 
   ngOnInit() {
     this.loadForm();
@@ -33,7 +47,10 @@ export class FormManagerComponent implements OnInit{
       next: (response) => {
         this.form = response.form;
         this.loading = false;
-        console.log('Loaded form:', this.form);
+        // console.log('Loaded form:', this.form);
+
+        // Build form controls dynamically
+        this.buildFormGroup();
       },
       error: (err) => {
         console.error('Error loading form:', err);
@@ -42,4 +59,54 @@ export class FormManagerComponent implements OnInit{
       }
     });
   }
+
+  private buildFormGroup(): void {
+    if (!this.form?.formFields) {
+      return;
+    }
+
+    for (const control of this.form.formFields) {
+      this.formGroup.addControl(
+        control.name,
+        new FormControl(control.value)
+      );
+    }
+  }
+
+  submitForm(): void {
+    if (!this.form || !this.formGroup) {
+      this.error = 'Form is not loaded.';
+      return;
+    }
+
+    if (this.formGroup.invalid) {
+      this.error = 'Form is invalid. Please fix errors.';
+      return;
+    }
+
+    this.loading = true;
+    this.error = null;
+
+    const payload = {
+      pk: this.pk,
+      ...this.formGroup.value
+    };
+
+    this.service.submitForm(this.formId, payload).subscribe({
+      next: (response) => {
+        console.log('Submission response:', response);
+        this.loading = false;
+        // Handle success
+      },
+      error: (err) => {
+        console.error('Error submitting form:', err);
+        this.error = 'Failed to submit form.';
+        this.loading = false;
+      }
+    });
+  }
+
+  protected readonly TypeConstants = TypeConstants;
 }
+
+
