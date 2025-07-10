@@ -1,15 +1,32 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { FormService } from '../../../services/form.service';
-import { Form } from '../../../models/form';
-import { WidgetTextboxComponent } from '../../widgets/widget-textbox/widget-textbox.component';
-import { TypeConstants } from '../../../../constants/type_constants';
+import {Component, Input, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControlOptions, ValidatorFn
+} from '@angular/forms';
+import {FormService} from '../../../services/form.service';
+import {Form} from '../../../models/form';
+import {WidgetTextboxComponent} from '../../widgets/widget-textbox/widget-textbox.component';
+import {TypeConstants} from '../../../../constants/type_constants';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-form-manager',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, WidgetTextboxComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    WidgetTextboxComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButton,
+  ],
   templateUrl: './form-manager.component.html',
   styleUrl: './form-manager.component.scss'
 })
@@ -66,12 +83,46 @@ export class FormManagerComponent implements OnInit {
     }
 
     for (const control of this.form.formFields) {
+      const validators = this.buildValidators(control);
+      // const options = validators.length ? { validators } as AbstractControlOptions: undefined;
+      const options = validators.length
+        ? {validators: validators as ValidatorFn[]}
+        : undefined;
+
+
       this.formGroup.addControl(
         control.name,
-        new FormControl(control.value)
+        this.fb.nonNullable.control(control.value, options)
       );
     }
+
   }
+
+  private buildValidators(control: any): Validators[] {
+    const validators = [];
+
+    if (control.requiredFlag === 'Y') {
+      validators.push(Validators.required);
+    }
+
+    if (control.controlType === 'email') {
+      validators.push(Validators.email);
+    }
+
+    // if (control.minLength) {
+    //   validators.push(Validators.minLength(control.minLength));
+    // }
+    //
+    // if (control.maxLength) {
+    //   validators.push(Validators.maxLength(control.maxLength));
+    // }
+    // if (control.pattern) {
+    //   validators.push(Validators.pattern(control.pattern));
+    // }
+
+    return validators;
+  }
+
 
   submitForm(): void {
     if (!this.form || !this.formGroup) {

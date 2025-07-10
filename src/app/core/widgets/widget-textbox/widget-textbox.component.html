@@ -1,20 +1,36 @@
-<div [formGroup]="formGroup" class="widget-textbox">
-  <label [for]="field.name">{{ field.label }}</label>
+<div [formGroup]="formGroup">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{field.label}}</mat-label>
 
-  <input
-    [type]="field.controlType"
-    class="form-control"
-    [formControlName]="field.name"
-    [id]="field.name"
-    [attr.placeholder]="field.placeholder || ''"/>
+    <input
+      matInput
+      [type]="field.controlType || 'text'"
+      [formControlName]="field.name"
+      [id]="field.name"
+      [placeholder]="field.placeholder || ''">
 
-  <!-- Validation errors -->
-  <div class="error-message"
-       *ngIf="formGroup.get(field.name)?.invalid
-             && (formGroup.get(field.name)?.dirty || formGroup.get(field.name)?.touched)">
-    <small *ngIf="formGroup.get(field.name)?.errors?.['required']">
+    <!-- Validation errors -->
+    <mat-error *ngIf="formGroup.get(field.name)?.hasError('required')">
       This field is required.
-    </small>
+    </mat-error>
+
     <!-- Add more validation messages here if you want -->
-  </div>
+    <mat-error *ngIf="formGroup.get(field.name)?.hasError('email')" class="error-text">
+      Please enter a valid email.
+    </mat-error>
+  </mat-form-field>
 </div>
+
+<!--      <mat-form-field *ngSwitchCase="TypeConstants.CONTROL_TEXTBOX" appearance="fill" class="full-width">-->
+<!--        <mat-label>{{ control.label }}</mat-label>-->
+<!--        <input matInput-->
+<!--               [type]="control.controlType || 'text'"-->
+<!--               [formControlName]="control.name"-->
+<!--               [id]="control.name"-->
+<!--               [placeholder]="control.placeholder || ''">-->
+
+<!--        <mat-error *ngIf="formGroup.get(control.name)?.hasError('required')">-->
+<!--          This field is required.-->
+<!--        </mat-error>-->
+<!--        &lt;!&ndash; Add more validation errors if you want &ndash;&gt;-->
+<!--      </mat-form-field>-->

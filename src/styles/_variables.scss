@@ -8,6 +8,8 @@ $spacing-unit: 8px;
 $fg-sea: #4dd0e1;
 //$fg-main: map.get(theme.$primary-palette, 40);
 $fg-main: map.get(theme.$neutral-palette, 40);
+$bg-button: map.get(theme.$highlight-palette, 40);
+$fg-button: map.get(theme.$primary-palette, 100);
 
 //$primary-color: #0a3d62;
 //$accent-color: #ff6b6b;

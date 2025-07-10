@@ -124,16 +124,35 @@ $_palettes: (
     99: #fffbff,
     100: #ffffff,
   ),
+  highlight: (
+    0: #000000,
+    10: #331a00,
+    20: #663300,
+    30: #994c00,
+    40: #cc6600,
+    50: #ff8000,
+    60: #ff9933,
+    70: #ffb366,
+    80: #ffcc99,
+    90: #ffe6cc,
+    95: #fff2e6,
+    98: #fff8f5,
+    99: #fffdfc,
+    100: #ffffff,
+  )
 );
 
 $_rest: (
   secondary: map.get($_palettes, secondary),
   neutral: map.get($_palettes, neutral),
   neutral-variant: map.get($_palettes,  neutral-variant),
+  tertiary: map.get($_palettes, tertiary),
   error: map.get($_palettes, error),
+  highlight: map.get($_palettes, highlight),
 );
 
 $primary-palette: map.merge(map.get($_palettes, primary), $_rest);
 $neutral-palette: map.merge(map.get($_palettes, neutral), $_rest);
 $tertiary-palette: map.merge(map.get($_palettes, tertiary), $_rest);
 $error-palette: map.merge(map.get($_palettes, error), $_rest);
+$highlight-palette: map.merge(map.get($_palettes, highlight), $_rest);

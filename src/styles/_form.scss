@@ -1,0 +1,96 @@
+@use 'sass:map';
+@use 'styles/variables';
+@use 'styles/themes' as theme;
+
+/* Main form container */
+.material-form {
+  padding: 8px 24px 16px;
+  background-color: map.get(theme.$tertiary-palette, 98);
+  border-left: 2px solid map.get(theme.$primary-palette, 40);
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 0 0 map.get(theme.$tertiary-palette, 50);
+  max-width: 500px;
+  margin-bottom: 16px;
+
+  .form-header {
+    //margin-top: 2px;
+    //margin-bottom: 4px;
+    //margin-left: 8px;
+    //font-size: 1.5rem;
+    //font-weight: 600;
+    //background-color: map.get(theme.$primary-palette, 95);
+    //background-color: map.get(theme.$tertiary-palette, 30);
+    color: map.get(theme.$highlight-palette, 40);
+    //border-bottom: 1px solid map.get(theme.$primary-palette, 30);
+    //padding-bottom: 8px;
+  }
+}
+
+//form {
+//  max-width: 600px;
+//  border-left: 2px solid map.get(theme.$tertiary-palette, 40);
+//  padding: 16px 24px;
+//  background-color: map.get(theme.$tertiary-palette, 100);
+//  box-shadow: 0 0 0 map.get(theme.$tertiary-palette, 50);
+//  margin: 0;
+//  border-top-right-radius: 8px;
+//  border-bottom-right-radius: 8px;
+//  //font-family: Arial, sans-serif;
+//}
+
+/* Form rows */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+
+  label {
+    font-weight: 600;
+    margin-bottom: 4px;
+    //color: red;
+  }
+
+  input {
+    color: map.get(theme.$primary-palette, 100);
+    //padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    //font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      //border-color: red;
+      //box-shadow: 0 0 0 2px rgba(0, 77, 77, 0.2);
+    }
+  }
+
+  .unknown-type-warning {
+    color: #a94442;
+    background-color: #f2dede;
+    padding: 8px;
+    border-radius: 4px;
+  }
+}
+
+/* Submit button styling */
+button[type="submit"] {
+  background-color: variables.$bg-button;
+  color: variables.$fg-button;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100px;
+  //transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: map.get(theme.$primary-palette, 40);
+  }
+}
+.material-form button.mat-button-disabled {
+  background-color: #ffcc80;
+  color: #ffffff;
+  opacity: 1;
+}
+
