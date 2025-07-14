@@ -1,3 +1,7 @@
+  <div *ngIf="error" class="form-error-message mat-elevation-z2">
+    {{ error }}
+  </div>
+
 <form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form" class="material-form">
   <div class="form-header">
     <h3>{{ form?.header }}</h3>
@@ -11,21 +15,6 @@
       [field]="control"
       [formGroup]="formGroup">
     </app-widget-textbox>
-
-      <!-- TEXTBOX -->
-<!--      <mat-form-field *ngSwitchCase="TypeConstants.CONTROL_TEXTBOX" appearance="fill" class="full-width">-->
-<!--        <mat-label>{{ control.label }}</mat-label>-->
-<!--        <input matInput-->
-<!--               [type]="control.controlType || 'text'"-->
-<!--               [formControlName]="control.name"-->
-<!--               [id]="control.name"-->
-<!--               [placeholder]="control.placeholder || ''">-->
-
-<!--        <mat-error *ngIf="formGroup.get(control.name)?.hasError('required')">-->
-<!--          This field is required.-->
-<!--        </mat-error>-->
-<!--        &lt;!&ndash; Add more validation errors if you want &ndash;&gt;-->
-<!--      </mat-form-field>-->
 
       <!-- HIDDEN -->
       <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"

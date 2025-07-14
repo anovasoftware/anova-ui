@@ -15,6 +15,9 @@ import {TypeConstants} from '../../../../constants/type_constants';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
+import {Router} from '@angular/router';
+import {handleForm001Response} from '../../../form-handlers/form001.handler';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-form-manager',
@@ -36,6 +39,8 @@ export class FormManagerComponent implements OnInit {
   @Input() action?: string;
   @Input() params?: any;
 
+  protected readonly formHandlers: { [formId: string]: (response: any) => void } = {};
+  protected readonly TypeConstants = TypeConstants;
   // The loaded form metadata (from your service)
   form?: Form;
 
@@ -47,9 +52,15 @@ export class FormManagerComponent implements OnInit {
 
   constructor(
     private service: FormService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
   ) {
     this.formGroup = this.fb.group({});
+        this.formHandlers = {
+          '001': (response) => handleForm001Response(response, this.router, this.authService)
+      // add more special handlers here
+    };
   }
 
   ngOnInit() {
@@ -71,7 +82,17 @@ export class FormManagerComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading form:', err);
-        this.error = 'Failed to load form.';
+
+        // Default error message
+        let message = 'Failed to submit form.';
+
+        if (err?.error?.message) {
+          message = err.error.message;
+        } else if (err.status === 0) {
+          // Network error, server unreachable
+          message = 'Network error. Please check your connection.';
+        }
+        console.log(message);
         this.loading = false;
       }
     });
@@ -145,19 +166,52 @@ export class FormManagerComponent implements OnInit {
 
     this.service.submitForm(this.formId, payload).subscribe({
       next: (response) => {
-        console.log('Submission response:', response);
+        const data = response.data;
+        if (response.result === 'success') {
+          const handler = this.formHandlers[this.formId];
+          if (handler) {
+            handler(response);
+          // } else {
+          //   this.handleCrudFormResponse(response);
+          } else {
+            console.log(`No post-submit handling defined for form ${this.formId}.`);
+          }
+        }
+        // if (response.result === 'success') {
+        //   if (response.access) {
+        //     localStorage.setItem('access_token', response.access);
+        //   }
+        //   if (response.refresh) {
+        //     localStorage.setItem('refresh_token', response.refresh);
+        //   }
+        //   if (data.redirect) {
+        //     console.log(data.redirect);
+        //     this.router.navigate([data.redirect]);
+        //   } else {
+        //     // Optionally do something else if no redirect provided
+        //     console.log('No redirect path specified by backend.');
+        //   }
+        // }
         this.loading = false;
         // Handle success
       },
       error: (err) => {
-        console.error('Error submitting form:', err);
-        this.error = 'Failed to submit form.';
+        // Default error message
+        let message = 'Failed to submit form.';
+
+        if (err?.error?.message) {
+          message = err.error.message;
+        } else if (err.status === 0) {
+          // Network error, server unreachable
+          message = 'Network error. Please check your connection.';
+        }
+        console.log(message);
+
+        this.error = message;
         this.loading = false;
       }
     });
   }
-
-  protected readonly TypeConstants = TypeConstants;
 }
 
 

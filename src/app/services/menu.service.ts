@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {ApiService} from './api.service';
+import {GlobalService} from './global.service';
 
 export interface PageItem {
   pageId: string;
@@ -23,7 +24,9 @@ export class MenuService {
   private menusSubject = new BehaviorSubject<MenuItem[]>([]);
   menus$ = this.menusSubject.asObservable();
 
-  constructor(private api: ApiService) {
+  constructor(
+    private api: ApiService,
+    private globalService: GlobalService) {
   }
 
   // loadMenus(): void {
@@ -44,6 +47,7 @@ export class MenuService {
         if (!this.selectedMenuSubject.value && menus.length > 0) {
           const defaultMenu = menus.find(m => m.menuId === '001') || menus[0];
           this.selectedMenuSubject.next(defaultMenu);
+          this.globalService.setMeta(res.meta);
         }
       },
       error: () => {

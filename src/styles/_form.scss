@@ -9,7 +9,7 @@
   border-left: 2px solid map.get(theme.$primary-palette, 40);
   border-radius: 0 8px 8px 0;
   box-shadow: 0 0 0 map.get(theme.$tertiary-palette, 50);
-  max-width: 500px;
+  max-width: 300px;
   margin-bottom: 16px;
 
   .form-header {
@@ -20,7 +20,7 @@
     //font-weight: 600;
     //background-color: map.get(theme.$primary-palette, 95);
     //background-color: map.get(theme.$tertiary-palette, 30);
-    color: map.get(theme.$highlight-palette, 40);
+    //color: map.get(theme.$highlight-palette, 40);
     //border-bottom: 1px solid map.get(theme.$primary-palette, 30);
     //padding-bottom: 8px;
   }
@@ -94,3 +94,16 @@ button[type="submit"] {
   opacity: 1;
 }
 
+.form-error-message-ext {
+  color: #b00020;
+  background: #fdecea;
+  border: 1px solid #f5c2c7;
+  padding: 8px 12px;
+  margin: 12px 0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.form-error-message {
+  color: red;
+  margin: 8px 0;
+}

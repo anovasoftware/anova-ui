@@ -6,16 +6,29 @@ import {MatIconModule} from '@angular/material/icon';
 import {GlobalService} from '../../../services/global.service';
 import {Constants} from '../../../../constants/constants';
 import {MenuItem, MenuService} from '../../../services/menu.service';
-import {RouterModule} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {AuthService} from '../../../services/auth.service';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatDivider} from '@angular/material/divider';
+
 // import {Constants} from 'src/constants/constants';
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatIconModule, MatButtonModule, NgOptimizedImage, RouterModule],
+  imports: [
+    CommonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    NgOptimizedImage,
+    RouterModule,
+    MatMenuModule,
+    MatDivider
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -34,15 +47,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private globalService: GlobalService,
-    private menuService: MenuService
-    ) {}
+    private menuService: MenuService,
+    private authService: AuthService,
+    private router: Router,
+  ) {
+  }
 
   ngOnInit(): void {
+    // this.authService.user$.subscribe(user => {
+    //   this.user = user;
+    //   this.isLoggedIn = !!user;
+    // });
     this.globalService.user$.subscribe(global => {
-      this.userName = global?.user?.name ?? 'Guest';
-      this.isLoggedIn = global?.user?.loggedIn ?? false;
+      this.user = global?.user ?? { name: 'Guest', loggedIn: false };
+      this.userName = this.user?.name;
+      this.isLoggedIn = !!this.user && this.user.name !== 'Guest';
+      // this.isLoggedIn = this.user?.loggedIn ?? false;
       this.beVersion = `${global?.meta?.version}`;
     });
+
+    // this.globalService.user$.subscribe(global => {
+    //   this.userName = global?.user?.name ?? 'Guest';
+    //   this.isLoggedIn = global?.user?.loggedIn ?? false;
+    //   this.beVersion = `${global?.meta?.version}`;
+    // });
     this.menuService.menus$
       .pipe(takeUntil(this.destroy$))
       .subscribe(menus => {
@@ -72,18 +100,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   get version(): string {
-  const feVersion = this?.feVersion;
-  const beVersion = this?.beVersion;
+    const feVersion = this?.feVersion;
+    const beVersion = this?.beVersion;
 
-  let version = '';
-  if (!beVersion) {
-    version = `FE: ${feVersion} - BE: not connected`;
-  } else if (feVersion === beVersion) {
-    version = `${this.const.VERSION}`;
-  } else {
-    version = `FE: ${feVersion} - BE: ${beVersion}`;
+    let version = '';
+    if (!beVersion) {
+      version = `FE: ${feVersion} - BE: not connected`;
+    } else if (feVersion === beVersion) {
+      version = `${this.const.VERSION}`;
+    } else {
+      version = `FE: ${feVersion} - BE: ${beVersion}`;
+    }
+    return version
   }
-  return version
-}
+
+  onLogout(): void {
+    this.authService.logout();
+    // this.globalService.loadPublicMeta();  // Optional: refresh public meta
+    this.router.navigate(['/navigator/001']);  // Or home page after logout
+  }
 
 }

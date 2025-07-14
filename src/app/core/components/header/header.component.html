@@ -34,9 +34,20 @@
     <!-- Logged-in state -->
     <div class="flex-row align-center" *ngIf="isLoggedIn">
       <span class="user-name hide-on-mobile mr-2">{{ user?.name }}</span>
-      <button mat-icon-button>
-        <mat-icon>account_circle</mat-icon>
-      </button>
+        <button mat-icon-button [matMenuTriggerFor]="accountMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+
+        <mat-menu #accountMenu="matMenu">
+          <button mat-menu-item disabled>
+            Signed in as {{ user?.name }}
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="onLogout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
     </div>
 
     <!-- Logged-out state -->

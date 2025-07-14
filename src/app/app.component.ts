@@ -9,9 +9,11 @@ import { GlobalService } from './services/global.service';  // 👈 Import it
   imports: [RouterModule]
 })
 export class AppComponent implements OnInit {
-  constructor(private userService: GlobalService) {}  // 👈 Inject it
+  constructor(
+    // private userService: GlobalService
+  ) {}  // 👈 Inject it
 
   ngOnInit(): void {
-    this.userService.loadGlobalState();  // 👈 Load user info once
+    // this.userService.loadGlobalState();  // 👈 Load user info once
   }
 }

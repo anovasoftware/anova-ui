@@ -4,5 +4,5 @@
 @use 'themes' as theme;
 
 .mat-mdc-form-field .mat-mdc-form-field-error {
-  color: map.get(theme.$error-palette, 40);
+  color: red;
 }

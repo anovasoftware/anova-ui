@@ -22,13 +22,13 @@ import {FormConstants} from '../../../../constants/form_constants';
 export class Page004Component {
   username: string = 'j';
   pk: string = 'new';
-  // password: string = '';  // 102129!!
+  // password: string = '';  //
   // errorMessage: string = '';
 
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.username = localStorage.getItem('last_username') || '';
+    // this.username = localStorage.getItem('last_username') || '';
   }
   // onSubmit() {
   //   localStorage.setItem('last_username', this.username);
