@@ -1,70 +1,94 @@
-  <div *ngIf="error" class="form-error-message mat-elevation-z2">
-    {{ error }}
-  </div>
+<div class="form-manager-container mat-typography">
+<!--  <img src="/assets/images/watermark.svg" class="background-watermark" alt="Seagull">-->
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <div class="header-with-icon">
+          <mat-icon>account_circle</mat-icon>
+          <span>{{ form?.header }}</span>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
 
-<form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form" class="material-form">
-  <div class="form-header">
-    <h3>{{ form?.header }}</h3>
-  </div>
-
-  <div *ngFor="let control of form.formFields" class="form-row">
-    <ng-container [ngSwitch]="control.typeId">
-    <!-- Use the widget component for TEXTBOX -->
-    <app-widget-textbox
-      *ngSwitchCase="TypeConstants.CONTROL_TEXTBOX"
-      [field]="control"
-      [formGroup]="formGroup">
-    </app-widget-textbox>
-
-      <!-- HIDDEN -->
-      <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"
-             type="hidden"
-             [formControlName]="control.name">
-
-      <!-- UNKNOWN -->
-      <div *ngSwitchDefault class="unknown-type-warning mat-elevation-z2">
-        ⚠️ {{ control.label }}: Type '{{ control.type?.description }}' not defined yet!
+    <mat-card-content>
+      <div *ngIf="error" class="form-error-message mat-elevation-z2">
+        {{ error }}
       </div>
 
-    </ng-container>
+      <form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form" class="material-form">
+        <div *ngFor="let control of form.formFields" class="form-row">
+          <ng-container [ngSwitch]="control.typeId">
 
-  </div>
+            <app-widget-textbox
+              *ngSwitchCase="TypeConstants.CONTROL_TEXTBOX"
+              [field]="control"
+              [formGroup]="formGroup">
+            </app-widget-textbox>
 
-  <button
-    mat-raised-button
-    color="primary"
-    type="submit"
-    [disabled]="formGroup.invalid">
-    {{ form.saveButtonLabel }}
-  </button>
-</form>
+            <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"
+                   type="hidden"
+                   [formControlName]="control.name">
 
+            <div *ngSwitchDefault class="unknown-type-warning mat-elevation-z2">
+              ⚠️ {{ control.label }}: Type '{{ control.type.description }}' not defined yet!
+            </div>
+          </ng-container>
+        </div>
 
-<!--<h3>{{form?.header}}</h3>-->
-<!--<form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form">-->
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="formGroup.invalid">
+          {{ form.saveButtonLabel }}
+        </button>
+      </form>
+
+      <div class="form-id-display" *ngIf="form?.formId">
+        Form ID: {{ form?.formId }}
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+</div>
+
+<!--  <div *ngIf="error" class="form-error-message mat-elevation-z2">-->
+<!--    {{ error }}-->
+<!--  </div>-->
+
+<!--<form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form" class="material-form">-->
+<!--  <div class="form-header">-->
+<!--    <h3>{{ form?.header }}</h3>-->
+<!--  </div>-->
+
 <!--  <div *ngFor="let control of form.formFields" class="form-row">-->
-<!--&lt;!&ndash;    <label>{{ control.label }}</label>&ndash;&gt;-->
-
 <!--    <ng-container [ngSwitch]="control.typeId">-->
-<!--      <app-widget-textbox-->
-<!--        *ngSwitchCase="TypeConstants.CONTROL_TEXTBOX"-->
-<!--        [field]="control"-->
-<!--        [formGroup]="formGroup">-->
-<!--      </app-widget-textbox>-->
+<!--    &lt;!&ndash; Use the widget component for TEXTBOX &ndash;&gt;-->
+<!--    <app-widget-textbox-->
+<!--      *ngSwitchCase="TypeConstants.CONTROL_TEXTBOX"-->
+<!--      [field]="control"-->
+<!--      [formGroup]="formGroup">-->
+<!--    </app-widget-textbox>-->
 
+<!--      &lt;!&ndash; HIDDEN &ndash;&gt;-->
 <!--      <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"-->
-<!--        type="hidden"-->
-<!--        [formControlName]="control.name"-->
-<!--      >-->
+<!--             type="hidden"-->
+<!--             [formControlName]="control.name">-->
 
-<!--      &lt;!&ndash; Not yet implemented types &ndash;&gt;-->
-<!--      <div *ngSwitchDefault class="unknown-type-warning">-->
-<!--        ⚠️ {{ control.label }}: Type '{{ control.type.description }}' not defined yet!-->
+<!--      &lt;!&ndash; UNKNOWN &ndash;&gt;-->
+<!--      <div *ngSwitchDefault class="unknown-type-warning mat-elevation-z2">-->
+<!--        ⚠️ {{ control.label }}: Type '{{ control.type?.description }}' not defined yet!-->
 <!--      </div>-->
 
 <!--    </ng-container>-->
+
 <!--  </div>-->
-<!--  <button type="submit">-->
+
+<!--  <button-->
+<!--    mat-raised-button-->
+<!--    color="primary"-->
+<!--    type="submit"-->
+<!--    [disabled]="formGroup.invalid">-->
 <!--    {{ form.saveButtonLabel }}-->
 <!--  </button>-->
 <!--</form>-->

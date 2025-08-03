@@ -20,10 +20,8 @@ import {FormConstants} from '../../../../constants/form_constants';
   styleUrls: ['./page004.component.scss'],
 })
 export class Page004Component {
-  username: string = 'j';
+  username: string = '';
   pk: string = 'new';
-  // password: string = '';  //
-  // errorMessage: string = '';
 
   constructor(private authService: AuthService) {}
 

@@ -14,10 +14,12 @@ import {WidgetTextboxComponent} from '../../widgets/widget-textbox/widget-textbo
 import {TypeConstants} from '../../../../constants/type_constants';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {MatButton} from '@angular/material/button';
+import {MatButton, MatButtonModule} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {handleForm001Response} from '../../../form-handlers/form001.handler';
 import {AuthService} from '../../../services/auth.service';
+import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-form-manager',
@@ -28,7 +30,11 @@ import {AuthService} from '../../../services/auth.service';
     WidgetTextboxComponent,
     MatFormFieldModule,
     MatInputModule,
-    MatButton,
+    MatButtonModule,
+    MatCardModule,
+    MatCardHeader,
+    MatCardContent,
+    MatIconModule,
   ],
   templateUrl: './form-manager.component.html',
   styleUrl: './form-manager.component.scss'

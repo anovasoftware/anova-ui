@@ -1,5 +1,5 @@
 <div [formGroup]="formGroup">
-  <mat-form-field appearance="outline" class="full-width">
+  <mat-form-field appearance="fill" class="form-field-full">
     <mat-label>{{field.label}}</mat-label>
 
     <input
@@ -20,17 +20,3 @@
     </mat-error>
   </mat-form-field>
 </div>
-
-<!--      <mat-form-field *ngSwitchCase="TypeConstants.CONTROL_TEXTBOX" appearance="fill" class="full-width">-->
-<!--        <mat-label>{{ control.label }}</mat-label>-->
-<!--        <input matInput-->
-<!--               [type]="control.controlType || 'text'"-->
-<!--               [formControlName]="control.name"-->
-<!--               [id]="control.name"-->
-<!--               [placeholder]="control.placeholder || ''">-->
-
-<!--        <mat-error *ngIf="formGroup.get(control.name)?.hasError('required')">-->
-<!--          This field is required.-->
-<!--        </mat-error>-->
-<!--        &lt;!&ndash; Add more validation errors if you want &ndash;&gt;-->
-<!--      </mat-form-field>-->
