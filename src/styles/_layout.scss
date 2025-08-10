@@ -1,7 +1,10 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'variables' as *;
+//@use 'variables' as *;
 @use 'themes' as theme;
+
+@use 'styles/variables';
+
 
 .flex-row {
   display: flex;
@@ -86,4 +89,8 @@
   border-left: 4px solid map.get(theme.$error-palette, 25);
   border-radius: 4px;
   margin-bottom: 1rem;
+}
+.text-highlight {
+  color: variables.$highlight;
+
 }

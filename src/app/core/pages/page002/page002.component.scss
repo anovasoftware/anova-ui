@@ -8,12 +8,26 @@
   gap: 24px;
   align-items: start;
 }
-
 .about-panel-left {
+  display: flex;
+  justify-content: center;   // horizontal centering
+  align-items: center;       // vertical centering
+  text-align: center;        // center text inside
+  padding: 24px;              // space inside the box
   border-radius: 16px;
   box-shadow: var(--mat-elevation-z4);
-  background-color: map.get(theme.$tertiary-palette, 95);
-  font-size: medium;
+  //color: variables.$highlight;
+  font-size: large;
+  line-height: 2.0;           // space between lines
+  min-height: 100%;           // fill parent height for vertical centering
+}
+
+.about-panel-left-DELETE {
+  border-radius: 16px;
+  box-shadow: var(--mat-elevation-z4);
+  color: variables.$highlight;
+  //background-color: map.get(theme.$highlight, 95);
+  font-size: large;
 }
 .about-panel-right {
   border-radius: 16px;
