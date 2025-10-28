@@ -40,7 +40,7 @@ export class MenuService {
     console.log('loading menus');
     this.api.get('public/table/static/menu/').subscribe({
       next: (res) => {
-       const menus: MenuItem[] = res?.detail || [];
+       const menus: MenuItem[] = res?.data.records || [];
         this.menusSubject.next(menus);
 
         // ✅ Set selectedMenu if it's empty

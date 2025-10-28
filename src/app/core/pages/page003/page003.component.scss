@@ -1,0 +1,59 @@
+/* features.component.scss */
+.features {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  gap: 24px;
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+  padding: 24px;
+}
+
+.feature.reverse {
+  .feature__image { order: 2; }
+  .feature__content { order: 1; }
+}
+
+.feature__image img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.feature__content h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+}
+
+.subtitle { margin: 0 0 16px; opacity: 0.85; }
+
+.points {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  li {
+    display: grid;
+    grid-template-columns: 24px auto;
+    align-items: start;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .feature { grid-template-columns: 1fr; }
+  .feature.reverse .feature__image,
+  .feature .feature__image { order: 1; }
+  .feature.reverse .feature__content,
+  .feature .feature__content { order: 2; }
+}

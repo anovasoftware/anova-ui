@@ -1,0 +1,34 @@
+<div class="printable-area">
+  <!-- features.component.html -->
+  <section class="features">
+    <mat-card
+      class="feature"
+      *ngFor="let f of features; index as i"
+      [class.reverse]="i % 2 === 1"
+    >
+      <div class="feature__image">
+        <img [src]="f.image" [alt]="f.alt" loading="lazy"/>
+      </div>
+
+      <div class="feature__content">
+        <h2>
+          <mat-icon aria-hidden="true">{{ f.icon }}</mat-icon>
+          {{ f.title }}
+        </h2>
+        <p class="subtitle">{{ f.tagline }}</p>
+
+        <ul class="points">
+          <li *ngFor="let point of f.points">
+            <mat-icon aria-hidden="true">check_circle</mat-icon>
+            <span>{{ point }}</span>
+          </li>
+        </ul>
+
+        <button mat-stroked-button color="primary">
+          Learn more
+        </button>
+      </div>
+    </mat-card>
+  </section>
+
+</div>
