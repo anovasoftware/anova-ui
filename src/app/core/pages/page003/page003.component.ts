@@ -28,7 +28,7 @@ export class Page003Component {
       title: 'Passenger Management',
       tagline: 'Seamless guest journeys from booking to disembark.',
       icon: 'airline_seat_recline_normal',
-      image: 'images/features/feature_pax.jpg',
+      image: 'images/features/feature_pax.png',
       alt: 'Passenger manifest dashboard on a laptop',
       points: [
         'Fast manifest import & validation',
@@ -134,7 +134,7 @@ export class Page003Component {
       title: 'Gangway/Safety',
       tagline: 'Real-time access control and safety you can trust.',
       icon: 'verified_user',
-      image: 'images/features/feature_gangway.jpg',
+      image: 'images/features/feature_gangway.png',
       alt: 'Gangway',
       points: [
         'Embark/disembark logging (RFID/barcode/magstripe)',

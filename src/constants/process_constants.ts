@@ -1,0 +1,4 @@
+export class ProcessConstants {
+// AUTO GENERATED
+  static readonly BASE_CATEGORY = '001';  static readonly BASE_CHART_FIELD = '002';  static readonly BASE_COMPANY = '003';  static readonly BASE_EMAIL = '004';  static readonly BASE_HOTEL_TYPE = '005';  static readonly BASE_ITEM = '006';  static readonly BASE_PERSON = '007';  static readonly BASE_POSITION = '00M';  static readonly BASE_POS_MENU = '008';  static readonly BASE_POS_MENU_ITEM = '009';  static readonly RES_EVENT = '00B';  static readonly RES_GUEST = '00C';  static readonly RES_GUEST_ROOM = '00D';  static readonly RES_HOTEL_ITEM = '00F';  static readonly RES_RESERVATION = '00G';  static readonly RES_ROOM = '00J';  static readonly RES_TRANSACTION = '00K';  static readonly RES_TRANSACTION_ITEM = '00L';}
+

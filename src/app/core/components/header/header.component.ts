@@ -63,6 +63,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userName = this.user?.name;
       this.isLoggedIn = !!this.user && this.user.name !== 'Guest';
       // this.isLoggedIn = this.user?.loggedIn ?? false;
+      console.log(global);
       this.beVersion = `${global?.meta?.version}`;
     });
 
