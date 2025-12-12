@@ -15,7 +15,7 @@ import {CommonModule} from '@angular/common';
 
 
 export class NavigatorComponent implements OnInit, OnDestroy {
-  public componentLoaded = true;
+  public componentLoaded = false;
   menuId = '';
   selectedMenu: MenuItem | null = null;
   page: PageItem | null = null;
@@ -50,12 +50,13 @@ export class NavigatorComponent implements OnInit, OnDestroy {
           const route = `page${menu.page.pageId}`;
           if (this.routeExistsInConfig(route)) {
             this.router.navigate([`/${route}`]);
+            this.componentLoaded = true;
           }
         }
       } else {
         console.warn('Menus not loaded yet');
       }
-      this.componentLoaded = true;
+      // this.componentLoaded = true;
     });
   }
 
