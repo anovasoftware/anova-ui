@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public const = Constants;
   isLoggedIn = false;
+  isDisabledLogin = true;
   userName: string | null = null;
   feVersion = `${this.const.VERSION}`;
   beVersion = `not connected`;

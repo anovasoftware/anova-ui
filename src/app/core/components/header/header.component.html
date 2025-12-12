@@ -51,8 +51,12 @@
     </div>
 
     <!-- Logged-out state -->
-    <div *ngIf="!isLoggedIn">
-      <a class="header-link" [routerLink]="'/navigator/004'" (click)="onLogin()" href="javascript:void(0)">LOGIN</a>
+    <div *ngIf="!isLoggedIn && !isDisabledLogin">
+      <a class="header-link"
+         [routerLink]="'/navigator/004'"
+         (click)="onLogin()"
+         href="javascript:void(0)">LOGIN
+      </a>
     </div>
   </div>
 </div>

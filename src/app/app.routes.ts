@@ -16,7 +16,7 @@ export const routes: Routes = [
     path: '',
     component: MainComponent,  // ✅ Main layout wraps pages
     children: [
-      { path: '', redirectTo: '/navigator/001', pathMatch: 'full' },  // ✅ Redirect to home page
+      { path: '', redirectTo: 'navigator/001', pathMatch: 'full' },  // ✅ Redirect to home page
       { path: 'home', component: Page001Component},
       { path: 'navigator/:id', component: NavigatorComponent },
       // pages
