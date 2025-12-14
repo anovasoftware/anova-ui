@@ -45,7 +45,7 @@ export class Page003Component {
       title: 'Crew Management',
       tagline: 'Empowering your crew with smart scheduling and compliance.',
       icon: 'groups',
-      image: 'images/features/feature_crew.jpg',
+      image: 'images/features/feature_crew.png',
       alt: 'Crew scheduling board',
       points: [
         'Roster planning & shift rotations',
