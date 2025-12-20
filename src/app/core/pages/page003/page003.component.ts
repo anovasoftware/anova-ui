@@ -60,7 +60,7 @@ export class Page003Component {
       title: 'Point of Sale',
       tagline: 'Fast, flexible sales across every onboard outlet.',
       icon: 'point_of_sale',
-      image: 'images/features/feature_pos.jpg',
+      image: 'images/features/feature_pos.png',
       alt: 'Point of sale',
       points: [
         'Touchscreen-optimized sales screens',
@@ -75,7 +75,7 @@ export class Page003Component {
       title: 'Shore Excursions',
       tagline: 'Effortless booking and management of unforgettable experiences.',
       icon: 'tour',
-      image: 'images/features/feature_shorex.jpg',
+      image: 'images/features/feature_shorex.png',
       alt: 'Shore excursions',
       points: [
         'Tour catalog with rich descriptions & pricing',
@@ -89,7 +89,7 @@ export class Page003Component {
       title: 'Onboard Payroll',
       tagline: 'Accurate payroll tailored for life at sea.',
       icon: 'account_balance',
-      image: 'images/features/feature_payroll.jpg',
+      image: 'images/features/feature_payroll.png',
       alt: 'Onboard Payroll',
       points: [
         'Track earnings, deductions, and advances',

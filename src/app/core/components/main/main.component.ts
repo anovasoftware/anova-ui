@@ -8,6 +8,7 @@ import {ApiService} from '../../../services/api.service';
 import {MenuItem, MenuService} from '../../../services/menu.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {FooterComponent} from '../footer/footer.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -19,8 +20,9 @@ import {Subject} from 'rxjs';
     RouterModule,
     RouterOutlet,
     HeaderComponent,
+    FooterComponent,
     // SidebarComponent,
-    BreadcrumbComponent
+    // BreadcrumbComponent
   ],
 })
 export class MainComponent implements OnInit, OnDestroy {

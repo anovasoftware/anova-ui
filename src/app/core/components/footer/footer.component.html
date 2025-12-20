@@ -1,0 +1,25 @@
+<!--<footer class="app-footer-bar toolbar-bar">-->
+<!--  <div class="printable-area">-->
+<!--    <small class="footer-text" *ngIf="referenceId">-->
+<!--      Ref. {{ referenceId }}-->
+<!--    </small>-->
+<!--    <span class="flex-spacer"></span>-->
+
+<!--    <small class="footer-text">-->
+<!--      &copy; {{ currentYear }} Anova-->
+<!--    </small>-->
+<!--  </div>-->
+<!--</footer>-->
+
+
+<div class="toolbar-bar">
+  <div class="printable-area-flex">
+    <small class="footer-text" *ngIf="referenceId">
+      &copy; {{ currentYear }} Anova Software Corporation
+    </small>
+    <span class="flex-spacer"></span>
+    <small class="footer-text" *ngIf="referenceId">
+      Ref. {{ referenceId }}
+    </small>
+  </div>
+</div>

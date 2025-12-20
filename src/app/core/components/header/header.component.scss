@@ -2,29 +2,30 @@
 @use 'sass:map';
 @use 'styles/variables' as *;
 @use 'styles/themes' as theme;
+@use 'styles/toolbar' as *;
 
-.header-toolbar {
-  $fg: map.get(theme.$primary-palette, 95);
-
-  display: flex;               // ✅ required for vertical centering to work
-  align-items: center;         // ✅ vertically center children
-
-  min-height: 56px;   // default is 64px for desktop, 56px for mobile
-  height: 56px;
-  padding-left: 0;
-  //background-color: mat.m2-get-color-from-palette($custom-blue-palette, 500);
-  color: $fg;
-  background-color: map.get(theme.$primary-palette, 40);
-
-  .mat-icon,
-  .mat-icon-button {
-    color: $fg;
-  }
-  .mat-toolbar-row {
-    height: 48px;     // ensures inner row also adjusts
-    min-height: 48px;
-  }
-}
+//.header-toolbar {
+//  $fg: map.get(theme.$primary-palette, 95);
+//
+//  display: flex;               // ✅ required for vertical centering to work
+//  align-items: center;         // ✅ vertically center children
+//
+//  min-height: 56px;   // default is 64px for desktop, 56px for mobile
+//  height: 56px;
+//  padding-left: 0;
+//  //background-color: mat.m2-get-color-from-palette($custom-blue-palette, 500);
+//  color: $fg;
+//  background-color: map.get(theme.$primary-palette, 40);
+//
+//  .mat-icon,
+//  .mat-icon-button {
+//    color: $fg;
+//  }
+//  .mat-toolbar-row {
+//    height: 48px;     // ensures inner row also adjusts
+//    min-height: 48px;
+//  }
+//}
 
 
 .app-title {

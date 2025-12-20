@@ -10,14 +10,17 @@
   </div>
 
   <div class="main-content">
+
     <router-outlet></router-outlet>
   </div>
 
-  <div class="printable-area">
-    <footer class="app-footer">
-      <small *ngIf="referenceId">Ref. {{ referenceId }}</small>
-    </footer>
-  </div>
+<!--  <div class="printable-area">-->
+<!--    <footer class="app-footer">-->
+<!--      <small *ngIf="referenceId">Ref. {{ referenceId }}</small>-->
+<!--    </footer>-->
+<!--  </div>-->
+
+  <app-footer [referenceId]="referenceId"></app-footer>
 </ng-container>
 
 <ng-template #loading>
