@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {AuthService} from '../../../services/auth.service';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {HeroComponent} from '../page001/hero/hero.component';
+// import {HeroComponent} from '../page001/hero/hero.component';
 import {FormManagerComponent} from '../../components/form-manager/form-manager.component';
 import {FormConstants} from '../../../../constants/form_constants';
 
@@ -13,7 +13,7 @@ import {FormConstants} from '../../../../constants/form_constants';
   imports: [
     FormsModule,
     CommonModule,
-    HeroComponent,
+    // HeroComponent,
     FormManagerComponent
   ],
   templateUrl: './page004.component.html',

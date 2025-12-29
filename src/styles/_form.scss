@@ -11,11 +11,11 @@
   padding: 16px;
 
   // Add the background image
-  background-image: url('/assets/images/watermark.svg');
+  //background-image: url('/assets/images/watermark.svg');
   background-repeat: no-repeat;
   background-position: left;
   background-size: contain;
-  background-color: map.get(theme.$tertiary-palette, 95);
+  background-color: map.get(theme.$primary-palette, 95);
 }
 
 /* --- Card wrapper for the form --- */

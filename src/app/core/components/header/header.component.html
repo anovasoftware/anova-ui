@@ -1,17 +1,17 @@
 <div class="toolbar-bar">
   <div class="printable-area-flex">
-<!--    <button mat-icon-button (click)="toggleSidebar()" class="mr-2">-->
-<!--      <mat-icon>menu</mat-icon>-->
-<!--    </button>-->
+    <!--    <button mat-icon-button (click)="toggleSidebar()" class="mr-2">-->
+    <!--      <mat-icon>menu</mat-icon>-->
+    <!--    </button>-->
 
     <a [routerLink]="'/navigator/001'" class="app-title logo-link" title="version: {{version}}">
-<!--    <span class="app-title" title="version: {{version}}">-->
+      <!--    <span class="app-title" title="version: {{version}}">-->
       <span class="anova">anova</span>
       <span class="sea-wrapper">
         <img src="icons/seagull.svg" alt="Seagull" class="seagull-icon"/>
         <span class="sea">sea</span>
       </span>
-<!--    </span>-->
+      <!--    </span>-->
     </a>
 
     <span class="flex-spacer"></span>
@@ -26,29 +26,10 @@
       </a>
     </nav>
 
-<!--    <div>-->
-<!--      <a class="header-link" href="javascript:void(0)">ABOUT</a>-->
-<!--      <a class="header-link" href="javascript:void(0)">MODULES</a>-->
-<!--    </div>-->
-
-    <!-- Logged-in state -->
-    <div class="flex-row align-center" *ngIf="isLoggedIn">
-      <span class="user-name hide-on-mobile mr-2">{{ user?.name }}</span>
-        <button mat-icon-button [matMenuTriggerFor]="accountMenu">
-          <mat-icon>account_circle</mat-icon>
-        </button>
-
-        <mat-menu #accountMenu="matMenu">
-          <button mat-menu-item disabled>
-            Signed in as {{ user?.name }}
-          </button>
-          <mat-divider></mat-divider>
-          <button mat-menu-item (click)="onLogout()">
-            <mat-icon>logout</mat-icon>
-            <span>Logout</span>
-          </button>
-        </mat-menu>
-    </div>
+    <!--    <div>-->
+    <!--      <a class="header-link" href="javascript:void(0)">ABOUT</a>-->
+    <!--      <a class="header-link" href="javascript:void(0)">MODULES</a>-->
+    <!--    </div>-->
 
     <!-- Logged-out state -->
     <div *ngIf="!isLoggedIn && !isDisabledLogin">
@@ -58,5 +39,25 @@
          href="javascript:void(0)">LOGIN
       </a>
     </div>
+
+    <!-- Logged-in state -->
+    <div class="flex-row align-center" *ngIf="isLoggedIn">
+      <button mat-icon-button [matMenuTriggerFor]="accountMenu" title="{{user?.name}}">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <mat-menu #accountMenu="matMenu">
+        <button mat-menu-item disabled>
+          Signed in as {{ user?.name }}
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="onLogout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+
+
   </div>
 </div>

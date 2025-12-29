@@ -173,7 +173,7 @@ export class FormManagerComponent implements OnInit {
     this.service.submitForm(this.formId, payload).subscribe({
       next: (response) => {
         const data = response.data;
-        if (response.result === 'success') {
+        if (response.success) {
           const handler = this.formHandlers[this.formId];
           if (handler) {
             handler(response);

@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
-import {HeroComponent} from '../page001/hero/hero.component';
+// import {HeroComponent} from '../page001/hero/hero.component';
 
 @Component({
   selector: 'app-page002',
@@ -9,7 +9,7 @@ import {HeroComponent} from '../page001/hero/hero.component';
   imports: [
     CommonModule,
     MatCardModule,
-    HeroComponent,
+    // HeroComponent,
   ],
   templateUrl: './page002.component.html',
   styleUrl: './page002.component.scss'

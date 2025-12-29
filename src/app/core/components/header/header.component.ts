@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output, OnInit, OnDestroy} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {GlobalService} from '../../../services/global.service';
@@ -24,7 +24,7 @@ import {MatDivider} from '@angular/material/divider';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    NgOptimizedImage,
+    // NgOptimizedImage,
     RouterModule,
     MatMenuModule,
     MatDivider
@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public const = Constants;
   isLoggedIn = false;
-  isDisabledLogin = true;
+  isDisabledLogin = false;
   userName: string | null = null;
   feVersion = `${this.const.VERSION}`;
   beVersion = `not connected`;
