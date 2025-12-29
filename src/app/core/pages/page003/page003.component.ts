@@ -104,8 +104,8 @@ export class Page003Component {
       title: 'Cashbook/Foreign Exchange',
       tagline: 'Secure cash handling and hassle-free currency exchange.',
       icon: 'currency_exchange',
-      image: 'images/features/feature_payroll.jpg',
-      alt: 'Onboard Payroll',
+      image: 'images/features/feature_cash.png',
+      alt: 'Cashbook',
       points: [
         'Manage multiple floats and safes',
         'Multi-currency balances & journals',
@@ -119,7 +119,7 @@ export class Page003Component {
       title: 'Inventory',
       tagline: 'Smarter stock control from galley to gift shop.',
       icon: 'local_shipping',
-      image: 'images/features/feature_inventory.jpg',
+      image: 'images/features/feature_inventory.png',
       alt: 'Inventory',
       points: [
         'Track consumables, retail, and F&B stock',
