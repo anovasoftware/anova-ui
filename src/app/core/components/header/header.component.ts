@@ -5,6 +5,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {GlobalService} from '../../../services/global.service';
 import {Constants} from '../../../../constants/constants';
+import {FormConstants} from '../../../../constants/form_constants';
 import {MenuItem, MenuService} from '../../../services/menu.service';
 import {Router, RouterModule} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
@@ -12,6 +13,8 @@ import {Subject} from 'rxjs';
 import {AuthService} from '../../../services/auth.service';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/divider';
+import {MatDialog} from '@angular/material/dialog';
+import {FormManagerComponent} from '../form-manager/form-manager.component';
 
 // import {Constants} from 'src/constants/constants';
 
@@ -27,7 +30,7 @@ import {MatDivider} from '@angular/material/divider';
     // NgOptimizedImage,
     RouterModule,
     MatMenuModule,
-    MatDivider
+    MatDivider,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
@@ -51,6 +54,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private menuService: MenuService,
     private authService: AuthService,
     private router: Router,
+    private dialog: MatDialog,
   ) {
   }
 
@@ -94,9 +98,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onLogin(): void {
-  }
+onLogin(event: MouseEvent) {
+  // allow open-in-new-tab / ctrl-click / middle-click to still navigate
+  if (event.ctrlKey || event.metaKey || event.button === 1) return;
 
+  event.preventDefault();
+  this.dialog.open(FormManagerComponent, {
+    width: '420px',
+    maxWidth: '90vw',
+    data: { formId: FormConstants.LOGIN, pk: 'new' }
+  });
+}
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
   }

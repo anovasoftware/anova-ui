@@ -32,13 +32,18 @@
     <!--    </div>-->
 
     <!-- Logged-out state -->
+<!--    <div *ngIf="!isLoggedIn && !isDisabledLogin">-->
+<!--      <a class="header-link"-->
+<!--         [routerLink]="'/navigator/004'"-->
+<!--             href="javascript:void(0)">LOGIN-->
+<!--      </a>-->
+<!--    </div>-->
     <div *ngIf="!isLoggedIn && !isDisabledLogin">
-      <a class="header-link"
-         [routerLink]="'/navigator/004'"
-         (click)="onLogin()"
-         href="javascript:void(0)">LOGIN
+      <a  class="header-link" type="button" (click)="onLogin($event)">
+        LOGIN
       </a>
     </div>
+
 
     <!-- Logged-in state -->
     <div class="flex-row align-center" *ngIf="isLoggedIn">

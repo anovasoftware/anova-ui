@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit, Optional} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import { Location } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -20,6 +21,15 @@ import {handleForm001Response} from '../../../form-handlers/form001.handler';
 import {AuthService} from '../../../services/auth.service';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
+import {MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+
+type DialogData = {
+  formId?: string;
+  pk?: string;
+  action?: string;
+  params?: any;
+};
 
 @Component({
   selector: 'app-form-manager',
@@ -60,7 +70,10 @@ export class FormManagerComponent implements OnInit {
     private service: FormService,
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private location: Location,
+    @Optional() private dialog: MatDialogRef<FormManagerComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
     this.formGroup = this.fb.group({});
         this.formHandlers = {
@@ -70,6 +83,12 @@ export class FormManagerComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.data) {
+      this.formId = this.data.formId ?? this.formId;
+      this.pk = this.data.pk ?? this.pk;
+      this.action = this.data.action ?? this.action;
+      this.params = this.data.params ?? this.params;
+    }
     this.loadForm();
   }
 
@@ -177,27 +196,11 @@ export class FormManagerComponent implements OnInit {
           const handler = this.formHandlers[this.formId];
           if (handler) {
             handler(response);
-          // } else {
-          //   this.handleCrudFormResponse(response);
           } else {
             console.log(`No post-submit handling defined for form ${this.formId}.`);
           }
         }
-        // if (response.result === 'success') {
-        //   if (response.access) {
-        //     localStorage.setItem('access_token', response.access);
-        //   }
-        //   if (response.refresh) {
-        //     localStorage.setItem('refresh_token', response.refresh);
-        //   }
-        //   if (data.redirect) {
-        //     console.log(data.redirect);
-        //     this.router.navigate([data.redirect]);
-        //   } else {
-        //     // Optionally do something else if no redirect provided
-        //     console.log('No redirect path specified by backend.');
-        //   }
-        // }
+        this.dialog?.close(response);
         this.loading = false;
         // Handle success
       },
@@ -218,6 +221,9 @@ export class FormManagerComponent implements OnInit {
       }
     });
   }
+onCancel() {
+  this.location.back();
+}
 }
 
 
