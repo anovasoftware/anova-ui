@@ -11,6 +11,14 @@ export interface FormField {
   value: any;
 }
 
+export interface FormExtra {
+  formExtraId: string;
+  type: Type;
+  description: string;
+  label: string;
+  targetFormId: string;
+}
+
 export interface Form {
   formId: string;
   typeId: string;
@@ -19,4 +27,5 @@ export interface Form {
   saveButtonLabel: string;
   saveButtonAction: string;
   formFields: FormField[];
+  formExtras: FormExtra[];
 }

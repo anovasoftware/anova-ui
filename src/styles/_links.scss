@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use 'variables' as *;
+@use 'styles/themes' as theme;
 
 
 /* Shared base link styles */
@@ -21,6 +22,28 @@
 }
 
 /* Specific overrides */
+.Xform-extra-link {
+  @extend .nav-link;
+  color: mat.m2-get-color-from-palette(theme.$neutral-palette, 20);
+  margin-right:16px;
+  margin-bottom:8px;
+}
+.form-extra-link {
+  @extend .nav-link;
+
+  color: mat.m2-get-color-from-palette(theme.$neutral-palette, 20);
+  margin-right: 16px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: mat.m2-get-color-from-palette(theme.$primary-palette, 50);
+    text-decoration: underline;
+  }
+}
+
+
 .header-link {
   @extend .nav-link;
   color: mat.m2-get-color-from-palette($custom-blue-palette, 50);
@@ -31,7 +54,6 @@
   //color: mat.m2-get-color-from-palette($custom-blue-palette, 50);
   //margin-right:16px;
 }
-
 .breadcrumb-link {
   @extend .nav-link;
   color: $fg-main;

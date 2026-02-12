@@ -98,17 +98,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-onLogin(event: MouseEvent) {
-  // allow open-in-new-tab / ctrl-click / middle-click to still navigate
-  if (event.ctrlKey || event.metaKey || event.button === 1) return;
+  onLogin(event: MouseEvent) {
+    // allow open-in-new-tab / ctrl-click / middle-click to still navigate
+    if (event.ctrlKey || event.metaKey || event.button === 1) return;
 
-  event.preventDefault();
-  this.dialog.open(FormManagerComponent, {
-    width: '420px',
-    maxWidth: '90vw',
-    data: { formId: FormConstants.LOGIN, pk: 'new' }
-  });
-}
+    event.preventDefault();
+    this.dialog.open(FormManagerComponent, {
+      width: '500px',
+      maxWidth: '90vw',
+      data: { formId: FormConstants.LOGIN, pk: 'new' }
+    });
+  }
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
   }

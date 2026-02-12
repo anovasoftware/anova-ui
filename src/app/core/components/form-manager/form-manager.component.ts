@@ -10,9 +10,10 @@ import {
   AbstractControlOptions, ValidatorFn
 } from '@angular/forms';
 import {FormService} from '../../../services/form.service';
-import {Form} from '../../../models/form';
+import {Form, FormExtra} from '../../../models/form';
 import {WidgetTextboxComponent} from '../../widgets/widget-textbox/widget-textbox.component';
 import {TypeConstants} from '../../../../constants/type_constants';
+import {FormExtraConstants} from '../../../../constants/form_extra_constants';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButton, MatButtonModule} from '@angular/material/button';
@@ -21,7 +22,8 @@ import {handleForm001Response} from '../../../form-handlers/form001.handler';
 import {AuthService} from '../../../services/auth.service';
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
-import {MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {FormConstants} from '../../../../constants/form_constants';
 
 
 type DialogData = {
@@ -57,6 +59,7 @@ export class FormManagerComponent implements OnInit {
 
   protected readonly formHandlers: { [formId: string]: (response: any) => void } = {};
   protected readonly TypeConstants = TypeConstants;
+  protected readonly FormExtraConstants = FormExtraConstants;
   // The loaded form metadata (from your service)
   form?: Form;
 
@@ -72,7 +75,8 @@ export class FormManagerComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private location: Location,
-    @Optional() private dialog: MatDialogRef<FormManagerComponent>,
+    private dialog: MatDialog,
+    @Optional() private dialogRef: MatDialogRef<FormManagerComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
     this.formGroup = this.fb.group({});
@@ -104,6 +108,7 @@ export class FormManagerComponent implements OnInit {
 
         // Build form controls dynamically
         this.buildFormGroup();
+        console.log(this.form.formExtras);
       },
       error: (err) => {
         console.error('Error loading form:', err);
@@ -200,7 +205,7 @@ export class FormManagerComponent implements OnInit {
             console.log(`No post-submit handling defined for form ${this.formId}.`);
           }
         }
-        this.dialog?.close(response);
+        this.dialogRef?.close(response);
         this.loading = false;
         // Handle success
       },
@@ -221,9 +226,30 @@ export class FormManagerComponent implements OnInit {
       }
     });
   }
-onCancel() {
-  this.location.back();
-}
+  onCancel() {
+    this.location.back();
+  }
+  onFormExtra(extra: FormExtra): void {
+    const typeId = (extra?.type?.typeId || '').toLowerCase().trim();
+
+    switch (typeId) {
+      case TypeConstants.FORM_EXTRA_LINK:
+        // this.location.back();
+        this.dialogRef?.close();
+        this.dialog.open(FormManagerComponent, {
+          width: '500px',
+          maxWidth: '90vw',
+          data: { formId: extra.targetFormId, pk: 'new' }
+        });
+        break;
+
+      default:
+        // fallback: emit event or log
+        console.log(`Unknown extra: ${extra}`);
+        break;
+    }
+  }
+
 }
 
 
