@@ -24,6 +24,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from '@angular/ma
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {FormConstants} from '../../../../constants/form_constants';
+import {FormDialogService} from '../../../services/form-dialog.service';
 
 
 type DialogData = {
@@ -65,9 +66,10 @@ export class FormManagerComponent implements OnInit {
 
   // The reactive form group
   formGroup: FormGroup;
-
-  loading = false;
+  header: string = '';
+  componentLoaded = false;
   error: string | null = null;
+  message: string | null = null;
 
   constructor(
     private service: FormService,
@@ -76,6 +78,7 @@ export class FormManagerComponent implements OnInit {
     private authService: AuthService,
     private location: Location,
     private dialog: MatDialog,
+    private formDialog: FormDialogService,
     @Optional() private dialogRef: MatDialogRef<FormManagerComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
@@ -97,17 +100,18 @@ export class FormManagerComponent implements OnInit {
   }
 
   loadForm(): void {
-    this.loading = true;
     this.error = null;
 
     this.service.loadForm(this.formId).subscribe({
       next: (response) => {
         this.form = response.form;
-        this.loading = false;
-        // console.log('Loaded form:', this.form);
 
         // Build form controls dynamically
         this.buildFormGroup();
+
+        this.header = this.form.header;
+
+        this.componentLoaded = true;
         console.log(this.form.formExtras);
       },
       error: (err) => {
@@ -122,8 +126,11 @@ export class FormManagerComponent implements OnInit {
           // Network error, server unreachable
           message = 'Network error. Please check your connection.';
         }
+        this.message = message;
         console.log(message);
-        this.loading = false;
+
+        this.header = 'Error loading form';
+        this.componentLoaded = true;
       }
     });
   }
@@ -176,6 +183,7 @@ export class FormManagerComponent implements OnInit {
 
 
   submitForm(): void {
+    this.componentLoaded = false;
     if (!this.form || !this.formGroup) {
       this.error = 'Form is not loaded.';
       return;
@@ -186,7 +194,7 @@ export class FormManagerComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+
     this.error = null;
 
     const payload = {
@@ -206,7 +214,7 @@ export class FormManagerComponent implements OnInit {
           }
         }
         this.dialogRef?.close(response);
-        this.loading = false;
+        // this.componentLoaded = true;
         // Handle success
       },
       error: (err) => {
@@ -222,25 +230,28 @@ export class FormManagerComponent implements OnInit {
         console.log(message);
 
         this.error = message;
-        this.loading = false;
+        this.componentLoaded = true;
       }
     });
   }
+
   onCancel() {
     this.location.back();
   }
+
   onFormExtra(extra: FormExtra): void {
     const typeId = (extra?.type?.typeId || '').toLowerCase().trim();
 
     switch (typeId) {
       case TypeConstants.FORM_EXTRA_LINK:
-        // this.location.back();
-        this.dialogRef?.close();
-        this.dialog.open(FormManagerComponent, {
-          width: '500px',
-          maxWidth: '90vw',
-          data: { formId: extra.targetFormId, pk: 'new' }
-        });
+        this.formDialog.switchFrom(this.dialogRef, extra.targetFormId, 'new');
+        // // this.location.back();
+        // this.dialogRef?.close();
+        // this.dialog.open(FormManagerComponent, {
+        //   width: '500px',
+        //   maxWidth: '90vw',
+        //   data: { formId: extra.targetFormId, pk: 'new' }
+        // });
         break;
 
       default:

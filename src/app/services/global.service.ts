@@ -8,14 +8,20 @@ import {User} from '../models/user';
 
 export interface GlobalState {
   meta: Meta,
-  user: User
+  user: User | null
 }
 
 @Injectable({ providedIn: 'root' })
 export class GlobalService {
   private globalSubject = new BehaviorSubject<GlobalState>({
     meta: {version: 'TBA', databaseKey: 'TBA'},
-    user: {name: 'Guest', loggedIn: false},
+    user: {
+      userId: 'new',
+      username: '',
+      person: null,
+      loggedIn: false,
+      name: 'Guest',
+    },
   });
   user$ = this.globalSubject.asObservable();
 
@@ -61,13 +67,18 @@ export class GlobalService {
   // }
   private updateUserState(user: any): void {
     const current = this.globalSubject.value;
-    this.globalSubject.next({
-      meta: current.meta,
-      user: {
-        name: user?.first_name ?? user?.username ?? 'Guest',
-        loggedIn: !!user
-      }
-    });
+      this.globalSubject.next({
+        meta: current.meta,
+        user: user ?? null
+      });
+    // this.globalSubject.next({
+    //   meta: current.meta,
+    //   user: {
+    //     name: user?.first_name ?? user?.username ?? 'Guest',
+    //     loggedIn: !!user,
+    //     personId: user?.person?.person_id ?? 'new'
+    //   }
+    // });
   }
   setMeta(meta: Meta): void {
     const current = this.globalSubject.value;

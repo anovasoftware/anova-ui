@@ -37,7 +37,6 @@ export class MenuService {
   //   });
   // }
   loadMenus(): void {
-    console.log('loading menus');
     this.api.get('public/table/static/menu/').subscribe({
       next: (res) => {
        const menus: MenuItem[] = res?.data.records || [];

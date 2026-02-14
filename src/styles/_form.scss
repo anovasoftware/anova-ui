@@ -74,16 +74,26 @@
   border-radius: 4px;
 }
 
+
+.form-message {
+  //color: #b00020;
+  //background: #fdecea;
+  //border: 1px solid #f5c2c7;
+  //padding: 8px 12px;
+  margin: 10px 0 40px 0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 /* --- Error messages --- */
 .form-error-message,
 .form-error-message-ext {
+  @extend .form-message;
   color: #b00020;
   background: #fdecea;
   border: 1px solid #f5c2c7;
   padding: 8px 12px;
-  margin: 12px 0;
-  border-radius: 4px;
-  font-size: 14px;
 }
 .button-row {
   display: flex;

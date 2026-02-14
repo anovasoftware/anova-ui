@@ -32,14 +32,14 @@
     <!--    </div>-->
 
     <!-- Logged-out state -->
-<!--    <div *ngIf="!isLoggedIn && !isDisabledLogin">-->
-<!--      <a class="header-link"-->
-<!--         [routerLink]="'/navigator/004'"-->
-<!--             href="javascript:void(0)">LOGIN-->
-<!--      </a>-->
-<!--    </div>-->
+    <!--    <div *ngIf="!isLoggedIn && !isDisabledLogin">-->
+    <!--      <a class="header-link"-->
+    <!--         [routerLink]="'/navigator/004'"-->
+    <!--             href="javascript:void(0)">LOGIN-->
+    <!--      </a>-->
+    <!--    </div>-->
     <div *ngIf="!isLoggedIn && !isDisabledLogin">
-      <a  class="header-link" type="button" (click)="onLogin($event)">
+      <a class="header-link" type="button" (click)="onLogin($event)">
         LOGIN
       </a>
     </div>
@@ -53,9 +53,14 @@
 
       <mat-menu #accountMenu="matMenu">
         <button mat-menu-item disabled>
-          Signed in as {{ user?.name }}
+          Signed in as {{ user?.username }}
         </button>
         <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="onProfile()">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
         <button mat-menu-item (click)="onLogout()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>

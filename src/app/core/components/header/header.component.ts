@@ -6,6 +6,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {GlobalService} from '../../../services/global.service';
 import {Constants} from '../../../../constants/constants';
 import {FormConstants} from '../../../../constants/form_constants';
+import {PersonConstants} from '../../../../constants/person_constants';
 import {MenuItem, MenuService} from '../../../services/menu.service';
 import {Router, RouterModule} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
@@ -15,6 +16,8 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/divider';
 import {MatDialog} from '@angular/material/dialog';
 import {FormManagerComponent} from '../form-manager/form-manager.component';
+import {FormDialogService} from '../../../services/form-dialog.service';
+import {User} from '../../../models/user';
 
 // import {Constants} from 'src/constants/constants';
 
@@ -44,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userName: string | null = null;
   feVersion = `${this.const.VERSION}`;
   beVersion = `not connected`;
-  user: { name: string } | null = null;
+  user: User | null = null;
   headerMenus: MenuItem[] = [];
 
   private destroy$ = new Subject<void>();
@@ -55,6 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog,
+    private formDialog: FormDialogService
   ) {
   }
 
@@ -64,11 +68,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //   this.isLoggedIn = !!user;
     // });
     this.globalService.user$.subscribe(global => {
-      this.user = global?.user ?? { name: 'Guest', loggedIn: false };
-      this.userName = this.user?.name;
-      this.isLoggedIn = !!this.user && this.user.name !== 'Guest';
-      // this.isLoggedIn = this.user?.loggedIn ?? false;
-      console.log(global);
+      this.user = global?.user ?? null;
+      // this.userName = this.user?.name;
+      this.isLoggedIn = !!this.user;
       this.beVersion = `${global?.meta?.version}`;
     });
 
@@ -103,11 +105,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (event.ctrlKey || event.metaKey || event.button === 1) return;
 
     event.preventDefault();
-    this.dialog.open(FormManagerComponent, {
-      width: '500px',
-      maxWidth: '90vw',
-      data: { formId: FormConstants.LOGIN, pk: 'new' }
-    });
+    this.formDialog.openForm(FormConstants.LOGIN, 'new');
+    // this.dialog.open(FormManagerComponent, {
+    //   width: '500px',
+    //   maxWidth: '90vw',
+    //   data: { formId: FormConstants.LOGIN, pk: 'new' }
+    // });
   }
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
@@ -133,5 +136,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // this.globalService.loadPublicMeta();  // Optional: refresh public meta
     this.router.navigate(['/navigator/001']);  // Or home page after logout
   }
-
+  onProfile() {
+    const params = {workingUserId: this.user?.userId};
+    let personId = this.user?.person?.personId;
+    let action = 'edit';
+    if (this.user?.person?.personId===PersonConstants.TO_BE_ANNOUNCED) {
+      personId = 'new';
+      action = 'new';
+    }
+    this.formDialog.openForm(FormConstants.PROFILE, personId, action, params);
+  }
 }
