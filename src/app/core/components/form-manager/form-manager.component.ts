@@ -1,6 +1,6 @@
 import {Component, Inject, Input, OnInit, Optional} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import { Location } from '@angular/common';
+import {Location} from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -29,7 +29,7 @@ import {FormDialogService} from '../../../services/form-dialog.service';
 
 type DialogData = {
   formId?: string;
-  pk?: string;
+  recordId?: string;
   action?: string;
   params?: any;
 };
@@ -54,8 +54,8 @@ type DialogData = {
 })
 export class FormManagerComponent implements OnInit {
   @Input() formId!: string;
-  @Input() pk!: string;
-  @Input() action?: string;
+  @Input() recordId!: string;
+  @Input() action = 'create';
   @Input() params?: any;
 
   protected readonly formHandlers: { [formId: string]: (response: any) => void } = {};
@@ -83,8 +83,8 @@ export class FormManagerComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
     this.formGroup = this.fb.group({});
-        this.formHandlers = {
-          '001': (response) => handleForm001Response(response, this.router, this.authService)
+    this.formHandlers = {
+      '001': (response) => handleForm001Response(response, this.router, this.authService)
       // add more special handlers here
     };
   }
@@ -92,7 +92,7 @@ export class FormManagerComponent implements OnInit {
   ngOnInit() {
     if (this.data) {
       this.formId = this.data.formId ?? this.formId;
-      this.pk = this.data.pk ?? this.pk;
+      this.recordId = this.data.recordId ?? this.recordId;
       this.action = this.data.action ?? this.action;
       this.params = this.data.params ?? this.params;
     }
@@ -102,17 +102,25 @@ export class FormManagerComponent implements OnInit {
   loadForm(): void {
     this.error = null;
 
-    this.service.loadForm(this.formId).subscribe({
+    this.service.loadForm(this.formId, this.action, this.recordId).subscribe({
       next: (response) => {
-        this.form = response.form;
+        if (!response.success) {
+          console.error('loadForm failed:', response.message, response.errors);
+        } else {
+          const  form = response.data?.form;
+          if (form) {
+            this.form = form;
+            this.buildFormGroup();
 
-        // Build form controls dynamically
-        this.buildFormGroup();
+          //   if (this.form.readonly) {
+          //    this.formGroup.disable({ emitEvent: false });
+          // }
 
-        this.header = this.form.header;
-
-        this.componentLoaded = true;
-        console.log(this.form.formExtras);
+            // this.debugFormValidity();
+            this.header = this.form.header;
+            this.componentLoaded = true;
+          }
+        }
       },
       error: (err) => {
         console.error('Error loading form:', err);
@@ -147,11 +155,15 @@ export class FormManagerComponent implements OnInit {
         ? {validators: validators as ValidatorFn[]}
         : undefined;
 
-
-      this.formGroup.addControl(
-        control.name,
-        this.fb.nonNullable.control(control.value, options)
-      );
+      const fc = this.fb.nonNullable.control(control.value, options);
+      // if (control.disabled) {
+      //   fc.disable({ emitEvent: false });
+      // }
+      this.formGroup.addControl(control.name, fc);
+      // this.formGroup.addControl(
+      //   control.name,
+      //   this.fb.nonNullable.control(control.value, options)
+      // );
     }
 
   }
@@ -198,7 +210,7 @@ export class FormManagerComponent implements OnInit {
     this.error = null;
 
     const payload = {
-      pk: this.pk,
+      recordId: this.recordId,
       ...this.formGroup.value
     };
 
@@ -206,6 +218,8 @@ export class FormManagerComponent implements OnInit {
       next: (response) => {
         const data = response.data;
         if (response.success) {
+          // this.storeJwtTokensIfPresent(response);  // ✅ catch login tokens here
+
           const handler = this.formHandlers[this.formId];
           if (handler) {
             handler(response);
@@ -235,6 +249,19 @@ export class FormManagerComponent implements OnInit {
     });
   }
 
+  // private storeJwtTokensIfPresent(response: any): void {
+  //   const access = response?.data?.access;
+  //   const refresh = response?.data?.refresh;
+  //
+  //   if (access) localStorage.setItem('access_token', access);
+  //   if (refresh) localStorage.setItem('refresh_token', refresh);
+  //
+  //   // optional: if your API also returns a user object
+  //   const user = response?.data?.user;
+  //   if (user) localStorage.setItem('user', JSON.stringify(user));
+  // }
+
+
   onCancel() {
     this.location.back();
   }
@@ -259,6 +286,20 @@ export class FormManagerComponent implements OnInit {
         console.log(`Unknown extra: ${extra}`);
         break;
     }
+  }
+  private debugFormValidity(): void {
+    console.log('FORM status=', this.formGroup.status, 'valid=', this.formGroup.valid);
+
+    Object.entries(this.formGroup.controls).forEach(([name, ctrl]) => {
+      if (ctrl.invalid) {
+        console.log('INVALID CONTROL:', name, {
+          value: ctrl.value,
+          errors: ctrl.errors,
+          status: ctrl.status,
+          readonly: ctrl.disabled
+        });
+      }
+    });
   }
 
 }

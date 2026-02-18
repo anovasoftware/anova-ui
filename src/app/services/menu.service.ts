@@ -2,22 +2,9 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {ApiService} from './api.service';
 import {GlobalService} from './global.service';
+import {MenuItem} from '../models/menu';
+import {ApiData, ApiResponse, RecordsResponse} from '../models/api-response';
 
-export interface PageItem {
-  pageId: string;
-  description: string;
-}
-
-export interface MenuItem {
-  menuId: string;
-  typeId: string;
-  description: string;
-  title: string;
-  subTitle?: string;
-  breadcrumbName: string;
-  route: string;
-  page?: PageItem;
-}
 
 @Injectable({providedIn: 'root'})
 export class MenuService {
@@ -29,24 +16,17 @@ export class MenuService {
     private globalService: GlobalService) {
   }
 
-  // loadMenus(): void {
-  //   console.log('loading menus');
-  //   this.api.get('public/table/static/menu/').subscribe({
-  //     next: (res) => this.menusSubject.next(res?.detail || []),
-  //     error: () => this.menusSubject.next([]),
-  //   });
-  // }
   loadMenus(): void {
-    this.api.get('public/table/static/menu/').subscribe({
-      next: (res) => {
-       const menus: MenuItem[] = res?.data.records || [];
+    this.api.get<ApiResponse<ApiData<MenuItem>>>('public/table/static/menu/').subscribe({
+      next: (response) => {
+        const menus: MenuItem[] = response?.data.records || [];
         this.menusSubject.next(menus);
 
         // ✅ Set selectedMenu if it's empty
         if (!this.selectedMenuSubject.value && menus.length > 0) {
           const defaultMenu = menus.find(m => m.menuId === '001') || menus[0];
           this.selectedMenuSubject.next(defaultMenu);
-          this.globalService.setMeta(res.meta);
+          this.globalService.setMeta(response.meta);
         }
       },
       error: () => {
@@ -54,7 +34,7 @@ export class MenuService {
         this.selectedMenuSubject.next(null);
       },
     });
-}
+  }
 
   getMenusByType(typeId: string): MenuItem[] {
     return this.menusSubject.getValue().filter(m => m.typeId === typeId);

@@ -174,3 +174,12 @@
   text-decoration: underline;
 }
 
+//.readonly-field {
+//  color: green !important;
+//  cursor: default;
+//}
+.mat-mdc-input-element.readonly-field {
+  color:  map.get(theme.$neutral-palette, 50) !important;
+  cursor: default;
+}
+

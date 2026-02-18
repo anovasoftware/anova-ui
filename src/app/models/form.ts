@@ -9,6 +9,9 @@ export interface FormField {
   placeholder: string;
   type: Type;
   value: any;
+  readonly: boolean;
+  customFlag: string;
+
 }
 
 export interface FormExtra {
@@ -26,6 +29,7 @@ export interface Form {
   header: string;
   saveButtonLabel: string;
   saveButtonAction: string;
+  readonly: boolean;
   formFields: FormField[];
   formExtras: FormExtra[];
 }

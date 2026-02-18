@@ -1,10 +1,11 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MenuItem, MenuService, PageItem} from '../../../services/menu.service';
+import {MenuService} from '../../../services/menu.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import {CommonModule} from '@angular/common';
+import {MenuItem, PageItem} from '../../../models/menu';
 
 @Component({
   selector: 'app-navigator',

@@ -1,8 +1,10 @@
 <div *ngIf="componentLoaded">
+
 <!--  <img src="/assets/images/watermark.svg" class="background-watermark" alt="Seagull">-->
   <mat-card class="form-card mat-typography">
     <mat-card-header>
       <mat-card-title>
+        <div class="warning" *ngIf="form?.readonly">Record is static and cannot be updated.</div>
         <div class="header-with-icon">
           <mat-icon>account_circle</mat-icon>
           <span>{{ header }}</span>
@@ -50,7 +52,7 @@
             mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="formGroup.invalid">
+            [disabled]="formGroup.invalid || form.readonly">
             {{ form.saveButtonLabel }}
           </button>
         </div>

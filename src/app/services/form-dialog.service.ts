@@ -4,7 +4,7 @@ import { FormManagerComponent } from '../core/components/form-manager/form-manag
 
 export type DialogData = {
   formId?: string;
-  pk?: string;
+  recordId?: string;
   action?: string;
   params?: any;
 };
@@ -14,7 +14,6 @@ export class FormDialogService {
   constructor(private dialog: MatDialog) {}
 
   open(data: DialogData, opts?: { width?: string; maxWidth?: string }): MatDialogRef<FormManagerComponent> {
-    console.log(data);
     return this.dialog.open(FormManagerComponent, {
       width: opts?.width ?? '500px',
       maxWidth: opts?.maxWidth ?? '90vw',
@@ -22,19 +21,19 @@ export class FormDialogService {
     });
   }
 
-  openForm(formId: string, pk: string = 'new', action?: string, params?: any) {
-    return this.open({ formId, pk, action, params });
+  openForm(formId: string, recordId: string = 'new', action: string='create', params?: any) {
+    return this.open({ formId, recordId, action, params });
   }
 
   // Convenience: close current dialog (if provided) then open the next
   switchFrom(
     currentRef: MatDialogRef<any> | null | undefined,
     formId: string,
-    pk: string = 'new',
+    recordId: string = 'new',
     action?: string,
     params?: any
   ) {
     currentRef?.close();
-    return this.openForm(formId, pk, action, params);
+    return this.openForm(formId, recordId, action, params);
   }
 }

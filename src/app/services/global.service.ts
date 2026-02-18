@@ -5,6 +5,7 @@ import { ApiService } from './api.service';
 import {AuthService} from './auth.service';
 import {Meta} from '../models/meta';
 import {User} from '../models/user';
+import {ApiMeta} from '../models/api-response';
 
 export interface GlobalState {
   meta: Meta,
@@ -80,7 +81,7 @@ export class GlobalService {
     //   }
     // });
   }
-  setMeta(meta: Meta): void {
+  setMeta(meta: ApiMeta): void {
     const current = this.globalSubject.value;
     this.globalSubject.next({
       meta: meta ?? {},

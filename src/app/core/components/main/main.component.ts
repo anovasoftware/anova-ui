@@ -5,10 +5,11 @@ import {HeaderComponent} from '../header/header.component';
 import {SidebarComponent} from '../sidebar/sidebar.component';
 import {BreadcrumbComponent} from '../breadcrumb/breadcrumb.component';
 import {ApiService} from '../../../services/api.service';
-import {MenuItem, MenuService} from '../../../services/menu.service';
+import {MenuService} from '../../../services/menu.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {FooterComponent} from '../footer/footer.component';
+import {MenuItem} from '../../../models/menu';
 
 @Component({
   selector: 'app-main-layout',

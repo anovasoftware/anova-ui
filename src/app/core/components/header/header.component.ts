@@ -7,7 +7,7 @@ import {GlobalService} from '../../../services/global.service';
 import {Constants} from '../../../../constants/constants';
 import {FormConstants} from '../../../../constants/form_constants';
 import {PersonConstants} from '../../../../constants/person_constants';
-import {MenuItem, MenuService} from '../../../services/menu.service';
+import {MenuService} from '../../../services/menu.service';
 import {Router, RouterModule} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
@@ -18,6 +18,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {FormManagerComponent} from '../form-manager/form-manager.component';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {User} from '../../../models/user';
+import {MenuItem} from '../../../models/menu';
 
 // import {Constants} from 'src/constants/constants';
 
@@ -85,7 +86,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.headerMenus = menus.filter(m => m.typeId === '002');
       });
 
-    this.menuService.loadMenus();  // ideally only called once (e.g., on login)
+    // this.menuService.loadMenus();  // ideally only called once (e.g., on login)
     // this.menuService.menus$.subscribe(menu => {
     //   this.headerMenu = menu;
     //   // If you expect only one item and want to store it differently:
@@ -105,7 +106,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (event.ctrlKey || event.metaKey || event.button === 1) return;
 
     event.preventDefault();
-    this.formDialog.openForm(FormConstants.LOGIN, 'new');
+    this.formDialog.openForm(FormConstants.LOGIN, 'new', 'create');
     // this.dialog.open(FormManagerComponent, {
     //   width: '500px',
     //   maxWidth: '90vw',
@@ -139,11 +140,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onProfile() {
     const params = {workingUserId: this.user?.userId};
     let personId = this.user?.person?.personId;
-    let action = 'edit';
+    let action = 'update';
     if (this.user?.person?.personId===PersonConstants.TO_BE_ANNOUNCED) {
       personId = 'new';
-      action = 'new';
+      action = 'create';
     }
+    console.log(personId);
     this.formDialog.openForm(FormConstants.PROFILE, personId, action, params);
   }
 }
