@@ -126,17 +126,26 @@
 //  }
 //}
 
+//.form-field-full {
+//  width: 100%;
+//
+//  .mat-mdc-input-element {
+//    font-size: 0.95rem; // slightly smaller than default (~1rem)
+//  }
+//
+//  .mat-mdc-form-field-infix {
+//    padding: 8px 8px;   // subtle tightening (defaults are around 8px 16px)
+//  }
+//}
 .form-field-full {
   width: 100%;
 
-  .mat-mdc-input-element {
-    font-size: 0.95rem; // slightly smaller than default (~1rem)
-  }
-
   .mat-mdc-form-field-infix {
-    padding: 8px 8px;   // subtle tightening (defaults are around 8px 16px)
+    padding: 4px 8px 4px 0 !important;   /* top/bottom smaller, left/right ok */
+    min-height: 25px !important;   // 👈 Step 2 goes here
   }
 }
+
 
 .header-with-icon {
   display: flex;
@@ -183,3 +192,43 @@
   cursor: default;
 }
 
+/* styles.scss */
+//.compact-form .mat-mdc-form-field .mat-mdc-form-field-infix {
+//  padding-left: 0 !important;
+//}
+//
+
+//.compact-form .mat-mdc-form-field {
+//  font-size: 12.5px;
+//  margin-bottom: 6px; /* small gap between fields */
+//}
+//
+//.compact-form .mat-mdc-form-field .mdc-notched-outline__notch {
+//  padding-left: 0 !important;
+//}
+///* Tighten the textbox without breaking label */
+//.compact-form .mat-mdc-form-field .mat-mdc-form-field-infix {
+//  min-height: 30px !important;     /* tighten box */
+//  padding-top: 5px !important;
+//  padding-bottom: 5px !important;
+//  padding-left: 0 !important;
+//}
+//
+///* Keep wrapper flexible (don’t set height!) */
+//.compact-form .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+//  padding-top: 0 !important;
+//  padding-bottom: 0 !important;
+//}
+//
+///* ✅ Reserve space for ONE line of error text */
+//.compact-form .mat-mdc-form-field .mat-mdc-form-field-subscript-wrapper {
+//  min-height: 16px;     /* one line */
+//  margin-top: 2px;
+//  font-size: 11px;
+//  line-height: 16px;
+//}
+//
+///* Optional: if you want errors slightly less “tall” */
+//.compact-form .mat-mdc-form-field .mat-mdc-form-field-error {
+//  margin: 0;
+//}

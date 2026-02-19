@@ -113,6 +113,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //   data: { formId: FormConstants.LOGIN, pk: 'new' }
     // });
   }
+
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
   }
@@ -137,15 +138,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // this.globalService.loadPublicMeta();  // Optional: refresh public meta
     this.router.navigate(['/navigator/001']);  // Or home page after logout
   }
+
   onProfile() {
-    const params = {workingUserId: this.user?.userId};
-    let personId = this.user?.person?.personId;
-    let action = 'update';
-    if (this.user?.person?.personId===PersonConstants.TO_BE_ANNOUNCED) {
-      personId = 'new';
-      action = 'create';
-    }
-    console.log(personId);
-    this.formDialog.openForm(FormConstants.PROFILE, personId, action, params);
+    const params = {};
+    const creatingPerson = this.user?.person?.personId === PersonConstants.TO_BE_ANNOUNCED;
+    const personId = creatingPerson ? 'new' : this.user?.person?.personId;
+    const action = creatingPerson ? 'create' : 'update';
+    const dialogRef = this.formDialog.openForm(FormConstants.PROFILE, personId, action, params);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        const personId = result?.data?.recordId;
+
+        if (personId) {
+          const user = result.data?.user;
+          this.authService.storeUser(user);
+        }
+      }
+    });
   }
 }

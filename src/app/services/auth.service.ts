@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
+import {User} from '../models/user';
+import {normalizeUser} from '../core/utilities/common';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +15,11 @@ export class AuthService {
   user$ = this.userSubject.asObservable();
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, { username, password })
+    return this.http.post<any>(this.apiUrl, {username, password})
       .pipe(
         tap(response => {
           this.storeTokens(response.access, response.refresh);
@@ -36,23 +39,39 @@ export class AuthService {
   getRefreshToken(): string | null {
     return localStorage.getItem('refresh_token');
   }
+
   private loadUserFromStorage(): any {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
+    // const storedUser = localStorage.getItem('user');
+    // return storedUser ? JSON.parse(storedUser) : null;
+    const stored = localStorage.getItem('user');
+    const user = stored ? JSON.parse(stored) : null;
+    return normalizeUser(user);
+
   }
 
   storeUser(user: any): void {
-    localStorage.setItem('user', JSON.stringify(user));
-    this.userSubject.next(user);
+    console.log('AuthService.storeUser() got =', user);
+
+    const normalized = normalizeUser(user);
+    console.log('AuthService.storeUser() normalized =', normalized);
+
+    localStorage.setItem('user', JSON.stringify(normalized));
+    console.log('localStorage.user NOW =', JSON.parse(localStorage.getItem('user') || 'null'));
+
+    this.userSubject.next(normalized);
   }
+
 
   clearUser(): void {
     localStorage.removeItem('user');
     this.userSubject.next(null);
   }
+
   logout(): void {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     this.clearUser();
   }
+
 }
+

@@ -21,7 +21,7 @@
         {{ error }}
       </div>
 
-      <form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form" class="material-form">
+      <form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form" class="material-form Xcompact-form">
         <div *ngFor="let control of form.formFields" class="form-row">
           <ng-container [ngSwitch]="control.typeId">
             <app-widget-textbox

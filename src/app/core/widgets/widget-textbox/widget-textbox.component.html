@@ -1,5 +1,10 @@
 <div [formGroup]="formGroup">
-  <mat-form-field appearance="fill" class="form-field-full">
+<!--  <mat-form-field appearance="outline" class="form-field-full">-->
+    <mat-form-field
+      appearance="outline"
+      subscriptSizing="fixed"
+      class="form-field-full XXXcompact-field">
+
     <mat-label>{{field.label}}</mat-label>
     <input
       matInput
@@ -12,13 +17,13 @@
       [tabIndex]="field.readonly ? -1 : 0">
 
     <!-- Validation errors -->
-    <mat-error *ngIf="formGroup.get(field.name)?.hasError('required')">
-      This field is required.
-    </mat-error>
-
-    <!-- Add more validation messages here if you want -->
-    <mat-error *ngIf="formGroup.get(field.name)?.hasError('email')" class="error-text">
-      Please enter a valid email.
+    <mat-error *ngIf="formGroup.get(field.name)?.invalid && (formGroup.get(field.name)?.touched || formGroup.get(field.name)?.dirty)">
+      <ng-container *ngIf="formGroup.get(field.name)?.hasError('required')">
+        This field is required.
+      </ng-container>
+      <ng-container *ngIf="formGroup.get(field.name)?.hasError('email')">
+        Please enter a valid email.
+      </ng-container>
     </mat-error>
   </mat-form-field>
 </div>
