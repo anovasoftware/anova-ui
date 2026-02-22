@@ -67,3 +67,69 @@
     }
   }
 }
+
+.toolbar-selector {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.toolbar-field {
+  width: 240px;
+  margin: 0;
+}
+
+/* Make it short + remove extra vertical space */
+.toolbar-field ::ng-deep .mat-mdc-form-field-flex {
+  height: 36px;
+  align-items: center;
+}
+
+.toolbar-field ::ng-deep .mat-mdc-form-field-infix {
+  padding: 0 10px !important;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+/* Hide the subscript area (removes that blank space under the control) */
+.toolbar-field ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+/* Toolbar look: white text + subtle border */
+.toolbar-field ::ng-deep .mat-mdc-select-value,
+.toolbar-field ::ng-deep .mat-mdc-select-placeholder,
+.toolbar-field ::ng-deep .mat-mdc-select-arrow {
+  color: map.get(theme.$primary-palette, 95);
+}
+
+/* Outline color */
+.toolbar-field ::ng-deep .mdc-notched-outline__leading,
+.toolbar-field ::ng-deep .mdc-notched-outline__notch,
+.toolbar-field ::ng-deep .mdc-notched-outline__trailing {
+  border-color: map.get(theme.$primary-palette, 95);
+}
+
+/* Hover/focus polish */
+.toolbar-field:hover ::ng-deep .mdc-notched-outline__leading,
+.toolbar-field:hover ::ng-deep .mdc-notched-outline__notch,
+.toolbar-field:hover ::ng-deep .mdc-notched-outline__trailing {
+  border-color: map.get(theme.$primary-palette, 95);
+}
+
+.toolbar-field.mat-focused ::ng-deep .mdc-notched-outline__leading,
+.toolbar-field.mat-focused ::ng-deep .mdc-notched-outline__notch,
+.toolbar-field.mat-focused ::ng-deep .mdc-notched-outline__trailing {
+  border-color: map.get(theme.$primary-palette, 95);
+  border-width: 3.5px;
+}
+
+/* container for toolbar context controls */
+.toolbar-context-wrap {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+

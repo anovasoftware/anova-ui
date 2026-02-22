@@ -1,9 +1,5 @@
-<div class="toolbar-bar">
+<div class="toolbar-bar" *ngIf="componentLoaded">
   <div class="printable-area-flex">
-    <!--    <button mat-icon-button (click)="toggleSidebar()" class="mr-2">-->
-    <!--      <mat-icon>menu</mat-icon>-->
-    <!--    </button>-->
-
     <a [routerLink]="'/navigator/001'" class="app-title logo-link" title="version: {{version}}">
       <!--    <span class="app-title" title="version: {{version}}">-->
       <span class="anova">anova</span>
@@ -16,7 +12,6 @@
 
     <span class="flex-spacer"></span>
 
-
     <nav class="header-nav" *ngIf="headerMenus.length > 0">
       <a *ngFor="let item of headerMenus"
          [routerLink]="item.route"
@@ -26,18 +21,6 @@
       </a>
     </nav>
 
-    <!--    <div>-->
-    <!--      <a class="header-link" href="javascript:void(0)">ABOUT</a>-->
-    <!--      <a class="header-link" href="javascript:void(0)">MODULES</a>-->
-    <!--    </div>-->
-
-    <!-- Logged-out state -->
-    <!--    <div *ngIf="!isLoggedIn && !isDisabledLogin">-->
-    <!--      <a class="header-link"-->
-    <!--         [routerLink]="'/navigator/004'"-->
-    <!--             href="javascript:void(0)">LOGIN-->
-    <!--      </a>-->
-    <!--    </div>-->
     <div *ngIf="!isLoggedIn && !isDisabledLogin">
       <a class="header-link" type="button" (click)="onLogin($event)">
         LOGIN
@@ -47,6 +30,23 @@
 
     <!-- Logged-in state -->
     <div class="flex-row align-center" *ngIf="isLoggedIn">
+      <!-- Hotel selector -->
+      <div class="toolbar-selector" *ngIf="(user?.hotels ?? []).length > 0">
+        <mat-form-field appearance="outline" class="toolbar-field">
+          <mat-select
+            placeholder="Select Hotel"
+            [value]="selectedHotelId"
+            (selectionChange)="onHotelChange($event.value)">
+
+            <mat-option
+              *ngFor="let hotel of user?.hotels"
+              [value]="hotel.hotelId">
+              {{ hotel.description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <button mat-icon-button [matMenuTriggerFor]="accountMenu" title="{{user?.name}}">
         <mat-icon>account_circle</mat-icon>
       </button>

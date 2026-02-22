@@ -50,14 +50,8 @@ export class AuthService {
   }
 
   storeUser(user: any): void {
-    console.log('AuthService.storeUser() got =', user);
-
     const normalized = normalizeUser(user);
-    console.log('AuthService.storeUser() normalized =', normalized);
-
     localStorage.setItem('user', JSON.stringify(normalized));
-    console.log('localStorage.user NOW =', JSON.parse(localStorage.getItem('user') || 'null'));
-
     this.userSubject.next(normalized);
   }
 

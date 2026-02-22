@@ -19,6 +19,9 @@ import {FormManagerComponent} from '../form-manager/form-manager.component';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {User} from '../../../models/user';
 import {MenuItem} from '../../../models/menu';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatChip} from '@angular/material/chips';
 
 // import {Constants} from 'src/constants/constants';
 
@@ -35,6 +38,10 @@ import {MenuItem} from '../../../models/menu';
     RouterModule,
     MatMenuModule,
     MatDivider,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatChip,
+
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
@@ -50,6 +57,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   beVersion = `not connected`;
   user: User | null = null;
   headerMenus: MenuItem[] = [];
+  selectedHotelId: string | null = null;
+  componentLoaded = false;
 
   private destroy$ = new Subject<void>();
 
@@ -73,6 +82,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       // this.userName = this.user?.name;
       this.isLoggedIn = !!this.user;
       this.beVersion = `${global?.meta?.version}`;
+      this.componentLoaded = true;
     });
 
     // this.globalService.user$.subscribe(global => {
@@ -156,5 +166,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }
     });
+  }
+  onHotelChange(hotelId: string): void {
+    this.selectedHotelId = hotelId;
+    console.log(hotelId);
+    localStorage.setItem('hotelId', hotelId);
   }
 }

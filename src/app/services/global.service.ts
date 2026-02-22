@@ -31,7 +31,6 @@ export class GlobalService {
     private api: ApiService,
     private authService: AuthService) {
       this.authService.user$.subscribe(user => {
-        console.log('GlobalService saw authService.user$ =', user);
         this.updateUserState(user);
       });
   }
