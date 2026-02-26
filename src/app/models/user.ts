@@ -6,6 +6,7 @@ export interface User {
   userId: string;
   username: string;
   person: Person | null;
+  lastHotelId: string;
 
   // client-only helpers (optional)
   loggedIn: boolean;

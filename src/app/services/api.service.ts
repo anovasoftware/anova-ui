@@ -30,6 +30,11 @@ export class ApiService {
     const httpHeaders = new HttpHeaders(headers);
     return this.http.post(url, body, { headers: httpHeaders });
   }
+  patch(urlExt: string, body: any = {}, headers: any = {}): Observable<any> {
+    const url = `${this.baseApi}${urlExt}`;
+    const httpHeaders = new HttpHeaders(headers);
 
-  // Add other methods like PUT, DELETE as needed
+    return this.http.patch(url, body, { headers: httpHeaders });
+  }
+    // Add other methods like PUT, DELETE as needed
 }

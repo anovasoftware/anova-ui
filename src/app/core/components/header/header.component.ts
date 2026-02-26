@@ -22,6 +22,7 @@ import {MenuItem} from '../../../models/menu';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatChip} from '@angular/material/chips';
+import {UserService} from '../../../services/user.service';
 
 // import {Constants} from 'src/constants/constants';
 
@@ -66,6 +67,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private globalService: GlobalService,
     private menuService: MenuService,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private dialog: MatDialog,
     private formDialog: FormDialogService
@@ -167,9 +169,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     });
   }
+  // onHotelChangeOld(hotelId: string): void {
+  //   this.selectedHotelId = hotelId;
+  //   this.userService.setLastHotel(hotelId);
+  //   console.log(hotelId);
+  //   localStorage.setItem('hotelId', hotelId);
+  // }
+
   onHotelChange(hotelId: string): void {
-    this.selectedHotelId = hotelId;
-    console.log(hotelId);
     localStorage.setItem('hotelId', hotelId);
+    this.selectedHotelId = hotelId;
+
+    if (!!this.user) {
+      this.userService.setLastHotel(this.user.userId, hotelId).subscribe({
+        next: (response) => {
+          if (!response.success) {
+            console.error('setLastHotel failed:', response.message, response.errors);
+          }
+        },
+        error: (err) => console.error('setLastHotel HTTP error:', err)
+      });
+    }
   }
 }
