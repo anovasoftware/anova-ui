@@ -21,7 +21,7 @@ import {FormConstants} from '../../../../constants/form_constants';
 })
 export class Page004Component {
   username: string = '';
-  recordId: string = 'new';
+  recordId: string = 'create';
 
   constructor(private authService: AuthService) {}
 

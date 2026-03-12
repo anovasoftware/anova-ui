@@ -8,7 +8,7 @@ import {ApiResponse, FormResponse} from '../models/api-response';
   providedIn: 'root'
 })
 export class FormService {
-  private baseUrl = 'form/form_data/';
+  private baseUrl = 'form/';
 
   constructor(private api: ApiService) {
   }

@@ -1,0 +1,73 @@
+@use 'sass:map';
+@use 'styles/variables';
+@use 'styles/themes' as theme;
+
+.anova-platform-section {
+  padding: 4rem 0 5rem;
+  background-color: map.get(theme.$primary-palette, 95);
+}
+
+.anova-platform {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.section-eyebrow {
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: map.get(theme.$primary-palette, 30);
+}
+
+.anova-platform-text h2 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: map.get(theme.$primary-palette, 20);
+}
+
+.anova-platform-text p {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: map.get(theme.$primary-palette, 20);
+
+}
+
+.anova-platform-highlights {
+  display: grid;
+  gap: 1rem;
+}
+
+.platform-card {
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.platform-card mat-card-title {
+  padding-top: 0.75rem;
+  padding-left: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: map.get(theme.$primary-palette, 20);
+}
+
+.platform-card mat-card-content p {
+  margin-top: 0.75rem;
+  color: map.get(theme.$primary-palette, 20);
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .anova-platform {
+    grid-template-columns: 1fr;
+  }
+
+  .anova-platform-text h2 {
+    font-size: 1.7rem;
+  }
+}

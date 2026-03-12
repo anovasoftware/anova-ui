@@ -17,10 +17,18 @@ import {MatCardModule} from '@angular/material/card';
 
 export class Page002Component implements OnInit, OnDestroy {
   highlights: string[] = [
-    'Over 20 years of continuous operation',
+    'Innovative and user-friendly',
+    'Powerful and scalable',
+    'Secure and reliable',
+    'Customizable and adaptable',
+    'Trusted shipboard software running in remote environments for over 20 years',
     'Fully integrated enterprise-level platform',
     'Rock-solid and dependable',
     'Highly configurable',
+    'Flexible integration platform for expedition operations',
+    'Advanced analytics and reporting capabilities',
+    'Real-time data visualization and analysis',
+    'Advanced security measures',
   ];
 
   currentHighlightIndex = 0;
@@ -32,7 +40,7 @@ export class Page002Component implements OnInit, OnDestroy {
       this.currentHighlightIndex =
         (this.currentHighlightIndex + 1) % this.highlights.length;
       this.currentHighlight = this.highlights[this.currentHighlightIndex];
-    }, 3000); // 3 seconds per highlight
+    }, 5000); // 3 seconds per highlight
   }
 
   ngOnDestroy(): void {

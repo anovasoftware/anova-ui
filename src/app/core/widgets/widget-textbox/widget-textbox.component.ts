@@ -22,9 +22,15 @@ export class WidgetTextboxComponent {
   @Input() field!: FormField;
   @Input() formGroup!: FormGroup;
 
+  protected readonly TypeConstants = TypeConstants;
+
   get inputType(): string {
     return this.field?.controlType?.toLowerCase() || 'text';
   }
 
-  protected readonly TypeConstants = TypeConstants;
+
+  hasError(name: string, error: string): boolean {
+    const control = this.formGroup.get(name);
+    return !!control && control.hasError(error);
+  }
 }
