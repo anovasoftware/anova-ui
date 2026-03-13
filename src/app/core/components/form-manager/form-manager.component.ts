@@ -25,6 +25,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {FormConstants} from '../../../../constants/form_constants';
 import {FormDialogService} from '../../../services/form-dialog.service';
+import {WidgetTextareaComponent} from '../../widgets/widget-textarea/widget-textarea.component';
 
 
 type DialogData = {
@@ -48,6 +49,7 @@ type DialogData = {
     MatCardHeader,
     MatCardContent,
     MatIconModule,
+    WidgetTextareaComponent,
   ],
   templateUrl: './form-manager.component.html',
   styleUrl: './form-manager.component.scss'
@@ -107,14 +109,14 @@ export class FormManagerComponent implements OnInit {
         if (!response.success) {
           console.error('loadForm failed:', response.message, response.errors);
         } else {
-          const  form = response.data?.form;
+          const form = response.data?.form;
           if (form) {
             this.form = form;
             this.buildFormGroup();
 
-          //   if (this.form.readonly) {
-          //    this.formGroup.disable({ emitEvent: false });
-          // }
+            //   if (this.form.readonly) {
+            //    this.formGroup.disable({ emitEvent: false });
+            // }
 
             // this.debugFormValidity();
             this.header = this.form.header;
@@ -150,26 +152,34 @@ export class FormManagerComponent implements OnInit {
 
     for (const control of this.form.formFields) {
       const validators = this.buildValidators(control);
-      // const options = validators.length ? { validators } as AbstractControlOptions: undefined;
-      const options = validators.length
-        ? {validators: validators as ValidatorFn[]}
-        : undefined;
 
-      const fc = this.fb.nonNullable.control(control.value, options);
-      // if (control.disabled) {
-      //   fc.disable({ emitEvent: false });
-      // }
+      const fc = this.fb.nonNullable.control(control.value ?? '', {
+        validators,
+        updateOn: 'change',
+      });
+
       this.formGroup.addControl(control.name, fc);
-      // this.formGroup.addControl(
-      //   control.name,
-      //   this.fb.nonNullable.control(control.value, options)
-      // );
+      // const validators = this.buildValidators(control);
+      // // const options = validators.length ? { validators } as AbstractControlOptions: undefined;
+      // const options = validators.length
+      //   ? {validators: validators as ValidatorFn[]}
+      //   : undefined;
+      //
+      // const fc = this.fb.nonNullable.control(control.value, options);
+      // // if (control.disabled) {
+      // //   fc.disable({ emitEvent: false });
+      // // }
+      // this.formGroup.addControl(control.name, fc);
+      // // this.formGroup.addControl(
+      // //   control.name,
+      // //   this.fb.nonNullable.control(control.value, options)
+      // // );
     }
 
   }
 
-  private buildValidators(control: any): Validators[] {
-    const validators = [];
+  private buildValidators(control: any): ValidatorFn[] {
+    const validators: ValidatorFn[] = [];
 
     if (control.requiredFlag === 'Y') {
       validators.push(Validators.required);
@@ -179,20 +189,20 @@ export class FormManagerComponent implements OnInit {
       validators.push(Validators.email);
     }
 
-    // if (control.minLength) {
-    //   validators.push(Validators.minLength(control.minLength));
-    // }
-    //
-    // if (control.maxLength) {
-    //   validators.push(Validators.maxLength(control.maxLength));
-    // }
-    // if (control.pattern) {
-    //   validators.push(Validators.pattern(control.pattern));
-    // }
+    if (control.minLength > 0) {
+      validators.push(Validators.minLength(control.minLength));
+    }
+
+    if (control.maxLength > 0) {
+      validators.push(Validators.maxLength(control.maxLength));
+    }
+
+    if (control.pattern) {
+      validators.push(Validators.pattern(control.pattern));
+    }
 
     return validators;
   }
-
 
   submitForm(): void {
     this.componentLoaded = false;
@@ -287,6 +297,7 @@ export class FormManagerComponent implements OnInit {
         break;
     }
   }
+
   private debugFormValidity(): void {
     console.log('FORM status=', this.formGroup.status, 'valid=', this.formGroup.valid);
 

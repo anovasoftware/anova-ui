@@ -11,7 +11,9 @@ export interface FormField {
   value: any;
   readonly: boolean;
   customFlag: string;
-
+  rows: number;
+  minLength: number;
+  maxLength: number;
 }
 
 export interface FormExtra {

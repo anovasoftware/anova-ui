@@ -1,0 +1,39 @@
+<div [formGroup]="formGroup">
+  <mat-form-field
+    appearance="outline"
+    subscriptSizing="fixed"
+    class="form-field-full XXXcompact-field">
+
+    <mat-label>{{ field.label }}</mat-label>
+
+    <textarea
+      matInput
+      [formControlName]="field.name"
+      [id]="field.name"
+      [placeholder]="field.placeholder || ''"
+      [readonly]="field.readonly"
+      [maxlength]="maxLength"
+      data-1p-ignore="true"
+      [class.readonly-field]="field.readonly"
+      [tabIndex]="field.readonly ? -1 : 0"
+      [rows]="rows">
+    </textarea>
+
+    <mat-hint *ngIf="maxLength > 0" align="end">
+       {{ currentLength }} / {{ field.maxLength }}
+
+    </mat-hint>
+
+    <mat-error *ngIf="showErrors(field.name)">
+      <ng-container *ngIf="hasError(field.name, 'required')">
+        This field is required.
+      </ng-container>
+      <ng-container *ngIf="hasError(field.name, 'email')">
+        Please enter a valid email.
+      </ng-container>
+      <ng-container *ngIf="hasError(field.name, 'maxlength')">
+        Maximum length exceeded.
+      </ng-container>
+    </mat-error>
+  </mat-form-field>
+</div>

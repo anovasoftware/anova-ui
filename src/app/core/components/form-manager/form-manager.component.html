@@ -29,6 +29,11 @@
               [field]="control"
               [formGroup]="formGroup">
             </app-widget-textbox>
+            <app-widget-textarea
+              *ngSwitchCase="TypeConstants.CONTROL_TEXTAREA"
+              [field]="control"
+              [formGroup]="formGroup">
+            </app-widget-textarea>
 
             <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"
                    type="hidden"
