@@ -21,7 +21,6 @@ import {User} from '../../../models/user';
 import {MenuItem} from '../../../models/menu';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
-import {MatChip} from '@angular/material/chips';
 import {UserService} from '../../../services/user.service';
 
 // import {Constants} from 'src/constants/constants';
@@ -41,8 +40,6 @@ import {UserService} from '../../../services/user.service';
     MatDivider,
     MatFormFieldModule,
     MatSelectModule,
-    MatChip,
-
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']

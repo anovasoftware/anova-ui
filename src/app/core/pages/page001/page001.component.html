@@ -67,76 +67,82 @@
     </div>
   </div>
 </section>
+<section class="exchange-ticker" *ngIf="exchangeRateData$ | async as xedata">
+  <div class="printable-area">
+    <div class="ticker-inner">
+      <div class="ticker-left">
+        <span
+          class="ticker-home"
+          matTooltip="Rates are updated hourly and were last updated: {{ xedata.job?.lastRunTime | date:'yyyy.MM.dd HH:mm' }}"
+          matTooltipPosition="above"
+          (click)="onRefreshRates()"
+        >
+          BASE: {{ xedata.homeCurrency?.code }}
+        </span>
 
+        <span class="ticker-item" *ngFor="let item of xedata.rates">
+<!--          <span class="arrow">→</span>-->
+          <span class="ticker-code">{{ item.currency.code }}</span>
+          <span class="ticker-rate">{{ item.rate | number:'1.4-4' }}</span>
+        </span>
+<!--        <span-->
+<!--          class="ticker-time clickable"-->
+<!--          *ngIf="xedata.job?.lastRunTime"-->
+<!--          (click)="onRefreshRates()"-->
+<!--        >-->
+<!--          As of {{ xedata.job?.lastRunTime | date:'yyyy.MM.dd HH:mm' }}-->
+<!--        </span>-->
 
+      </div>
 
-<!--<div class="banner">-->
-<!--  <div class="banner-overlay"></div>-->
+      <div class="ticker-right">
+      </div>
+    </div>
+  </div>
+</section>
+<!--<section class="exchange-ticker" *ngIf="exchangeRateData$ | async as xedata">-->
 <!--  <div class="printable-area">-->
-<!--    <div class="banner-content">-->
-<!--      <app-hero></app-hero>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-
-
-<!--<section class="anova-platform-section">-->
-<!--  <div class="printable-area">-->
-<!--    <div class="anova-platform">-->
-<!--      <div class="anova-platform-text">-->
-<!--        <div class="section-eyebrow">The Anova Platform</div>-->
-
-<!--        <h2>-->
-<!--          One platform connecting onboard operations, guest services,-->
-<!--          and shoreside visibility-->
-<!--        </h2>-->
-
-<!--        <p>-->
-<!--          AnovaSea is designed to modernize cruise and hospitality operations-->
-<!--          by connecting onboard systems, streamlining workflows, and extending-->
-<!--          key information to the cloud.-->
-<!--        </p>-->
-
-<!--        <p>-->
-<!--          It supports a practical step-by-step approach, helping operators improve-->
-<!--          the guest experience while protecting the value of existing onboard investments.-->
-<!--        </p>-->
-<!--        <button-->
-<!--          mat-raised-button-->
-<!--          color="primary"-->
-<!--          class="contact-button"-->
-<!--          (click)="onContact($event)">-->
-<!--          Contact Us-->
-<!--        </button>-->
+<!--    <div class="ticker-inner">-->
+<!--      <div class="ticker-rates">-->
+<!--        <span class="ticker-item" *ngFor="let item of xedata.rates">-->
+<!--          <span class="ticker-base">{{ xedata.homeCurrency?.code }}</span>-->
+<!--          <span class="arrow">→</span>-->
+<!--          <span class="ticker-code">{{ item.currency.code }}</span>-->
+<!--          <span class="ticker-rate">{{ item.rate | number:'1.4-4' }}</span>-->
+<!--        </span>-->
 <!--      </div>-->
 
-<!--      <div class="anova-platform-highlights">-->
-<!--        <mat-card class="platform-card">-->
-<!--          <mat-card-title>Onboard Operations</mat-card-title>-->
-<!--          <mat-card-content>-->
-<!--            <p>-->
-<!--              Support operational workflows for guests, crew, and vessel teams.-->
-<!--            </p>-->
-<!--          </mat-card-content>-->
-<!--        </mat-card>-->
+<!--      <span-->
+<!--        class="ticker-time"-->
+<!--        *ngIf="xedata.job?.lastRunTime"-->
+<!--        (click)="onRefreshRates()"-->
+<!--      >-->
+<!--        As of: {{ xedata.job?.lastRunTime | date:'yyyy.MM.dd HH:mm' }}-->
+<!--      </span>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+<!--<section class="exchange-ticker" *ngIf="exchangeRateData$ | async as xedata">-->
+<!--  <div class="printable-area">-->
+<!--    <div class="ticker-inner">-->
+<!--      <div class="ticker-left">-->
+<!--        <span class="ticker-home">{{ xedata.homeCurrency?.code }}</span>-->
 
-<!--        <mat-card class="platform-card">-->
-<!--          <mat-card-title>System Integration</mat-card-title>-->
-<!--          <mat-card-content>-->
-<!--            <p>-->
-<!--              Bridge onboard systems with modern APIs and connected services.-->
-<!--            </p>-->
-<!--          </mat-card-content>-->
-<!--        </mat-card>-->
+<!--        <span class="ticker-item" *ngFor="let item of xedata.rates">-->
+<!--          <span class="arrow">→</span>-->
+<!--          <span class="ticker-code">{{ item.currency.code }}</span>-->
+<!--          <span class="ticker-rate">{{ item.rate | number:'1.4-4' }}</span>-->
+<!--        </span>-->
+<!--      </div>-->
 
-<!--        <mat-card class="platform-card">-->
-<!--          <mat-card-title>Shoreside Access</mat-card-title>-->
-<!--          <mat-card-content>-->
-<!--            <p>-->
-<!--              Extend selected data and functionality to web-based dashboards and portals.-->
-<!--            </p>-->
-<!--          </mat-card-content>-->
-<!--        </mat-card>-->
+<!--      <div class="ticker-right">-->
+<!--        <span-->
+<!--          class="ticker-time clickable"-->
+<!--          *ngIf="xedata.job?.lastRunTime"-->
+<!--          (click)="onRefreshRates()"-->
+<!--        >-->
+<!--          As of {{ xedata.job?.lastRunTime | date:'yyyy.MM.dd HH:mm' }}-->
+<!--        </span>-->
 <!--      </div>-->
 <!--    </div>-->
 <!--  </div>-->
