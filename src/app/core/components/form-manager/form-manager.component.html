@@ -21,7 +21,7 @@
         {{ error }}
       </div>
 
-      <form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form" class="material-form Xcompact-form">
+      <form [formGroup]="formGroup" (ngSubmit)="submitForm()" *ngIf="form" class="material-form">
         <div *ngFor="let control of form.formFields" class="form-row">
           <ng-container [ngSwitch]="control.typeId">
             <app-widget-textbox
@@ -34,6 +34,12 @@
               [field]="control"
               [formGroup]="formGroup">
             </app-widget-textarea>
+            <app-widget-select1
+              *ngSwitchCase="TypeConstants.CONTROL_SELECT1"
+              [field]="control"
+              [formGroup]="formGroup">
+            </app-widget-select1>
+
 
             <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"
                    type="hidden"

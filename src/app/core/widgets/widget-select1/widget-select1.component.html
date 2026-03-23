@@ -1,0 +1,50 @@
+<div [formGroup]="formGroup">
+    <mat-form-field
+      class="form-field-full"
+      appearance="outline"
+      [matTooltip]="getToolTip(field)"
+      matTooltipClass="standard"
+      matTooltipPosition="right">
+
+      <mat-label>{{field.label}}</mat-label>
+      <mat-select
+        [formControlName]="field.name"
+        (selectionChange)="changed()"
+        panelClass="wide-panel">
+
+        <mat-option *ngFor="let option of field.dataOptions" [value]="option.id">
+          <span class="mono">{{option.displayValue}}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+</div>
+
+<!--<div [formGroup]="formGroup">-->
+<!--&lt;!&ndash;  <mat-form-field appearance="outline" class="form-field-full">&ndash;&gt;-->
+<!--    <mat-form-field-->
+<!--      appearance="outline"-->
+<!--      subscriptSizing="fixed"-->
+<!--      class="form-field-full XXXcompact-field">-->
+
+<!--    <mat-label>{{field.label}}</mat-label>-->
+<!--    <input-->
+<!--      matInput-->
+<!--      [type]="field.controlType || 'text'"-->
+<!--      [formControlName]="field.name"-->
+<!--      [id]="field.name"-->
+<!--      [placeholder]="field.placeholder || ''"-->
+<!--      [readonly]="field.readonly"-->
+<!--      [class.readonly-field]="field.readonly"-->
+<!--      [tabIndex]="field.readonly ? -1 : 0">-->
+
+<!--    &lt;!&ndash; Validation errors &ndash;&gt;-->
+<!--    <mat-error *ngIf="formGroup.get(field.name)?.invalid && (formGroup.get(field.name)?.touched || formGroup.get(field.name)?.dirty)">-->
+<!--      <ng-container *ngIf="hasError(field.name, 'required')">-->
+<!--        This field is required.-->
+<!--      </ng-container>-->
+<!--      <ng-container *ngIf="hasError(field.name, 'email')">-->
+<!--        Please enter a valid email.-->
+<!--      </ng-container>-->
+<!--    </mat-error>-->
+<!--  </mat-form-field>-->
+<!--</div>-->

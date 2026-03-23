@@ -1,5 +1,10 @@
 import {Type} from './type';
 
+export interface DataOption {
+  id: string;
+  description: string;
+  displayValue: string;
+}
 export interface FormField {
   formFieldId: string;
   typeId: string;
@@ -14,6 +19,7 @@ export interface FormField {
   rows: number;
   minLength: number;
   maxLength: number;
+  dataOptions: DataOption[];
 }
 
 export interface FormExtra {

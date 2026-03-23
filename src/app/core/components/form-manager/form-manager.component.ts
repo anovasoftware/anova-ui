@@ -26,6 +26,7 @@ import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog
 import {FormConstants} from '../../../../constants/form_constants';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {WidgetTextareaComponent} from '../../widgets/widget-textarea/widget-textarea.component';
+import {WidgetSelect1Component} from '../../widgets/widget-select1/widget-select1.component';
 
 
 type DialogData = {
@@ -50,6 +51,7 @@ type DialogData = {
     MatCardContent,
     MatIconModule,
     WidgetTextareaComponent,
+    WidgetSelect1Component,
   ],
   templateUrl: './form-manager.component.html',
   styleUrl: './form-manager.component.scss'

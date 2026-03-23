@@ -54,5 +54,8 @@ export abstract class WidgetBaseComponent implements OnInit, OnDestroy {
     const control = this.formGroup.controls[name];
     return !!control && control.invalid && (control.touched || control.dirty);
   }
+  getToolTip(field: FormField): string {
+    return '';
+  }
 
 }
