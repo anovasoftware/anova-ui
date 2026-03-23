@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<section class="anova-platform-section">
+<section class="anova-platform-section" *ngIf="!globalService.isLoggedIn">
   <div class="printable-area">
     <div class="anova-platform">
       <div class="anova-platform-text">
@@ -85,14 +85,6 @@
           <span class="ticker-code">{{ item.currency.code }}</span>
           <span class="ticker-rate">{{ item.rate | number:'1.4-4' }}</span>
         </span>
-<!--        <span-->
-<!--          class="ticker-time clickable"-->
-<!--          *ngIf="xedata.job?.lastRunTime"-->
-<!--          (click)="onRefreshRates()"-->
-<!--        >-->
-<!--          As of {{ xedata.job?.lastRunTime | date:'yyyy.MM.dd HH:mm' }}-->
-<!--        </span>-->
-
       </div>
 
       <div class="ticker-right">
@@ -100,50 +92,3 @@
     </div>
   </div>
 </section>
-<!--<section class="exchange-ticker" *ngIf="exchangeRateData$ | async as xedata">-->
-<!--  <div class="printable-area">-->
-<!--    <div class="ticker-inner">-->
-<!--      <div class="ticker-rates">-->
-<!--        <span class="ticker-item" *ngFor="let item of xedata.rates">-->
-<!--          <span class="ticker-base">{{ xedata.homeCurrency?.code }}</span>-->
-<!--          <span class="arrow">→</span>-->
-<!--          <span class="ticker-code">{{ item.currency.code }}</span>-->
-<!--          <span class="ticker-rate">{{ item.rate | number:'1.4-4' }}</span>-->
-<!--        </span>-->
-<!--      </div>-->
-
-<!--      <span-->
-<!--        class="ticker-time"-->
-<!--        *ngIf="xedata.job?.lastRunTime"-->
-<!--        (click)="onRefreshRates()"-->
-<!--      >-->
-<!--        As of: {{ xedata.job?.lastRunTime | date:'yyyy.MM.dd HH:mm' }}-->
-<!--      </span>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->
-<!--<section class="exchange-ticker" *ngIf="exchangeRateData$ | async as xedata">-->
-<!--  <div class="printable-area">-->
-<!--    <div class="ticker-inner">-->
-<!--      <div class="ticker-left">-->
-<!--        <span class="ticker-home">{{ xedata.homeCurrency?.code }}</span>-->
-
-<!--        <span class="ticker-item" *ngFor="let item of xedata.rates">-->
-<!--          <span class="arrow">→</span>-->
-<!--          <span class="ticker-code">{{ item.currency.code }}</span>-->
-<!--          <span class="ticker-rate">{{ item.rate | number:'1.4-4' }}</span>-->
-<!--        </span>-->
-<!--      </div>-->
-
-<!--      <div class="ticker-right">-->
-<!--        <span-->
-<!--          class="ticker-time clickable"-->
-<!--          *ngIf="xedata.job?.lastRunTime"-->
-<!--          (click)="onRefreshRates()"-->
-<!--        >-->
-<!--          As of {{ xedata.job?.lastRunTime | date:'yyyy.MM.dd HH:mm' }}-->
-<!--        </span>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->

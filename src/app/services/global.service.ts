@@ -55,5 +55,8 @@ export class GlobalService {
       user: current.user
     });
   }
-
+  get isLoggedIn(): boolean {
+    console.log(this.globalSubject.value.user);
+    return !!this.globalSubject.value.user;
+  }
 }

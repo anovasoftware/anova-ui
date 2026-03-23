@@ -9,6 +9,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ExchangeRateService } from '../../../services/financial.services';
 import {AsyncPipe, DatePipe, DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {MatTooltip} from '@angular/material/tooltip';
+import {GlobalService} from '../../../services/global.service';
 
 @Component({
   selector: 'app-page001',
@@ -35,7 +36,8 @@ export class Page001Component implements OnInit {
     private router: Router,
     private formDialog: FormDialogService,
     private snackBar: MatSnackBar,
-    private exchangeRateService: ExchangeRateService
+    private exchangeRateService: ExchangeRateService,
+    protected globalService: GlobalService,
   ) {}
 
   ngOnInit(): void {
