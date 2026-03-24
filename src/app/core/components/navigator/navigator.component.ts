@@ -82,39 +82,3 @@ export class NavigatorComponent implements OnInit, OnDestroy {
 
 }
 
-  // ngOnInit(): void {
-  //   this.route.paramMap
-  //     .pipe(takeUntil(this.destroy$))
-  //     .subscribe(params => {
-  //       const menuId = params.get('id') ?? '';
-  //       const menu = this.menuService.getMenuById(menuId);
-  //
-  //       this.menuId = menuId;
-  //       this.selectedMenu = menu;
-  //       this.page = menu?.page ?? null;
-  //       this.menuService.setSelectedMenu(menu);
-  //
-  //       if (menu?.page?.pageId) {
-  //         // Navigate to /page001, /page002, etc.
-  //         const route = `page${menu.page.pageId}`;
-  //         console.log(route);
-  //
-  //         // const routeExists = this.router.config.some(r => r.path === route);
-  //         const routeExists = this.routeExistsInConfig(route);
-  //         if (routeExists) {
-  //           this.router.navigate([`/${route}`])
-  //             .then(success => {
-  //               if (success) {
-  //                 console.log('Navigation succeeded');
-  //               } else {
-  //                 console.warn('Navigation failed');
-  //               }
-  //             })
-  //             .catch(err => {
-  //               console.error('Navigation error:', err);
-  //             });
-  //
-  //         }
-  //       }
-  //     });
-  // }

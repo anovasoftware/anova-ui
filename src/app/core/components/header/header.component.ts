@@ -71,38 +71,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit(): void {
-    // this.authService.user$.subscribe(user => {
-    //   this.user = user;
-    //   this.isLoggedIn = !!user;
-    // });
-    this.globalService.user$.subscribe(global => {
-      this.user = global?.user ?? null;
-      // this.userName = this.user?.name;
-      this.isLoggedIn = !!this.user;
-      this.beVersion = `${global?.meta?.version}`;
+ngOnInit(): void {
+  this.globalService.global$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(global => {
+      this.user = global.user;
+      this.isLoggedIn = !!global.user;
+      this.beVersion = `${global.meta?.version}`;
       this.componentLoaded = true;
     });
 
-    // this.globalService.user$.subscribe(global => {
-    //   this.userName = global?.user?.name ?? 'Guest';
-    //   this.isLoggedIn = global?.user?.loggedIn ?? false;
-    //   this.beVersion = `${global?.meta?.version}`;
-    // });
-    this.menuService.menus$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(menus => {
-        this.headerMenus = menus.filter(m => m.typeId === '002');
-      });
+  this.menuService.menus$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(menus => {
+      this.headerMenus = menus.filter(m => m.typeId === '002');
+    });
 
-    // this.menuService.loadMenus();  // ideally only called once (e.g., on login)
-    // this.menuService.menus$.subscribe(menu => {
-    //   this.headerMenu = menu;
-    //   // If you expect only one item and want to store it differently:
-    //   // this.headerMenu = menu.length > 0 ? [menu[0]] : [];
+    // this.globalService.user$.subscribe(global => {
+    //   this.user = global?.user ?? null;
+    //   // this.userName = this.user?.name;
+    //   this.isLoggedIn = !!this.user;
+    //   this.beVersion = `${global?.meta?.version}`;
+    //   this.componentLoaded = true;
     // });
-    // // this.menuService.headerMenu$.subscribe(menu => this.headerMenu = menu);
-    // this.menuService.loadMenu('002');
+    //
+    // this.menuService.menus$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(menus => {
+    //     this.headerMenus = menus.filter(m => m.typeId === '002');
+    //   });
+
   }
 
   ngOnDestroy(): void {

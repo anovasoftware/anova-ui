@@ -1,15 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { HeroComponent } from './hero/hero.component';
-import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
-import { MatButton } from '@angular/material/button';
-import { FormConstants } from '../../../../constants/form_constants';
-import { Router } from '@angular/router';
-import { FormDialogService } from '../../../services/form-dialog.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ExchangeRateService } from '../../../services/financial.services';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {HeroComponent} from './hero/hero.component';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatButton} from '@angular/material/button';
+import {FormConstants} from '../../../../constants/form_constants';
+import {Router, RouterLinkActive} from '@angular/router';
+import {FormDialogService} from '../../../services/form-dialog.service';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {ExchangeRateService} from '../../../services/financial.services';
 import {AsyncPipe, DatePipe, DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {MatTooltip} from '@angular/material/tooltip';
 import {GlobalService} from '../../../services/global.service';
+import {map, takeUntil} from 'rxjs/operators';
+import {MenuService} from '../../../services/menu.service';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {MenuItem} from '../../../models/menu';
+import {TypeConstants} from '../../../../constants/type_constants';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-page001',
@@ -18,6 +28,7 @@ import {GlobalService} from '../../../services/global.service';
     HeroComponent,
     MatCard,
     MatCardTitle,
+    MatIcon,
     MatCardContent,
     MatButton,
     MatSnackBarModule,
@@ -26,22 +37,59 @@ import {GlobalService} from '../../../services/global.service';
     DecimalPipe,
     NgForOf,
     DatePipe,
-    MatTooltip
+    MatTooltip,
+    RouterLinkActive
   ],
   templateUrl: './page001.component.html',
   styleUrls: ['./page001.component.scss'],
 })
-export class Page001Component implements OnInit {
+export class Page001Component implements OnInit, OnDestroy {
+  protected readonly TypeConstants = TypeConstants;
+  private destroy$ = new Subject<void>();
+  navigationMenus$!: Observable<MenuItem[]>;
+
   constructor(
     private router: Router,
     private formDialog: FormDialogService,
     private snackBar: MatSnackBar,
     private exchangeRateService: ExchangeRateService,
     protected globalService: GlobalService,
-  ) {}
+    private menuService: MenuService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.exchangeRateService.loadExchangeRates();
+
+    this.navigationMenus$ = combineLatest([
+      this.menuService.menus$,
+      this.globalService.currentMenuId$
+    ]).pipe(
+      map(([menus, currentMenuId]) =>
+        menus.filter(m =>
+          m.typeId === this.TypeConstants.MENU_NAVIGATION &&
+          m.parentMenuId === currentMenuId
+        )
+      )
+    );
+  }
+
+  // ngOnInit(): void {
+  //   this.exchangeRateService.loadExchangeRates();
+  //
+  //   this.navigationMenus$ = this.menuService.menus$.pipe(
+  //     map(menus =>
+  //       menus.filter(m =>
+  //         m.typeId === this.TypeConstants.MENU_NAVIGATION &&
+  //         m.parentMenuId === this.globalService.currentMenuId
+  //       )
+  //     )
+  //   );
+  // }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get exchangeRateData$() {
@@ -69,6 +117,7 @@ export class Page001Component implements OnInit {
       }
     });
   }
+
   onRefreshRates(): void {
     this.exchangeRateService.refreshExchangeRates();
 
@@ -81,5 +130,16 @@ export class Page001Component implements OnInit {
         verticalPosition: 'bottom',
       }
     );
+  }
+
+  onMenuClick(menuItem: MenuItem): void {
+    console.log(menuItem);
+    if (menuItem.route) {
+      // this.router.navigate([menu.route]);
+      // return;
+    }
+    console.log(menuItem.menuId);
+    this.globalService.setCurrentMenuId(menuItem.menuId)
+    // this.globalService.currentMenuId = menu.menuId;
   }
 }

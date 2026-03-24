@@ -5,6 +5,7 @@ export interface PageItem {
 
 export interface MenuItem {
   menuId: string;
+  parentMenuId: string;
   typeId: string;
   description: string;
   title: string;
@@ -12,4 +13,5 @@ export interface MenuItem {
   breadcrumbName: string;
   route: string;
   page?: PageItem;
+  icon: string;
 }

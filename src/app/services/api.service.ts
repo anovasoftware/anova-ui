@@ -9,14 +9,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  // get(urlExt: string, params: any = {}, headers: any = {}): Observable<any> {
-  //   const url = `${this.baseApi}${urlExt}`;
-  //   const httpHeaders = new HttpHeaders(headers);
-  //   const httpParams = new HttpParams({ fromObject: params });
-  //   console.log(url);
-  //   return this.http.get(url, { headers: httpHeaders, params: httpParams });
-  // }
-
   get<T>(urlExt: string, params: any = {}, headers: any = {}): Observable<T> {
     const url = `${this.baseApi}${urlExt}`;
     const httpHeaders = new HttpHeaders(headers);

@@ -14,8 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
         (req, next) => {
-          // console.log('INTERCEPTOR HIT:', req.url);
-
           const authService = inject(AuthService);
           const token = authService.getAccessToken();
 

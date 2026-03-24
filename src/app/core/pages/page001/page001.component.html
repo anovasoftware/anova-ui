@@ -92,3 +92,63 @@
     </div>
   </div>
 </section>
+
+<section class="navigation" *ngIf="globalService.isLoggedIn">
+  <div class="printable-area">
+    <div class="nav-card-grid">
+      <mat-card
+        class="nav-card"
+        *ngFor="let menuItem of navigationMenus$ | async"
+        (click)="onMenuClick(menuItem)">
+
+<!--        <div class="nav-card-top">-->
+<!--          <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>-->
+<!--        </div>-->
+
+        <mat-card-content>
+          <div class="nav-card-header">
+            <div class="nav-card-icon" *ngIf="menuItem.icon">
+              <mat-icon>{{ menuItem.icon }}</mat-icon>
+            </div>
+          </div>
+          <div class="nav-card-title">{{ menuItem.title }}</div>
+          <div class="nav-card-subtitle" *ngIf="menuItem.subTitle">
+            {{ menuItem.subTitle }}
+          </div>
+<!--          <div class="nav-card-description" *ngIf="menuItem.description">-->
+<!--            {{ menuItem.description }}-->
+<!--          </div>-->
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+
+<!--!&#45;&#45;<div class="dashboard grid-autofill" fxLayout="row wrap" fxLayoutAlign="space-between" fxFlexFill>&ndash;&gt;-->
+<!--  <mat-card-->
+<!--    fxFlex="25%"-->
+<!--    fxFlex.lt-md="50%"-->
+<!--    fxFlex.gt-md="20%"-->
+<!--    class="navigation-card anim card-with-link"-->
+<!--    *ngFor="let menuItem of menuList"-->
+<!--    [ngClass]="{'card-disabled': menuItem.status_id == '002'}"-->
+<!--    [attr.disabled]="menuItem.status == '002' ? true: null"-->
+<!--  >-->
+<!--    &lt;!&ndash;<a mat-list-item [routerLink]="menuItem.status == '001' ? menuItem.route : ''" routerLinkActive="active-link">&ndash;&gt;-->
+
+<!--    <a mat-list-item-->
+<!--       [routerLink]="['/navigator/', menuItem.menu_id]"-->
+<!--       routerLinkActive="active-link"-->
+<!--       [class.disabled]="menuItem.status_id=='002'"-->
+<!--    >-->
+<!--      <fa-icon *ngIf="menuItem.icon" icon="{{menuItem.icon}}" size="5x"></fa-icon>-->
+<!--      <mat-card-title-group>-->
+<!--        <mat-card-title>-->
+<!--          <span id="navigationId">{{menuItem.display_title}}</span>-->
+<!--        </mat-card-title>-->
+<!--        <mat-card-subtitle>{{menuItem.display_sub_title}}</mat-card-subtitle>-->
+<!--      </mat-card-title-group>-->
+<!--    </a>-->
+<!--  </mat-card>-->
+<!--</div>-->

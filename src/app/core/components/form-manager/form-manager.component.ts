@@ -139,7 +139,6 @@ export class FormManagerComponent implements OnInit {
           message = 'Network error. Please check your connection.';
         }
         this.message = message;
-        console.log(message);
 
         this.header = 'Error loading form';
         this.componentLoaded = true;
@@ -253,8 +252,6 @@ export class FormManagerComponent implements OnInit {
           // Network error, server unreachable
           message = 'Network error. Please check your connection.';
         }
-        console.log(message);
-
         this.error = message;
         this.componentLoaded = true;
       }

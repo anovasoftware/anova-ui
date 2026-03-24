@@ -17,7 +17,6 @@ export class JwtInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('JwtInterceptor running for:', req.url);
     const token = this.authService.getAccessToken();
 
     // If no token, send request unchanged
