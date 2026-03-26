@@ -2,7 +2,6 @@
   <div class="app-shell">
     <app-header></app-header>
     <!--<app-sidebar></app-sidebar>  &lt;!&ndash; ✅ Ensure this exists &ndash;&gt;-->
-    <!--<app-breadcrumb></app-breadcrumb>-->
 
     <!-- Page Title -->
     <div class="page-title-container printable-area" *ngIf="showPageHeader">
@@ -10,8 +9,11 @@
       <h3 class="page-sub-title">{{ currentMenu?.subTitle }}</h3>
     </div>
 
+
     <div class="main-content">
+      <app-breadcrumb></app-breadcrumb>
       <router-outlet></router-outlet>
+
     </div>
 
     <app-footer [referenceId]="referenceId"></app-footer>

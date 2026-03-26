@@ -7,7 +7,7 @@ import {
 } from '@angular/material/card';
 import {MatButton} from '@angular/material/button';
 import {FormConstants} from '../../../../constants/form_constants';
-import {Router, RouterLinkActive} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {ExchangeRateService} from '../../../services/financial.services';
@@ -17,7 +17,7 @@ import {GlobalService} from '../../../services/global.service';
 import {map, takeUntil} from 'rxjs/operators';
 import {MenuService} from '../../../services/menu.service';
 import {combineLatest, Observable, Subject} from 'rxjs';
-import {MenuItem} from '../../../models/menu';
+import {Menu} from '../../../models/menu';
 import {TypeConstants} from '../../../../constants/type_constants';
 import {MatIcon} from '@angular/material/icon';
 
@@ -38,7 +38,6 @@ import {MatIcon} from '@angular/material/icon';
     NgForOf,
     DatePipe,
     MatTooltip,
-    RouterLinkActive
   ],
   templateUrl: './page001.component.html',
   styleUrls: ['./page001.component.scss'],
@@ -46,7 +45,7 @@ import {MatIcon} from '@angular/material/icon';
 export class Page001Component implements OnInit, OnDestroy {
   protected readonly TypeConstants = TypeConstants;
   private destroy$ = new Subject<void>();
-  navigationMenus$!: Observable<MenuItem[]>;
+  navigationMenus$!: Observable<Menu[]>;
 
   constructor(
     private router: Router,
@@ -132,14 +131,15 @@ export class Page001Component implements OnInit, OnDestroy {
     );
   }
 
-  onMenuClick(menuItem: MenuItem): void {
-    console.log(menuItem);
-    if (menuItem.route) {
-      // this.router.navigate([menu.route]);
-      // return;
+  onCardClick(menu: Menu): void {
+    console.log(menu);
+
+    this.globalService.setCurrentMenuId(menu.menuId);
+    this.menuService.setSelectedMenu(menu);
+
+    if (menu.route) {
+      this.router.navigate([menu.route]);
+      return;
     }
-    console.log(menuItem.menuId);
-    this.globalService.setCurrentMenuId(menuItem.menuId)
-    // this.globalService.currentMenuId = menu.menuId;
   }
 }

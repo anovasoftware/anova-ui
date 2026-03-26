@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import {CommonModule} from '@angular/common';
-import {MenuItem, PageItem} from '../../../models/menu';
+import {Menu, PageItem} from '../../../models/menu';
 
 @Component({
   selector: 'app-navigator',
@@ -18,7 +18,7 @@ import {MenuItem, PageItem} from '../../../models/menu';
 export class NavigatorComponent implements OnInit, OnDestroy {
   public componentLoaded = false;
   menuId = '';
-  selectedMenu: MenuItem | null = null;
+  selectedMenu: Menu | null = null;
   page: PageItem | null = null;
 
   private destroy$ = new Subject<void>();

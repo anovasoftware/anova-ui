@@ -6,6 +6,7 @@ import {BehaviorSubject} from 'rxjs';
 import {User} from '../models/user';
 import {normalizeUser} from '../core/utilities/common';
 import {TypeConstants} from '../../constants/type_constants';
+import {MenuConstants} from '../../constants/menu_constants';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AuthService {
   private userSubject = new BehaviorSubject<any>(this.loadUserFromStorage());
   user$ = this.userSubject.asObservable();
   protected readonly TypeConstants = TypeConstants;
+  protected readonly MenuConstants = MenuConstants;
 
 
   constructor(private http: HttpClient) {
@@ -54,7 +56,7 @@ export class AuthService {
   storeUser(user: any): void {
     const normalized = normalizeUser(user);
     localStorage.setItem('user', JSON.stringify(normalized));
-    localStorage.setItem('currentMenuId', this.TypeConstants.NOT_APPLICABLE);
+    localStorage.setItem('currentMenuId', this.MenuConstants.HOME);
     this.userSubject.next(normalized);
   }
 
@@ -72,7 +74,7 @@ export class AuthService {
   }
 
   getCurrentMenuId(): string {
-    return localStorage.getItem('currentMenuId') || this.TypeConstants.NOT_APPLICABLE;
+    return localStorage.getItem('currentMenuId') || this.MenuConstants.HOME;
   }
   setCurrentMenuId(menuId: string): void {
     localStorage.setItem('currentMenuId', menuId);

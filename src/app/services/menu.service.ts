@@ -1,30 +1,46 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {GlobalService} from './global.service';
-import {MenuItem} from '../models/menu';
-import {ApiData, ApiResponse, RecordsResponse} from '../models/api-response';
+ import {Menu} from '../models/menu';
+import {ApiData, ApiResponse} from '../models/api-response';
+import {MenuConstants} from '../../constants/menu_constants';
 
 
 @Injectable({providedIn: 'root'})
 export class MenuService {
-  private menusSubject = new BehaviorSubject<MenuItem[]>([]);
+  private menusSubject = new BehaviorSubject<Menu[]>([]);
   menus$ = this.menusSubject.asObservable();
+
+  private selectedMenuSubject = new BehaviorSubject<Menu | null>(null);
+  selectedMenu$ = this.selectedMenuSubject.asObservable();
+
+  breadcrumbMenus$: Observable<Menu[]> = combineLatest([
+    this.menus$,
+    this.selectedMenu$
+  ]).pipe(
+    map(([menus, selectedMenu]) => {
+      if (!menus.length || !selectedMenu?.menuId) {
+        return [];
+      }
+      return this.buildMenuPath(menus, selectedMenu.menuId);
+    })
+  );
 
   constructor(
     private api: ApiService,
-    private globalService: GlobalService) {
+    private globalService: GlobalService
+  ) {
   }
 
   loadMenus(): void {
-    this.api.get<ApiResponse<ApiData<MenuItem>>>('public/table/static/menu/').subscribe({
+    this.api.get<ApiResponse<ApiData<Menu>>>('public/table/static/menu/').subscribe({
       next: (response) => {
-        const menus: MenuItem[] = response?.data.records || [];
+        const menus: Menu[] = response?.data.records || [];
         this.menusSubject.next(menus);
 
-        // ✅ Set selectedMenu if it's empty
         if (!this.selectedMenuSubject.value && menus.length > 0) {
-          const defaultMenu = menus.find(m => m.menuId === '001') || menus[0];
+          const defaultMenu = menus.find(m => m.menuId === MenuConstants.HOME) || menus[0];
           this.selectedMenuSubject.next(defaultMenu);
           this.globalService.setMeta(response.meta);
         }
@@ -36,22 +52,125 @@ export class MenuService {
     });
   }
 
-  getMenusByType(typeId: string): MenuItem[] {
+  getMenusByType(typeId: string): Menu[] {
     return this.menusSubject.getValue().filter(m => m.typeId === typeId);
   }
 
-  getMenuById(menuId: string): MenuItem | null {
+  getMenuById(menuId: string): Menu | null {
     return this.menusSubject.getValue().find(m => m.menuId === menuId) ?? null;
   }
 
-  private selectedMenuSubject = new BehaviorSubject<MenuItem | null>(null);
-  selectedMenu$ = this.selectedMenuSubject.asObservable();
-
-  setSelectedMenu(menu: MenuItem | null): void {
+  setSelectedMenu(menu: Menu | null): void {
     this.selectedMenuSubject.next(menu);
   }
 
-  getSelectedMenu(): MenuItem | null {
+  getSelectedMenu(): Menu | null {
     return this.selectedMenuSubject.getValue();
   }
+
+  getMenuPath(menuId: string): Menu[] {
+    return this.buildMenuPath(this.menusSubject.getValue(), menuId);
+  }
+
+  private buildMenuPath(menus: Menu[], menuId: string): Menu[] {
+    let path: Menu[] = [];
+    let currentMenu = menus.find(m => m.menuId === menuId) ?? null;
+    let guard = 0;
+
+    while (currentMenu && guard < 20) {
+      path.unshift(currentMenu);
+
+      const parentMenuId = currentMenu.parentMenuId;
+      if (currentMenu.menuId === MenuConstants.HOME) {
+        break;
+      }
+
+      currentMenu = menus.find(m => m.menuId === parentMenuId) ?? null;
+      guard++;
+    }
+    // if (path.length === 1) {
+    //   path = [];
+    // }
+
+    return path;
+  }
 }
+
+// import {Injectable} from '@angular/core';
+// import {BehaviorSubject} from 'rxjs';
+// import {ApiService} from './api.service';
+// import {GlobalService} from './global.service';
+// import {Menu} from '../models/menu';
+// import {ApiData, ApiResponse, RecordsResponse} from '../models/api-response';
+//
+//
+// @Injectable({providedIn: 'root'})
+// export class MenuService {
+//   private menusSubject = new BehaviorSubject<Menu[]>([]);
+//   menu$ = this.menusSubject.asObservable();
+//
+//   constructor(
+//     private api: ApiService,
+//     private globalService: GlobalService) {
+//   }
+//
+//   loadMenus(): void {
+//     this.api.get<ApiResponse<ApiData<Menu>>>('public/table/static/menu/').subscribe({
+//       next: (response) => {
+//         const menus: Menu[] = response?.data.records || [];
+//         this.menusSubject.next(menus);
+//
+//         // ✅ Set selectedMenu if it's empty
+//         if (!this.selectedMenuSubject.value && menus.length > 0) {
+//           const defaultMenu = menus.find(m => m.menuId === '001') || menus[0];
+//           this.selectedMenuSubject.next(defaultMenu);
+//           this.globalService.setMeta(response.meta);
+//         }
+//       },
+//       error: () => {
+//         this.menusSubject.next([]);
+//         this.selectedMenuSubject.next(null);
+//       },
+//     });
+//   }
+//
+//   getMenusByType(typeId: string): Menu[] {
+//     return this.menusSubject.getValue().filter(m => m.typeId === typeId);
+//   }
+//
+//   getMenuById(menuId: string): Menu | null {
+//     return this.menusSubject.getValue().find(m => m.menuId === menuId) ?? null;
+//   }
+//
+//   private selectedMenuSubject = new BehaviorSubject<Menu | null>(null);
+//   selectedMenu$ = this.selectedMenuSubject.asObservable();
+//
+//   setSelectedMenu(menu: Menu | null): void {
+//     this.selectedMenuSubject.next(menu);
+//   }
+//
+//   getSelectedMenu(): Menu | null {
+//     return this.selectedMenuSubject.getValue();
+//   }
+//
+//   getMenuPath(menuId: string): Menu[] {
+//     const path: Menu[] = [];
+//
+//     let currentMenu = this.getMenuById(menuId);
+//     let guard = 0;
+//
+//     while (currentMenu && guard < 20) {
+//       path.unshift(currentMenu);
+//
+//       const parentMenuId = currentMenu.parentMenuId;
+//       if (!parentMenuId) {
+//         break;
+//       }
+//
+//       currentMenu = this.getMenuById(parentMenuId);
+//       guard++;
+//     }
+//
+//     return path;
+//   }
+// }

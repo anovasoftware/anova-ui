@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output, OnInit, OnDestroy} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {GlobalService} from '../../../services/global.service';
@@ -18,10 +18,12 @@ import {MatDialog} from '@angular/material/dialog';
 import {FormManagerComponent} from '../form-manager/form-manager.component';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {User} from '../../../models/user';
-import {MenuItem} from '../../../models/menu';
+import {Menu} from '../../../models/menu';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {UserService} from '../../../services/user.service';
+import {MenuConstants} from '../../../../constants/menu_constants';
+import {PageConstants} from '../../../../constants/page_constants';
 
 // import {Constants} from 'src/constants/constants';
 
@@ -34,7 +36,6 @@ import {UserService} from '../../../services/user.service';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    // NgOptimizedImage,
     RouterModule,
     MatMenuModule,
     MatDivider,
@@ -47,22 +48,27 @@ import {UserService} from '../../../services/user.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidebarEvent = new EventEmitter<void>();
 
-  public const = Constants;
+  protected const = Constants;
+  protected readonly MenuConstants = MenuConstants;
+  protected readonly PageConstants = PageConstants;
+
   isLoggedIn = false;
   isDisabledLogin = false;
   userName: string | null = null;
   feVersion = `${this.const.VERSION}`;
   beVersion = `not connected`;
   user: User | null = null;
-  headerMenus: MenuItem[] = [];
+  headerMenus: Menu[] = [];
   selectedHotelId: string | null = null;
   componentLoaded = false;
+  // breadcrumbMenus: Menu[] = [];
+  // navigationMode = false;
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private globalService: GlobalService,
-    private menuService: MenuService,
+    protected menuService: MenuService,
     private authService: AuthService,
     private userService: UserService,
     private router: Router,
@@ -71,36 +77,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {
   }
 
-ngOnInit(): void {
-  this.globalService.global$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(global => {
-      this.user = global.user;
-      this.isLoggedIn = !!global.user;
-      this.beVersion = `${global.meta?.version}`;
-      this.componentLoaded = true;
-    });
+  ngOnInit(): void {
+    this.globalService.global$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(global => {
+        this.user = global.user;
+        this.isLoggedIn = !!global.user;
+        this.beVersion = `${global.meta?.version}`;
+        this.componentLoaded = true;
+      });
 
-  this.menuService.menus$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(menus => {
-      this.headerMenus = menus.filter(m => m.typeId === '002');
-    });
+    this.menuService.menus$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(menus => {
+        this.headerMenus = menus.filter(m => m.typeId === '002');
+        // this.breadcrumbMenus = menus;
+      });
 
-    // this.globalService.user$.subscribe(global => {
-    //   this.user = global?.user ?? null;
-    //   // this.userName = this.user?.name;
-    //   this.isLoggedIn = !!this.user;
-    //   this.beVersion = `${global?.meta?.version}`;
-    //   this.componentLoaded = true;
-    // });
-    //
-    // this.menuService.menus$
+    // this.menuService.breadcrumbMenus$
     //   .pipe(takeUntil(this.destroy$))
     //   .subscribe(menus => {
-    //     this.headerMenus = menus.filter(m => m.typeId === '002');
+    //     this.breadcrumbMenus = menus;
+    //     this.navigationMode = this.isLoggedIn && menus.length > 1;
     //   });
-
   }
 
   ngOnDestroy(): void {
@@ -164,6 +163,7 @@ ngOnInit(): void {
       }
     });
   }
+
   // onHotelChangeOld(hotelId: string): void {
   //   this.selectedHotelId = hotelId;
   //   this.userService.setLastHotel(hotelId);
@@ -186,4 +186,45 @@ ngOnInit(): void {
       });
     }
   }
+
+  // oldNavigationMode(): boolean {
+  //   let navigationMode = true;
+  //   if (!this.globalService.isLoggedIn) {
+  //     navigationMode = false;
+  //   }
+  //   else if (this.breadcrumbMenus.length > 1) {
+  //     navigationMode = false;
+  //   }
+  //   console.log('navigationMode', navigationMode);
+  //   return navigationMode;
+  // }
+
+  // get navigationMode(): boolean {
+  //   const mode = this.globalService.isLoggedIn && this.breadcrumbMenus.length > 1;
+  //   console.log('navigationMode', mode);
+  //   console.log('this.breadcrumbMenus', this.breadcrumbMenus);
+  //   return mode;
+  // }
+  // goHome(event: Event): void {
+  //   event.preventDefault();
+  //
+  //   this.globalService.setCurrentMenuId(this.MenuConstants.HOME);
+  //   let booleanPromise = this.router.navigateByUrl(`/navigator/${this.PageConstants.HOME}`);
+  // }
+
+  // goToMenu(event: Event, menuId: string): void {
+  //   event.preventDefault();
+  //
+  //   const menu = this.menuService.getMenuById(menuId);
+  //   if (!menu) {
+  //     return;
+  //   }
+  //   console.log('menu', menu);
+  //   this.globalService.setCurrentMenuId(menuId);
+  //   this.menuService.setSelectedMenu(menu);
+  //
+  //   if (menu.page?.pageId && menu.page.pageId !== this.PageConstants.NOT_APPLICABLE) {
+  //     let promise = this.router.navigate(['/navigator', menu.page.pageId]);
+  //   }
+  // }
 }

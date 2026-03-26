@@ -3,7 +3,7 @@ export interface PageItem {
   description: string;
 }
 
-export interface MenuItem {
+export interface Menu {
   menuId: string;
   parentMenuId: string;
   typeId: string;

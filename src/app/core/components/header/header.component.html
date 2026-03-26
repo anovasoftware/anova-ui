@@ -67,7 +67,27 @@
         </button>
       </mat-menu>
     </div>
-
-
   </div>
 </div>
+
+<!--<div class="breadcrumb-bar" *ngIf="navigationMode">-->
+<!--  <nav class="printable-area" aria-label="Breadcrumb">-->
+<!--    <ng-container *ngIf="menuService.breadcrumbMenus$ | async as breadcrumbMenus">-->
+<!--      <ng-container *ngFor="let menu of breadcrumbMenus; let last = last">-->
+<!--        <a-->
+<!--          *ngIf="!last"-->
+<!--          class="breadcrumb-link"-->
+<!--          href=""-->
+<!--          (click)="goToMenu($event, menu.menuId)">-->
+<!--          {{ menu.breadcrumbName || menu.title }}-->
+<!--        </a>-->
+
+<!--        <span *ngIf="last" class="breadcrumb-current">-->
+<!--          {{ menu.breadcrumbName || menu.title }}-->
+<!--        </span>-->
+
+<!--        <span class="breadcrumb-separator" *ngIf="!last">>></span>-->
+<!--      </ng-container>-->
+<!--    </ng-container>-->
+<!--  </nav>-->
+<!--</div>-->

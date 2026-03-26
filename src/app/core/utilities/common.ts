@@ -1,6 +1,7 @@
-import {User} from '../../models/user';
+import {Role, User} from '../../models/user';
 import {Client} from '../../models/client';
 import {Hotel} from '../../models/hotel';
+import {Menu} from '../../models/menu';
 
 export function normalizeUser(u: any): User | null {
   if (!u) return null;
@@ -8,35 +9,53 @@ export function normalizeUser(u: any): User | null {
   const person = u.person
     ? {
       ...u.person,
-      // support both snake_case and camelCase
-      personId: u.person.personId ?? u.person.person_id ?? u.person.personid,
+      personId: u.person.personId,
     }
     : null;
 
-    // Normalize clients safely
-  const clients: Client[] = Array.isArray(u.clients)
-    ? u.clients.map((c: any) => ({
-        clientId: c.clientId ?? c.client_id ?? c.id ?? '',
-        code: c.code ?? '',
-        description: c.description ?? '',
+  // Normalize roles safely
+  const roles: Role[] = Array.isArray(u.roles)
+    ? u.roles.map((r: any) => ({
+        roleId: r.roleId,
+        description: r.description,
+      }))
+    : [];
+
+    // Normalize menus safely
+  const menus: Menu[] = Array.isArray(u.menus)
+    ? u.menus.map((m: any) => ({
+        menuId: m.roleId,
+        description: m.description,
       }))
     : [];
 
     // Normalize clients safely
+  const clients: Client[] = Array.isArray(u.clients)
+    ? u.clients.map((c: any) => ({
+        clientId: c.clientId,
+        code: c.code,
+        description: c.description,
+      }))
+    : [];
+
+    // Normalize hotels safely
   const hotels: Hotel[] = Array.isArray(u.hotels)
-    ? u.hotels.map((c: any) => ({
-      hotelId: c.hotelId ?? c.hotel_id ?? c.id ?? '',
-      code: c.code ?? '',
-      description: c.description ?? '',
+    ? u.hotels.map((h: any) => ({
+      hotelId: h.hotelId,
+      code: h.code,
+      description: h.description,
     }))
     : [];
 
   return {
-    userId: u.userId ?? u.user_id ?? u.id,
-    username: u.username ?? '',
-    name: u.name ?? u.full_name ?? u.username ?? 'Guest',
-    loggedIn: u.loggedIn ?? u.is_logged_in ?? !!u,
+    userId: u.userId,
+    username: u.username,
+    name: u.name  ?? 'Guest',
+    loggedIn: u.loggedIn ?? false,
+    lastHotelId: u.lastHotelId ?? null,
     person,
+    roles,
+    menus,
     clients,
     hotels
   } as User;

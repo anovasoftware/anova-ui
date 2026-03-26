@@ -1,3 +1,4 @@
+
 <div class="banner">
   <div class="banner-overlay"></div>
   <div class="printable-area">
@@ -99,7 +100,7 @@
       <mat-card
         class="nav-card"
         *ngFor="let menuItem of navigationMenus$ | async"
-        (click)="onMenuClick(menuItem)">
+        (click)="onCardClick(menuItem)">
 
 <!--        <div class="nav-card-top">-->
 <!--          <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>-->

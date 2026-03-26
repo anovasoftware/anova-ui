@@ -43,7 +43,7 @@ export class GlobalService {
       this.updateUserState(user);
 
       if (user) {
-        this.setCurrentMenuId(MenuConstants.NOT_APPLICABLE);
+        this.setCurrentMenuId(MenuConstants.HOME);
       }
     });
   }

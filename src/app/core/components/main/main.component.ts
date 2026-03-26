@@ -9,7 +9,7 @@ import {MenuService} from '../../../services/menu.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {FooterComponent} from '../footer/footer.component';
-import {MenuItem} from '../../../models/menu';
+import {Menu} from '../../../models/menu';
 
 @Component({
   selector: 'app-main-layout',
@@ -22,6 +22,7 @@ import {MenuItem} from '../../../models/menu';
     RouterOutlet,
     HeaderComponent,
     FooterComponent,
+    BreadcrumbComponent,
     // SidebarComponent,
     // BreadcrumbComponent
   ],
@@ -30,7 +31,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public message = 'Loading...';
   public user: { name: string } | null = null;
   public title = 'Welcome!';
-  public currentMenu: MenuItem | null = null;
+  public currentMenu: Menu | null = null;
   public componentLoaded = false;
 
   private destroy$ = new Subject<void>();
@@ -87,7 +88,7 @@ export class MainComponent implements OnInit, OnDestroy {
     return `M${menuPart}-P${pagePart}`;
   }
   get showPageHeader(): boolean {
-    return !!(this.currentMenu?.title || this.currentMenu?.subTitle);
+    return !!(this.currentMenu?.title || this.currentMenu?.subTitle) && false;
   }
 
 }
