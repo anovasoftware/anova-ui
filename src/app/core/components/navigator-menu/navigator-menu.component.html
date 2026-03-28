@@ -1,0 +1,32 @@
+<section class="navigation" *ngIf="globalService.isLoggedIn">
+  <div class="printable-area">
+    <div class="nav-card-grid">
+      <mat-card
+        class="nav-card"
+        *ngFor="let menu of navigationMenus$ | async"
+        [class.disabled]="menu.disabled"
+        [attr.aria-disabled]="menu.disabled"
+        [attr.tabindex]="menu.disabled ? -1 : 0"
+        [matTooltip]="menu.disabled ? 'Access not enabled' : ''"
+        [matTooltipDisabled]="!menu.disabled"
+        (click)="!menu.disabled && onCardClick(menu)">
+
+        <mat-card-content>
+          <div class="nav-card-header">
+            <div class="nav-card-icon" *ngIf="menu.icon">
+              <mat-icon>{{ menu.icon }}</mat-icon>
+            </div>
+          </div>
+          <div class="nav-card-title">{{menu.title}}</div>
+          <div class="nav-card-subtitle" *ngIf="menu.subTitle">
+            {{ menu.subTitle }}
+          </div>
+          <!--          <div class="nav-card-description" *ngIf="menuItem.description">-->
+          <!--            {{ menuItem.description }}-->
+          <!--          </div>-->
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</section>
+

@@ -24,6 +24,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {UserService} from '../../../services/user.service';
 import {MenuConstants} from '../../../../constants/menu_constants';
 import {PageConstants} from '../../../../constants/page_constants';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 // import {Constants} from 'src/constants/constants';
 
@@ -73,33 +74,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     private dialog: MatDialog,
-    private formDialog: FormDialogService
+    private formDialog: FormDialogService,
+    private snackBar: MatSnackBar
   ) {
   }
 
   ngOnInit(): void {
-    this.globalService.global$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(global => {
-        this.user = global.user;
-        this.isLoggedIn = !!global.user;
-        this.beVersion = `${global.meta?.version}`;
-        this.componentLoaded = true;
-      });
+    this.globalService.global$.pipe(takeUntil(this.destroy$)).subscribe(global => {
+      this.user = global.user;
+      this.isLoggedIn = !!global.user;
+      this.beVersion = `${global.meta?.version}`;
+      this.componentLoaded = true;
+    });
 
-    this.menuService.menus$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(menus => {
-        this.headerMenus = menus.filter(m => m.typeId === '002');
-        // this.breadcrumbMenus = menus;
-      });
-
-    // this.menuService.breadcrumbMenus$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe(menus => {
-    //     this.breadcrumbMenus = menus;
-    //     this.navigationMode = this.isLoggedIn && menus.length > 1;
-    //   });
+    this.menuService.menus$.pipe(takeUntil(this.destroy$)).subscribe(menus => {
+      this.headerMenus = menus.filter(m => m.typeId === '002');
+    });
+    this.globalService.currentHotelId$.pipe(takeUntil(this.destroy$)).subscribe(hotelId => {
+      this.selectedHotelId = hotelId;
+    });
   }
 
   ngOnDestroy(): void {
@@ -170,22 +163,49 @@ export class HeaderComponent implements OnInit, OnDestroy {
   //   console.log(hotelId);
   //   localStorage.setItem('hotelId', hotelId);
   // }
-
   onHotelChange(hotelId: string): void {
-    localStorage.setItem('hotelId', hotelId);
+    this.globalService.setCurrentHotelId(hotelId);
     this.selectedHotelId = hotelId;
 
-    if (!!this.user) {
+    if (this.user) {
       this.userService.setLastHotel(this.user.userId, hotelId).subscribe({
         next: (response) => {
           if (!response.success) {
             console.error('setLastHotel failed:', response.message, response.errors);
           }
         },
-        error: (err) => console.error('setLastHotel HTTP error:', err)
+        error: (err) => {
+          const message =
+            err?.error?.errors?.join(' | ') ||
+            err?.error?.message ||
+            err?.message ||
+            'Unable to update hotel.';
+
+          this.snackBar.open(message, 'OK', {
+            duration: 5000
+          });
+
+          console.error('setLastHotel HTTP error:', err);
+        }
       });
     }
   }
+
+  // onHotelChange(hotelId: string): void {
+  //   localStorage.setItem('hotelId', hotelId);
+  //   this.selectedHotelId = hotelId;
+  //
+  //   if (!!this.user) {
+  //     this.userService.setLastHotel(this.user.userId, hotelId).subscribe({
+  //       next: (response) => {
+  //         if (!response.success) {
+  //           console.error('setLastHotel failed:', response.message, response.errors);
+  //         }
+  //       },
+  //       error: (err) => console.error('setLastHotel HTTP error:', err)
+  //     });
+  //   }
+  // }
 
   // oldNavigationMode(): boolean {
   //   let navigationMode = true;

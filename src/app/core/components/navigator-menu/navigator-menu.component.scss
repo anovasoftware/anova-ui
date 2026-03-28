@@ -1,0 +1,91 @@
+@use 'sass:map';
+@use 'styles/variables';
+@use 'styles/themes' as theme;
+
+
+/***************************************************************
+***  navigation controls
+****************************************************************/
+.navigation {
+  margin-top: 24px;
+}
+.nav-card-grid {
+   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 280px));
+  gap: 20px;
+  justify-content: start;
+}
+
+.nav-card {
+  cursor: pointer;
+  //border-radius: 12px;
+  //transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid rgba(0, 0, 0, 0.08);  // subtle but visible
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* TOP SECTION */
+.nav-card-top {
+  height: 70px;
+  background: map.get(theme.$neutral-palette, 90);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* ICON AREA */
+.nav-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-card-icon mat-icon {
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.04);
+  color: #555;
+}
+.nav-card-header {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 12px;
+}
+.nav-card-title {
+  padding-top: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  //color: rgba(0, 0, 0, 0.85);
+  color: map.get(theme.$neutral-palette, 50);
+  margin-bottom: 6px;
+}
+
+.nav-card-subtitle {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 8px;
+}
+
+.nav-card-description {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+.nav-card.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.nav-card.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  transition: none;
+}

@@ -411,3 +411,14 @@
   color: rgba(0, 0, 0, 0.72);
 }
 
+.nav-card.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.nav-card.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  transition: none;
+}

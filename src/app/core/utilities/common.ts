@@ -24,8 +24,9 @@ export function normalizeUser(u: any): User | null {
     // Normalize menus safely
   const menus: Menu[] = Array.isArray(u.menus)
     ? u.menus.map((m: any) => ({
-        menuId: m.roleId,
+        menuId: m.menuId,
         description: m.description,
+        hotelRequired: m.hotelRequired,
       }))
     : [];
 
@@ -53,6 +54,8 @@ export function normalizeUser(u: any): User | null {
     name: u.name  ?? 'Guest',
     loggedIn: u.loggedIn ?? false,
     lastHotelId: u.lastHotelId ?? null,
+    isSuperuser: u.isSuperuser ?? false,
+
     person,
     roles,
     menus,

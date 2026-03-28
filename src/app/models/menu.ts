@@ -14,4 +14,7 @@ export interface Menu {
   route: string;
   page?: PageItem;
   icon: string;
+  disabled?: boolean;
+  hotelRequired?: boolean;
+  children?: Menu[];
 }

@@ -13,6 +13,7 @@ export interface User {
   username: string;
   person: Person | null;
   lastHotelId: string;
+  isSuperuser: boolean;
 
   // client-only helpers (optional)
   loggedIn: boolean;
@@ -21,4 +22,5 @@ export interface User {
   menus: Menu[];
   clients: Client[];
   hotels: Hotel[];
+
 }

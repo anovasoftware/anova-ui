@@ -2,13 +2,16 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {GlobalService} from './global.service';
- import {Menu} from '../models/menu';
+import {Menu} from '../models/menu';
 import {ApiData, ApiResponse} from '../models/api-response';
 import {MenuConstants} from '../../constants/menu_constants';
+import {TypeConstants} from '../../constants/type_constants';
+import {HotelConstants} from '../../constants/hotel_constants';
 
 
 @Injectable({providedIn: 'root'})
 export class MenuService {
+  protected readonly TypeConstants = TypeConstants;
   private menusSubject = new BehaviorSubject<Menu[]>([]);
   menus$ = this.menusSubject.asObservable();
 
@@ -27,11 +30,13 @@ export class MenuService {
     })
   );
 
+
   constructor(
     private api: ApiService,
     private globalService: GlobalService
   ) {
   }
+
 
   loadMenus(): void {
     this.api.get<ApiResponse<ApiData<Menu>>>('public/table/static/menu/').subscribe({
@@ -93,6 +98,46 @@ export class MenuService {
     // }
 
     return path;
+  }
+
+  hasMenuAccess(menuId: string): boolean {
+    let hasAccess = false;
+    const user = this.globalService.currentUser;
+    if (user) {
+      hasAccess = user.menus?.some(m => m.menuId === menuId) ?? false;
+    }
+    return hasAccess;
+  }
+
+  getCurrentNavigationMenus(): Observable<Menu[]> {
+    return combineLatest([
+      this.menus$,
+      this.globalService.currentMenuId$,
+      this.globalService.currentHotelId$,
+      this.globalService.user$,
+    ]).pipe(
+      map(([menus, currentMenuId, currentHotelId, user]) => {
+        const allowedMenuIds = new Set(user?.menus?.map(m => m.menuId) ?? []);
+        const hotelSelected = this.globalService.currentHotelId != HotelConstants.NOT_APPLICABLE;
+
+        return menus
+          .filter(m => {
+            const isNavigationMenu = (m.typeId === this.TypeConstants.MENU_NAVIGATION);
+            const isChildOfCurrentMenu = (m.parentMenuId === currentMenuId);
+            const hotelRequirementMet = (!m.hotelRequired || hotelSelected);
+
+            return isNavigationMenu && isChildOfCurrentMenu && hotelRequirementMet;
+          })
+          .map(m => {
+            const hasAccess = !!user?.isSuperuser || allowedMenuIds.has(m.menuId);
+
+            return {
+              ...m,
+              disabled: !hasAccess
+            };
+          });
+      })
+    );
   }
 }
 

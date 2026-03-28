@@ -7,16 +7,20 @@ import {User} from '../models/user';
 import {normalizeUser} from '../core/utilities/common';
 import {TypeConstants} from '../../constants/type_constants';
 import {MenuConstants} from '../../constants/menu_constants';
+import {HotelConstants} from '../../constants/hotel_constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  protected readonly TypeConstants = TypeConstants;
+  protected readonly MenuConstants = MenuConstants;
+  protected readonly HotelConstants = HotelConstants;
+
+
   private apiUrl = 'http://localhost:8000/api/token/';
   private userSubject = new BehaviorSubject<any>(this.loadUserFromStorage());
   user$ = this.userSubject.asObservable();
-  protected readonly TypeConstants = TypeConstants;
-  protected readonly MenuConstants = MenuConstants;
 
 
   constructor(private http: HttpClient) {
@@ -70,9 +74,16 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('currentMenuId');
+    localStorage.removeItem('currentHotelId');
     this.clearUser();
   }
 
+  getCurrentHotelId(): string {
+    return localStorage.getItem('currentHotelId') || this.HotelConstants.NOT_APPLICABLE;
+  }
+  setCurrentHotelId(hotelId: string): void {
+    localStorage.setItem('currentHotelId', hotelId);
+  }
   getCurrentMenuId(): string {
     return localStorage.getItem('currentMenuId') || this.MenuConstants.HOME;
   }

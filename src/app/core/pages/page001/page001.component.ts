@@ -14,12 +14,11 @@ import {ExchangeRateService} from '../../../services/financial.services';
 import {AsyncPipe, DatePipe, DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {MatTooltip} from '@angular/material/tooltip';
 import {GlobalService} from '../../../services/global.service';
-import {map, takeUntil} from 'rxjs/operators';
 import {MenuService} from '../../../services/menu.service';
-import {combineLatest, Observable, Subject} from 'rxjs';
 import {Menu} from '../../../models/menu';
 import {TypeConstants} from '../../../../constants/type_constants';
-import {MatIcon} from '@angular/material/icon';
+import {NavigatorMenuComponent} from '../../components/navigator-menu/navigator-menu.component';
+import {Observable, Subject} from 'rxjs';
 
 @Component({
   selector: 'app-page001',
@@ -28,7 +27,6 @@ import {MatIcon} from '@angular/material/icon';
     HeroComponent,
     MatCard,
     MatCardTitle,
-    MatIcon,
     MatCardContent,
     MatButton,
     MatSnackBarModule,
@@ -38,6 +36,7 @@ import {MatIcon} from '@angular/material/icon';
     NgForOf,
     DatePipe,
     MatTooltip,
+    NavigatorMenuComponent,
   ],
   templateUrl: './page001.component.html',
   styleUrls: ['./page001.component.scss'],
@@ -59,18 +58,19 @@ export class Page001Component implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.exchangeRateService.loadExchangeRates();
+    this.navigationMenus$ = this.menuService.getCurrentNavigationMenus();
 
-    this.navigationMenus$ = combineLatest([
-      this.menuService.menus$,
-      this.globalService.currentMenuId$
-    ]).pipe(
-      map(([menus, currentMenuId]) =>
-        menus.filter(m =>
-          m.typeId === this.TypeConstants.MENU_NAVIGATION &&
-          m.parentMenuId === currentMenuId
-        )
-      )
-    );
+    // this.navigationMenus$ = combineLatest([
+    //   this.menuService.menus$,
+    //   this.globalService.currentMenuId$
+    // ]).pipe(
+    //   map(([menus, currentMenuId]) =>
+    //     menus.filter(m =>
+    //       m.typeId === this.TypeConstants.MENU_NAVIGATION &&
+    //       m.parentMenuId === currentMenuId
+    //     )
+    //   )
+    // );
   }
 
   // ngOnInit(): void {
@@ -131,15 +131,4 @@ export class Page001Component implements OnInit, OnDestroy {
     );
   }
 
-  onCardClick(menu: Menu): void {
-    console.log(menu);
-
-    this.globalService.setCurrentMenuId(menu.menuId);
-    this.menuService.setSelectedMenu(menu);
-
-    if (menu.route) {
-      this.router.navigate([menu.route]);
-      return;
-    }
-  }
 }
