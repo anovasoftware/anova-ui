@@ -48,7 +48,12 @@ export class NavigatorMenuComponent implements OnInit {
       this.menuService.setSelectedMenu(menu);
 
       if (menu.route) {
-        this.router.navigate([menu.route]);
+        let route = menu.route;
+        if (route === 'page' && menu.page) {
+          route = `/page${menu.page?.pageId}`;
+        }
+        console.log('menu.route', route);
+        this.router.navigate([route]);
         return;
       }
     }
