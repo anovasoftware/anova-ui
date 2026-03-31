@@ -13,7 +13,7 @@ import {GridConstants} from '../../../../constants/grid_constants';
   styleUrl: './grid-manager.component.css'
 })
 export class GridManagerComponent {
-  @Input() gridId: string | null = null;
+  @Input() gridId: string = GridConstants.TO_BE_ANNOUNCED;
   protected readonly GridConstants= GridConstants;
 
 
