@@ -1,10 +1,10 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { AuthService } from './services/auth.service';
-import { inject } from '@angular/core';
+import { GlobalService } from './services/global.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,19 +15,30 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([
         (req, next) => {
           const authService = inject(AuthService);
-          const token = authService.getAccessToken();
+          const globalService = inject(GlobalService);
 
-          if (!token) {
-            return next(req);
+          const token = authService.getAccessToken();
+          const hotelId = globalService.currentHotelId;
+
+          let modifiedReq = req;
+
+          if (token) {
+            modifiedReq = modifiedReq.clone({
+              setHeaders: {
+                Authorization: `Bearer ${token}`
+              }
+            });
           }
 
-          const authReq = req.clone({
-            setHeaders: {
-              Authorization: `Bearer ${token}`
-            }
-          });
+          if (hotelId && !modifiedReq.params.has('hotelId')) {
+            modifiedReq = modifiedReq.clone({
+              setParams: {
+                hotelId: hotelId
+              }
+            });
+          }
 
-          return next(authReq);
+          return next(modifiedReq);
         }
       ])
     )

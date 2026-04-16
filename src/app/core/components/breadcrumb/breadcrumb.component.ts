@@ -69,7 +69,7 @@ export class BreadcrumbComponent implements OnInit {
     if (!menu) {
       return;
     }
-    console.log('menu', menu);
+    // console.log('menu', menu);
     this.globalService.setCurrentMenuId(menuId);
     this.menuService.setSelectedMenu(menu);
 

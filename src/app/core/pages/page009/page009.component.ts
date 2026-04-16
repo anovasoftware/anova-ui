@@ -3,15 +3,15 @@ import {GridConstants} from '../../../../constants/grid_constants';
 import {GridManagerComponent} from '../../components/grid-manager/grid-manager.component';
 
 @Component({
-  selector: 'app-page007',
+  selector: 'app-page9',
   imports: [
     GridManagerComponent,
     GridManagerComponent
   ],
-  templateUrl: './page007.component.html',
-  styleUrl: './page007.component.scss'
+  templateUrl: './page009.component.html',
+  styleUrl: './page009.component.scss'
 })
-export class Page007Component {
+export class Page006Component {
   protected readonly GridConstants = GridConstants;
 
 }
