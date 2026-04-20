@@ -14,27 +14,50 @@ export class MenuService {
   protected readonly TypeConstants = TypeConstants;
   private menusSubject = new BehaviorSubject<Menu[]>([]);
   menus$ = this.menusSubject.asObservable();
-
   private selectedMenuSubject = new BehaviorSubject<Menu | null>(null);
   selectedMenu$ = this.selectedMenuSubject.asObservable();
+  private childrenMap: { [key: string]: Menu[] } = {};  // TODO: add this later
 
-  breadcrumbMenus$: Observable<Menu[]> = combineLatest([
-    this.menus$,
-    this.selectedMenu$
-  ]).pipe(
-    map(([menus, selectedMenu]) => {
-      if (!menus.length || !selectedMenu?.menuId) {
-        return [];
-      }
-      return this.buildMenuPath(menus, selectedMenu.menuId);
-    })
-  );
-
+  // breadcrumbMenus$: Observable<Menu[]> = combineLatest([
+  //   this.menus$,
+  //   this.selectedMenu$
+  // ]).pipe(
+  //   map(([menus, selectedMenu]) => {
+  //     if (!menus.length || !selectedMenu?.menuId) {
+  //       return [];
+  //     }
+  //     return this.buildMenuPath(menus, selectedMenu.menuId);
+  //   })
+  // );
+  breadcrumbMenus$!: Observable<Menu[]>;
 
   constructor(
     private api: ApiService,
     private globalService: GlobalService
   ) {
+    this.breadcrumbMenus$ = combineLatest([
+      this.menus$,
+      this.globalService.currentMenuId$
+    ]).pipe(
+      map(([menus, currentMenuId]) => {
+        if (!menus.length || !currentMenuId) {
+          return [];
+        }
+        return this.buildMenuPath(menus, currentMenuId);
+      })
+    );
+    this.globalService.user$.subscribe(user => {
+      if (user) {
+        this.loadMenus();
+      } else {
+        this.menusSubject.next([]);
+      }
+    });
+
+    this.globalService.currentHotelId$.subscribe(() => {
+      // optional: reload menus if hotel affects them
+      this.loadMenus();
+    });
   }
 
 
@@ -55,6 +78,12 @@ export class MenuService {
         this.selectedMenuSubject.next(null);
       },
     });
+  }
+
+  hasChildren(menuId: string): boolean {
+    return this.menusSubject
+      .getValue()
+      .some(m => m.parentMenuId === menuId);
   }
 
   getMenusByType(typeId: string): Menu[] {
@@ -141,81 +170,3 @@ export class MenuService {
   }
 }
 
-// import {Injectable} from '@angular/core';
-// import {BehaviorSubject} from 'rxjs';
-// import {ApiService} from './api.service';
-// import {GlobalService} from './global.service';
-// import {Menu} from '../models/menu';
-// import {ApiData, ApiResponse, RecordsResponse} from '../models/api-response';
-//
-//
-// @Injectable({providedIn: 'root'})
-// export class MenuService {
-//   private menusSubject = new BehaviorSubject<Menu[]>([]);
-//   menu$ = this.menusSubject.asObservable();
-//
-//   constructor(
-//     private api: ApiService,
-//     private globalService: GlobalService) {
-//   }
-//
-//   loadMenus(): void {
-//     this.api.get<ApiResponse<ApiData<Menu>>>('public/table/static/menu/').subscribe({
-//       next: (response) => {
-//         const menus: Menu[] = response?.data.records || [];
-//         this.menusSubject.next(menus);
-//
-//         // ✅ Set selectedMenu if it's empty
-//         if (!this.selectedMenuSubject.value && menus.length > 0) {
-//           const defaultMenu = menus.find(m => m.menuId === '001') || menus[0];
-//           this.selectedMenuSubject.next(defaultMenu);
-//           this.globalService.setMeta(response.meta);
-//         }
-//       },
-//       error: () => {
-//         this.menusSubject.next([]);
-//         this.selectedMenuSubject.next(null);
-//       },
-//     });
-//   }
-//
-//   getMenusByType(typeId: string): Menu[] {
-//     return this.menusSubject.getValue().filter(m => m.typeId === typeId);
-//   }
-//
-//   getMenuById(menuId: string): Menu | null {
-//     return this.menusSubject.getValue().find(m => m.menuId === menuId) ?? null;
-//   }
-//
-//   private selectedMenuSubject = new BehaviorSubject<Menu | null>(null);
-//   selectedMenu$ = this.selectedMenuSubject.asObservable();
-//
-//   setSelectedMenu(menu: Menu | null): void {
-//     this.selectedMenuSubject.next(menu);
-//   }
-//
-//   getSelectedMenu(): Menu | null {
-//     return this.selectedMenuSubject.getValue();
-//   }
-//
-//   getMenuPath(menuId: string): Menu[] {
-//     const path: Menu[] = [];
-//
-//     let currentMenu = this.getMenuById(menuId);
-//     let guard = 0;
-//
-//     while (currentMenu && guard < 20) {
-//       path.unshift(currentMenu);
-//
-//       const parentMenuId = currentMenu.parentMenuId;
-//       if (!parentMenuId) {
-//         break;
-//       }
-//
-//       currentMenu = this.getMenuById(parentMenuId);
-//       guard++;
-//     }
-//
-//     return path;
-//   }
-// }

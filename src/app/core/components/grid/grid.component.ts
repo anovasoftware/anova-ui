@@ -98,8 +98,15 @@ export class GridComponent {
           currency: 'USD'
         }).format(Number(value));
 
-      case 'date':
+      case 'dateX':
         return new Intl.DateTimeFormat('en-US').format(new Date(value));
+      case 'date':
+        const d = new Date(value);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+
 
       case 'datetime':
         return new Intl.DateTimeFormat('en-US', {

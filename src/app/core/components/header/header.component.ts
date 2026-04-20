@@ -101,16 +101,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogin(event: MouseEvent) {
-    // allow open-in-new-tab / ctrl-click / middle-click to still navigate
     if (event.ctrlKey || event.metaKey || event.button === 1) return;
 
     event.preventDefault();
     this.formDialog.openForm(FormConstants.LOGIN, 'new', 'create');
-    // this.dialog.open(FormManagerComponent, {
-    //   width: '500px',
-    //   maxWidth: '90vw',
-    //   data: { formId: FormConstants.LOGIN, pk: 'new' }
-    // });
   }
 
   toggleSidebar() {
@@ -135,7 +129,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onLogout(): void {
     this.authService.logout();
     // this.globalService.loadPublicMeta();  // Optional: refresh public meta
-    this.router.navigate(['/navigator/001']);  // Or home page after logout
+    void this.router.navigate(['/navigator/001']);  // Or home page after logout
   }
 
   onProfile() {
@@ -157,12 +151,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  // onHotelChangeOld(hotelId: string): void {
-  //   this.selectedHotelId = hotelId;
-  //   this.userService.setLastHotel(hotelId);
-  //   console.log(hotelId);
-  //   localStorage.setItem('hotelId', hotelId);
-  // }
   onHotelChange(hotelId: string): void {
     this.globalService.setCurrentHotelId(hotelId);
     this.selectedHotelId = hotelId;
@@ -172,6 +160,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
         next: (response) => {
           if (!response.success) {
             console.error('setLastHotel failed:', response.message, response.errors);
+          } else {
+            // utilities/base/user/profile
+            this.authService.getUserProfile().subscribe({
+              next: (profileResponse) => {
+                this.user = profileResponse.data.user || profileResponse.data;
+                this.authService.storeUser(this.user);
+                this.globalService.setCurrentMenuId(MenuConstants.HOME);
+                void this.router.navigateByUrl(`/navigator/${this.PageConstants.HOME}`);
+                // this.router.navigate(['/menu', homeMenuId]);
+              },
+              error: (err) => {
+                console.error('getUserProfile failed:', err);
+              }
+            });
           }
         },
         error: (err) => {
@@ -188,6 +190,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           console.error('setLastHotel HTTP error:', err);
         }
       });
+
     }
   }
 

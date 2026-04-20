@@ -8,6 +8,8 @@ import {normalizeUser} from '../core/utilities/common';
 import {TypeConstants} from '../../constants/type_constants';
 import {MenuConstants} from '../../constants/menu_constants';
 import {HotelConstants} from '../../constants/hotel_constants';
+import {ApiService} from './api.service';
+import {ApiResponse} from '../models/api-response';
 
 @Injectable({
   providedIn: 'root'
@@ -19,20 +21,26 @@ export class AuthService {
 
 
   private apiUrl = 'http://localhost:8000/api/token/';
-  private userSubject = new BehaviorSubject<any>(this.loadUserFromStorage());
+  private userSubject = new BehaviorSubject<User | null>(this.loadUserFromStorage());
   user$ = this.userSubject.asObservable();
 
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private api: ApiService,) {
+
   }
 
+//   login(username: string, password: string): Observable<any> {
+//     return this.http.post<any>(this.apiUrl, {username, password})
+//       .pipe(
+//         tap(response => {
+//           this.storeTokens(response.access, response.refresh);
+//         })
+//       );
+//   }
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, {username, password})
-      .pipe(
-        tap(response => {
-          this.storeTokens(response.access, response.refresh);
-        })
-      );
+    return this.http.post<any>(this.apiUrl, {username, password});
   }
 
   storeTokens(access: string, refresh: string) {
@@ -48,7 +56,7 @@ export class AuthService {
     return localStorage.getItem('refresh_token');
   }
 
-  private loadUserFromStorage(): any {
+  private loadUserFromStorage(): User | null {
     // const storedUser = localStorage.getItem('user');
     // return storedUser ? JSON.parse(storedUser) : null;
     const stored = localStorage.getItem('user');
@@ -61,6 +69,10 @@ export class AuthService {
     const normalized = normalizeUser(user);
     localStorage.setItem('user', JSON.stringify(normalized));
     localStorage.setItem('currentMenuId', this.MenuConstants.HOME);
+    localStorage.setItem(
+      'currentHotelId',
+      normalized?.lastHotelId || this.HotelConstants.NOT_APPLICABLE
+    );
     this.userSubject.next(normalized);
   }
 
@@ -81,15 +93,34 @@ export class AuthService {
   getCurrentHotelId(): string {
     return localStorage.getItem('currentHotelId') || this.HotelConstants.NOT_APPLICABLE;
   }
+
   setCurrentHotelId(hotelId: string): void {
     localStorage.setItem('currentHotelId', hotelId);
   }
+
   getCurrentMenuId(): string {
     return localStorage.getItem('currentMenuId') || this.MenuConstants.HOME;
   }
+
   setCurrentMenuId(menuId: string): void {
     localStorage.setItem('currentMenuId', menuId);
   }
 
+  getUserProfile(): Observable<ApiResponse<any>> {
+    return this.api.get('utilities/base/user/profile');
+
+  }
+
+  // updateLastHotelId(hotelId: string): void {
+  //   const user = this.userSubject.value;
+  //   if (!user) {
+  //     return;
+  //   }
+  //
+  //   this.userSubject.next({
+  //     ...user,
+  //     lastHotelId: hotelId
+  //   });
+  // }
 }
 

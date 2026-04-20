@@ -24,37 +24,55 @@ export class GlobalService {
     user: null,
   });
 
-  private currentHotelIdSubject: BehaviorSubject<string | null>;
-  currentHotelId$: Observable<string | null>;
-
-  private currentMenuIdSubject: BehaviorSubject<string | null>;
-  currentMenuId$: Observable<string | null>;
-
   global$ = this.globalSubject.asObservable();
   user$ = this.global$.pipe(map(state => state.user));
-  isLoggedIn$ = this.global$.pipe(map(state => !!state.user));
 
+  private currentHotelIdSubject: BehaviorSubject<string>;
+  currentHotelId$: Observable<string>;
+
+  private currentMenuIdSubject: BehaviorSubject<string>;
+  currentMenuId$: Observable<string>;
+
+  isLoggedIn$ = this.global$.pipe(map(state => !!state.user));
 
   constructor(
     private api: ApiService,
     private authService: AuthService
   ) {
-    const initialMenuId = this.authService.getCurrentMenuId();
-    const initialHotelId = this.authService.getCurrentHotelId();
+    const initialMenuId = this.authService.getCurrentMenuId() || MenuConstants.HOME;
+    const initialHotelId = this.authService.getCurrentHotelId() || HotelConstants.NOT_APPLICABLE;
+    this.currentMenuIdSubject = new BehaviorSubject<string>(initialMenuId);
+    this.currentHotelIdSubject = new BehaviorSubject<string>(initialHotelId);
 
-    this.currentMenuIdSubject = new BehaviorSubject<string | null>(initialMenuId);
     this.currentMenuId$ = this.currentMenuIdSubject.asObservable();
-    this.currentHotelIdSubject = new BehaviorSubject<string | null>(initialHotelId);
     this.currentHotelId$ = this.currentHotelIdSubject.asObservable();
 
     this.authService.user$.subscribe(user => {
       this.updateUserState(user);
-
-      if (user) {
+      if (!user) {
         this.setCurrentMenuId(MenuConstants.HOME);
-        this.setCurrentHotelId(user.lastHotelId);
+        this.setCurrentHotelId(HotelConstants.NOT_APPLICABLE);
+      } else {
+        const hotelId = user.lastHotelId || HotelConstants.NOT_APPLICABLE;
+        this.setCurrentHotelId(hotelId);
       }
     });
+    // const initialMenuId = this.authService.getCurrentMenuId();
+    // const initialHotelId = this.authService.getCurrentHotelId();
+    //
+    // this.currentMenuIdSubject = new BehaviorSubject<string | null>(initialMenuId);
+    // this.currentMenuId$ = this.currentMenuIdSubject.asObservable();
+    // this.currentHotelIdSubject = new BehaviorSubject<string | null>(initialHotelId);
+    // this.currentHotelId$ = this.currentHotelIdSubject.asObservable();
+
+    // this.authService.user$.subscribe(user => {
+    //   this.updateUserState(user);
+    //
+    //   if (user) {
+    //     this.setCurrentMenuId(MenuConstants.HOME);
+    //     this.setCurrentHotelId(user.lastHotelId);
+    //   }
+    // });
   }
 
   loadGlobalState(): void {
@@ -88,29 +106,22 @@ export class GlobalService {
   }
 
   get currentHotelId(): string {
-    let hotelId = this.currentHotelIdSubject.value;
-    if (!hotelId) {
-      hotelId = HotelConstants.NOT_APPLICABLE
-    }
-    return hotelId;
-  }
-
-  setCurrentHotelId(hotelId: string): void {
-    this.currentHotelIdSubject.next(hotelId);
-    this.authService.setCurrentHotelId(hotelId);
+    return this.currentHotelIdSubject.value || HotelConstants.NOT_APPLICABLE;
   }
 
   get currentMenuId(): string {
-    let menuId = this.currentMenuIdSubject.value;
-    if (!menuId) {
-      menuId = MenuConstants.NOT_APPLICABLE;
-    }
-    return menuId;
-    // return this.currentMenuIdSubject.value;
+    return this.currentMenuIdSubject.value || MenuConstants.HOME;
+  }
+
+  setCurrentHotelId(hotelId: string): void {
+    const value = hotelId || HotelConstants.NOT_APPLICABLE;
+    this.currentHotelIdSubject.next(value);
+    this.authService.setCurrentHotelId(value);
   }
 
   setCurrentMenuId(menuId: string): void {
-    this.currentMenuIdSubject.next(menuId);
-    this.authService.setCurrentMenuId(menuId);
+    const value = menuId || MenuConstants.HOME;
+    this.currentMenuIdSubject.next(value);
+    this.authService.setCurrentMenuId(value);
   }
 }

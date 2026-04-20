@@ -11,6 +11,7 @@ import {FormDialogService} from '../../../services/form-dialog.service';
 import {Subject} from 'rxjs';
 import {Menu} from '../../../models/menu';
 import {PageConstants} from '../../../../constants/page_constants';
+import {NavigationService} from '../../../services/navigation.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -29,31 +30,12 @@ export class BreadcrumbComponent implements OnInit {
   constructor(
     private globalService: GlobalService,
     protected menuService: MenuService,
-    private authService: AuthService,
-    private userService: UserService,
+    protected navigationService: NavigationService,
     private router: Router,
-    private dialog: MatDialog,
-    private formDialog: FormDialogService
   ) {
   }
 
   ngOnInit(): void {
-    // this.globalService.global$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe(global => {
-    //     this.user = global.user;
-    //     this.isLoggedIn = !!global.user;
-    //     this.beVersion = `${global.meta?.version}`;
-    //     this.componentLoaded = true;
-    //   });
-    //
-    // this.menuService.menus$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe(menus => {
-    //     this.headerMenus = menus.filter(m => m.typeId === '002');
-    //     // this.breadcrumbMenus = menus;
-    //   });
-
     this.menuService.breadcrumbMenus$
       .pipe(takeUntil(this.destroy$))
       .subscribe(menus => {
@@ -62,20 +44,29 @@ export class BreadcrumbComponent implements OnInit {
       });
   }
 
+  // breadcrumbClick(event: Event, menuId: string): void {
+  //   event.preventDefault();
+  //
+  //   const menu = this.menuService.getMenuById(menuId);
+  //   if (!menu) {
+  //     return;
+  //   }
+  //   // console.log('menu', menu);
+  //   this.globalService.setCurrentMenuId(menuId);
+  //   this.menuService.setSelectedMenu(menu);
+  //
+  //   if (menu.page?.pageId && menu.page.pageId !== this.PageConstants.NOT_APPLICABLE) {
+  //     let promise = this.router.navigate(['/navigator', menu.page.pageId]);
+  //   }
+  // }
   breadcrumbClick(event: Event, menuId: string): void {
     event.preventDefault();
 
     const menu = this.menuService.getMenuById(menuId);
-    if (!menu) {
+    if (!menu || menu.disabled) {
       return;
     }
-    // console.log('menu', menu);
-    this.globalService.setCurrentMenuId(menuId);
-    this.menuService.setSelectedMenu(menu);
 
-    if (menu.page?.pageId && menu.page.pageId !== this.PageConstants.NOT_APPLICABLE) {
-      let promise = this.router.navigate(['/navigator', menu.page.pageId]);
-    }
+    this.navigationService.navigateToMenu(menu);
   }
-
 }

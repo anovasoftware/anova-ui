@@ -11,6 +11,7 @@ import {GlobalService} from '../../../services/global.service';
 import {MenuService} from '../../../services/menu.service';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable} from 'rxjs';
+import {NavigationService} from '../../../services/navigation.service';
 
 @Component({
   selector: 'app-navigator-menu',
@@ -36,13 +37,15 @@ export class NavigatorMenuComponent implements OnInit {
     private router: Router,
     protected globalService: GlobalService,
     private menuService: MenuService,
+    private navigationService: NavigationService
   ) {
   }
+
   ngOnInit(): void {
     this.navigationMenus$ = this.menuService.getCurrentNavigationMenus();
   }
 
-  onCardClick(menu: Menu): void {
+  onCardClickOld(menu: Menu): void {
     if (!menu.disabled) {
         this.globalService.setCurrentMenuId(menu.menuId);
       this.menuService.setSelectedMenu(menu);
@@ -52,11 +55,19 @@ export class NavigatorMenuComponent implements OnInit {
         if (route === 'page' && menu.page) {
           route = `/page${menu.page?.pageId}`;
         }
-        console.log('menu.route', route);
-        this.router.navigate([route]);
+        void this.router.navigate([route], {
+          queryParams: { gridId: menu.gridId }
+        });
+        // this.router.navigate([route]);
         return;
       }
     }
   }
+  onCardClick(menu: Menu): void {
+    if (menu.disabled) {
+      return;
+    }
 
+    this.navigationService.navigateToMenu(menu);
+  }
 }

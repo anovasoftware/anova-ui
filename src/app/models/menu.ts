@@ -7,6 +7,7 @@ export interface Menu {
   menuId: string;
   parentMenuId: string;
   typeId: string;
+  gridId: string;
   description: string;
   title: string;
   subTitle?: string;
