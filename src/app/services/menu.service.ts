@@ -168,5 +168,15 @@ export class MenuService {
       })
     );
   }
+
+  getChildren(menuId: string): Menu[] {
+    return this.menusSubject.getValue().filter(m => m.parentMenuId === menuId);
+  }
+
+  getHeaderMenus(): Menu[] {
+    return this.menusSubject.getValue().filter(
+      m => m.parentMenuId === MenuConstants.NOT_APPLICABLE && m.typeId === this.TypeConstants.MENU_HEADER_BAR
+    );
+  }
 }
 
