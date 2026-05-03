@@ -1,11 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { GridConstants } from '../../../../constants/grid_constants';
-import { Router } from '@angular/router';
-import { FormDialogService } from '../../../services/form-dialog.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { GlobalService } from '../../../services/global.service';
-import { GridService } from '../../../services/grid.service';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import {Component, Input, ViewChild} from '@angular/core';
+import {GridConstants} from '../../../../constants/grid_constants';
+import {Router} from '@angular/router';
+import {FormDialogService} from '../../../services/form-dialog.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {GlobalService} from '../../../services/global.service';
+import {GridService} from '../../../services/grid.service';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {
   MatCell,
   MatCellDef,
@@ -18,7 +18,11 @@ import {
   MatRowDef,
   MatTable
 } from '@angular/material/table';
-import { MatTooltip } from '@angular/material/tooltip';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {formatDate} from '../../utilities/date-utilities';
+
 
 @Component({
   selector: 'app-grid',
@@ -37,7 +41,8 @@ import { MatTooltip } from '@angular/material/tooltip';
     MatCellDef,
     MatHeaderRowDef,
     MatRowDef,
-    MatTooltip
+    MatTooltip,
+    MatPaginator,
   ],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
@@ -45,6 +50,10 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class GridComponent {
   private _gridId: string = GridConstants.TO_BE_ANNOUNCED;
   protected readonly GridConstants = GridConstants;
+  public dataSource = new MatTableDataSource<any>();
+  public totalRows = 0;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   @Input()
   set gridId(value: string) {
@@ -61,6 +70,17 @@ export class GridComponent {
 
   get grid$() {
     return this.gridService.grid$;
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+
+    this.grid$.subscribe(grid => {
+      if (grid) {
+        this.dataSource.data = grid.rows || [];
+        this.totalRows = this.dataSource.data.length;
+      }
+    });
   }
 
   constructor(
@@ -101,139 +121,32 @@ export class GridComponent {
       case 'dateX':
         return new Intl.DateTimeFormat('en-US').format(new Date(value));
       case 'date':
-        const d = new Date(value);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-
+        return formatDate(value);
 
       case 'datetime':
-        return new Intl.DateTimeFormat('en-US', {
-          dateStyle: 'short',
-          timeStyle: 'short'
-        }).format(new Date(value));
-
+        return formatDate(value, true);
+      // case 'date':
+      //   const d = new Date(value);
+      //   const year = d.getFullYear();
+      //   const month = String(d.getMonth() + 1).padStart(2, '0');
+      //   const day = String(d.getDate()).padStart(2, '0');
+      //   return `${year}-${month}-${day}`;
+      //
+      // // case 'datetime':
+      // //   return new Intl.DateTimeFormat('en-US', {
+      // //     dateStyle: 'short',
+      // //     timeStyle: 'short'
+      // //   }).format(new Date(value));
+      // case 'datetime':
+      //   const d = new Date(value);
+      //   const year = d.getFullYear();
+      //   const month = String(d.getMonth() + 1).padStart(2, '0');
+      //   const day = String(d.getDate()).padStart(2, '0');
+      //   const hours = String(d.getHours()).padStart(2, '0');
+      //   const minutes = String(d.getMinutes()).padStart(2, '0');
+      //   return `${year}.${month}.${day} ${hours}:${minutes}`;
       default:
         return value;
     }
   }
 }
-// import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-// import {GridConstants} from '../../../../constants/grid_constants';
-// import {Router} from '@angular/router';
-// import {FormDialogService} from '../../../services/form-dialog.service';
-// import {MatSnackBar} from '@angular/material/snack-bar';
-// import {ExchangeRateService} from '../../../services/financial.services';
-// import {GlobalService} from '../../../services/global.service';
-// import {MenuService} from '../../../services/menu.service';
-// import {GridService} from '../../../services/grid.service';
-// import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-// import {
-//   MatCell, MatCellDef,
-//   MatColumnDef,
-//   MatHeaderCell,
-//   MatHeaderCellDef,
-//   MatHeaderRow, MatHeaderRowDef,
-//   MatRow, MatRowDef,
-//   MatTable
-// } from '@angular/material/table';
-// import {MatTooltip} from '@angular/material/tooltip';
-//
-// @Component({
-//   selector: 'app-grid',
-//   standalone: true,
-//   imports: [
-//     NgIf,
-//     AsyncPipe,
-//     MatTable,
-//     MatHeaderCell,
-//     MatColumnDef,
-//     MatCell,
-//     MatHeaderRow,
-//     MatRow,
-//     NgForOf,
-//     MatHeaderCellDef,
-//     MatCellDef,
-//     MatHeaderRowDef,
-//     MatRowDef,
-//     MatTooltip
-//   ],
-//   templateUrl: './grid.component.html',
-//   styleUrl: './grid.component.scss'
-// })
-// export class GridComponent implements OnChanges {
-//   @Input() gridId: string = GridConstants.TO_BE_ANNOUNCED;
-//   protected readonly GridConstants = GridConstants;
-//
-//
-//   constructor(
-//     private router: Router,
-//     private formDialog: FormDialogService,
-//     private snackBar: MatSnackBar,
-//     protected globalService: GlobalService,
-//     private gridService: GridService,
-//   ) {
-//   }
-//
-//   ngOnChanges(changes: SimpleChanges): void {
-//     if (changes['gridId']?.currentValue) {
-//       this.gridService.loadGrid(changes['gridId'].currentValue);
-//     }
-//   }
-//
-//   // ngOnInit(): void {
-//   //   this.gridService.loadGrid(this.gridId);
-//   // }
-//
-//   get grid$() {
-//     return this.gridService.grid$;
-//   }
-//
-//   // getCellValue(row: any, path: string): any {
-//   //   if (!row || !path) return '';
-//   //
-//   //   return path.split('.').reduce((obj, key) => obj?.[key], row) ?? '';
-//   // }
-//   getCellValue(row: any, path: string): any {
-//     if (!row || !path) return '';
-//
-//     return path.split('.').reduce((obj, key) => obj?.[key], row) ?? '';
-//   }
-//
-//   formatCellValue(value: any, format?: string): any {
-//     if (value === null || value === undefined || value === '') {
-//       return '';
-//     }
-//
-//     switch (format) {
-//       case 'uppercase':
-//         return String(value).toUpperCase();
-//
-//       case 'lowercase':
-//         return String(value).toLowerCase();
-//
-//       case 'yesno':
-//         return value ? 'Yes' : 'No';
-//
-//       case 'currency':
-//         return new Intl.NumberFormat('en-US', {
-//           style: 'currency',
-//           currency: 'USD'
-//         }).format(Number(value));
-//
-//       case 'date':
-//         return new Intl.DateTimeFormat('en-US').format(new Date(value));
-//
-//       case 'datetime':
-//         return new Intl.DateTimeFormat('en-US', {
-//           dateStyle: 'short',
-//           timeStyle: 'short'
-//         }).format(new Date(value));
-//
-//       default:
-//         return value;
-//     }
-//   }
-//
-// }

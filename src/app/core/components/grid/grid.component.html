@@ -7,7 +7,8 @@
     </h3>
 
     <div class="table-wrapper">
-      <table mat-table [dataSource]="grid.rows" class="full-width-table grid-table">
+      <!--      <table mat-table [dataSource]="grid.rows" class="full-width-table grid-table">-->
+      <table mat-table [dataSource]="dataSource" class="full-width-table grid-table">
 
         <ng-container *ngFor="let column of grid.columns" [matColumnDef]="column.field">
           <th mat-header-cell *matHeaderCellDef>
@@ -24,42 +25,11 @@
       </table>
     </div>
   </section>
+
+  <mat-paginator
+    [length]="totalRows"
+    [pageSize]="20"
+    [pageSizeOptions]="[20, 50, 100]"
+    showFirstLastButtons>
+  </mat-paginator>
 </div>
-
-<!--<div class="printable-area">-->
-<!--  <section *ngIf="grid$ | async as grid">-->
-<!--    <h3>{{ grid.title }}</h3>-->
-
-<!--    <table mat-table [dataSource]="grid.rows" class="mat-elevation-z1 full-width-table">-->
-
-<!--      <ng-container *ngFor="let column of grid.columns" [matColumnDef]="column.field">-->
-<!--        <th mat-header-cell *matHeaderCellDef>{{ column.label }}</th>-->
-
-<!--        <td mat-cell *matCellDef="let row">-->
-<!--          {{ formatCellValue(getCellValue(row, column.dataPath || column.field), column.format) }}-->
-<!--        </td>-->
-<!--      </ng-container>-->
-
-<!--      <tr mat-header-row *matHeaderRowDef="grid.displayedColumns"></tr>-->
-<!--      <tr mat-row *matRowDef="let row; columns: grid.displayedColumns;"></tr>-->
-<!--    </table>-->
-<!--  </section>-->
-<!--</div>-->
-
-<!--<div class="printable-area">-->
-<!--  <section *ngIf="grid$ | async as grid">-->
-<!--    <h3>{{ grid.title }}</h3>-->
-
-<!--    <table mat-table [dataSource]="grid.rows" class="mat-elevation-z1 full-width-table">-->
-<!--      <ng-container *ngFor="let column of grid.columns" [matColumnDef]="column.field">-->
-<!--        <th mat-header-cell *matHeaderCellDef>{{ column.label }}</th>-->
-<!--        <td mat-cell *matCellDef="let row">-->
-<!--          {{ getCellValue(row, column.dataPath || column.field) }}-->
-<!--        </td>-->
-<!--      </ng-container>-->
-
-<!--      <tr mat-header-row *matHeaderRowDef="grid.displayedColumns"></tr>-->
-<!--      <tr mat-row *matRowDef="let row; columns: grid.displayedColumns;"></tr>-->
-<!--    </table>-->
-<!--  </section>-->
-<!--</div>-->
