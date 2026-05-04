@@ -105,46 +105,26 @@ export class GridComponent {
     switch (format) {
       case 'uppercase':
         return String(value).toUpperCase();
-
       case 'lowercase':
         return String(value).toLowerCase();
-
       case 'yesno':
         return value ? 'Yes' : 'No';
-
       case 'currency':
         return new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD'
         }).format(Number(value));
-
-      case 'dateX':
-        return new Intl.DateTimeFormat('en-US').format(new Date(value));
+      // case 'dateX':
+      //   return new Intl.DateTimeFormat('en-US').format(new Date(value));
       case 'date':
         return formatDate(value);
-
       case 'datetime':
         return formatDate(value, true);
-      // case 'date':
-      //   const d = new Date(value);
-      //   const year = d.getFullYear();
-      //   const month = String(d.getMonth() + 1).padStart(2, '0');
-      //   const day = String(d.getDate()).padStart(2, '0');
-      //   return `${year}-${month}-${day}`;
-      //
-      // // case 'datetime':
-      // //   return new Intl.DateTimeFormat('en-US', {
-      // //     dateStyle: 'short',
-      // //     timeStyle: 'short'
-      // //   }).format(new Date(value));
-      // case 'datetime':
-      //   const d = new Date(value);
-      //   const year = d.getFullYear();
-      //   const month = String(d.getMonth() + 1).padStart(2, '0');
-      //   const day = String(d.getDate()).padStart(2, '0');
-      //   const hours = String(d.getHours()).padStart(2, '0');
-      //   const minutes = String(d.getMinutes()).padStart(2, '0');
-      //   return `${year}.${month}.${day} ${hours}:${minutes}`;
+      case 'decimal':
+        return new Intl.NumberFormat('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 4 // adjust if needed
+        }).format(Number(value));
       default:
         return value;
     }
