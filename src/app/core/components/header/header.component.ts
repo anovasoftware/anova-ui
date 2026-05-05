@@ -62,6 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   headerMenus: Menu[] = [];
   selectedHotelId: string | null = null;
   componentLoaded = false;
+
   // breadcrumbMenus: Menu[] = [];
   // navigationMode = false;
 
@@ -164,6 +165,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             // utilities/base/user/profile
             this.authService.getUserProfile().subscribe({
               next: (profileResponse) => {
+                console.log('getUserProfile response:', profileResponse);
                 this.user = profileResponse.data.user || profileResponse.data;
                 this.authService.storeUser(this.user);
                 this.globalService.setCurrentMenuId(MenuConstants.HOME);
@@ -194,60 +196,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  // onHotelChange(hotelId: string): void {
-  //   localStorage.setItem('hotelId', hotelId);
-  //   this.selectedHotelId = hotelId;
-  //
-  //   if (!!this.user) {
-  //     this.userService.setLastHotel(this.user.userId, hotelId).subscribe({
-  //       next: (response) => {
-  //         if (!response.success) {
-  //           console.error('setLastHotel failed:', response.message, response.errors);
-  //         }
-  //       },
-  //       error: (err) => console.error('setLastHotel HTTP error:', err)
-  //     });
-  //   }
-  // }
-
-  // oldNavigationMode(): boolean {
-  //   let navigationMode = true;
-  //   if (!this.globalService.isLoggedIn) {
-  //     navigationMode = false;
-  //   }
-  //   else if (this.breadcrumbMenus.length > 1) {
-  //     navigationMode = false;
-  //   }
-  //   console.log('navigationMode', navigationMode);
-  //   return navigationMode;
-  // }
-
-  // get navigationMode(): boolean {
-  //   const mode = this.globalService.isLoggedIn && this.breadcrumbMenus.length > 1;
-  //   console.log('navigationMode', mode);
-  //   console.log('this.breadcrumbMenus', this.breadcrumbMenus);
-  //   return mode;
-  // }
-  // goHome(event: Event): void {
-  //   event.preventDefault();
-  //
-  //   this.globalService.setCurrentMenuId(this.MenuConstants.HOME);
-  //   let booleanPromise = this.router.navigateByUrl(`/navigator/${this.PageConstants.HOME}`);
-  // }
-
-  // goToMenu(event: Event, menuId: string): void {
-  //   event.preventDefault();
-  //
-  //   const menu = this.menuService.getMenuById(menuId);
-  //   if (!menu) {
-  //     return;
-  //   }
-  //   console.log('menu', menu);
-  //   this.globalService.setCurrentMenuId(menuId);
-  //   this.menuService.setSelectedMenu(menu);
-  //
-  //   if (menu.page?.pageId && menu.page.pageId !== this.PageConstants.NOT_APPLICABLE) {
-  //     let promise = this.router.navigate(['/navigator', menu.page.pageId]);
-  //   }
-  // }
+  get currentHotel$() {
+    return this.globalService.currentHotel$;
+  }
 }

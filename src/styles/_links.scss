@@ -48,6 +48,7 @@
   @extend .nav-link;
   color: mat.m2-get-color-from-palette($custom-blue-palette, 50);
   margin-right:16px;
+  text-transform: uppercase;
 }
 .logo-link {
   text-decoration: none;

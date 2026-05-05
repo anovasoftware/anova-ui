@@ -4,7 +4,7 @@
       <!--    <span class="app-title" title="version: {{version}}">-->
       <span class="anova">anova</span>
       <span class="sea-wrapper">
-        <img src="icons/seagull.svg" alt="Seagull" class="seagull-icon"/>
+        <img src="assets/icons/seagull.svg" alt="Seagull" class="seagull-icon"/>
         <span class="sea">sea</span>
       </span>
       <!--    </span>-->
@@ -12,14 +12,6 @@
 
     <span class="flex-spacer"></span>
 
-    <!--    <nav class="header-nav" *ngIf="headerMenus.length > 0">-->
-    <!--      <a *ngFor="let item of headerMenus"-->
-    <!--         [routerLink]="item.route"-->
-    <!--         routerLinkActive="active-link"-->
-    <!--         class="header-link">-->
-    <!--        {{ item.description }}-->
-    <!--      </a>-->
-    <!--    </nav>-->
     <nav class="header-nav" *ngIf="headerMenus.length > 0">
       <ng-container *ngFor="let item of headerMenus">
 
@@ -58,64 +50,68 @@
 
     <!-- Logged-in state -->
     <div class="flex-row align-center" *ngIf="isLoggedIn">
-      <!-- Hotel selector -->
-      <div class="toolbar-selector" *ngIf="(user?.hotels ?? []).length > 0">
-        <mat-form-field appearance="outline" class="toolbar-field">
-          <mat-select
-            placeholder="Select Hotel"
-            [value]="selectedHotelId"
-            (selectionChange)="onHotelChange($event.value)">
+      <div *ngIf="currentHotel$ | async as selectedHotel">
+        <a
+          class="header-link"
+          href=""
+          [matMenuTriggerFor]="hotelMenu"
+          (click)="$event.preventDefault()">
+          {{ selectedHotel.description }}
+        </a>
+        <mat-menu #hotelMenu="matMenu">
+          <button
+            mat-menu-item
+            *ngFor="let hotel of user?.hotels"
+            (click)="onHotelChange(hotel.hotelId)">
 
-            <mat-option
-              *ngFor="let hotel of user?.hotels"
-              [value]="hotel.hotelId">
+            <mat-icon class="check-icon">
+              {{ hotel.hotelId === selectedHotel.hotelId ? 'check' : '' }}
+            </mat-icon>
+
+            <span class="hotel-name">
               {{ hotel.description }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+            </span>
+          </button>
+        </mat-menu>
       </div>
-
-      <button mat-icon-button [matMenuTriggerFor]="accountMenu" title="{{user?.name}}">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-
-      <mat-menu #accountMenu="matMenu">
-        <button mat-menu-item disabled>
-          Signed in as {{ user?.username }}
-        </button>
-        <mat-divider></mat-divider>
-
-        <button mat-menu-item (click)="onProfile()">
-          <mat-icon>person</mat-icon>
-          <span>Profile</span>
-        </button>
-        <button mat-menu-item (click)="onLogout()">
-          <mat-icon>logout</mat-icon>
-          <span>Logout</span>
-        </button>
-      </mat-menu>
     </div>
+    <!--      &lt;!&ndash; Hotel selector &ndash;&gt;-->
+    <!--      <div class="toolbar-selector" *ngIf="(user?.hotels ?? []).length > 0">-->
+    <!--        <mat-form-field appearance="outline" class="toolbar-field">-->
+    <!--          <mat-select-->
+    <!--            placeholder="Select Hotel"-->
+    <!--            [value]="selectedHotelId"-->
+    <!--            (selectionChange)="onHotelChange($event.value)">-->
+
+    <!--            <mat-option-->
+    <!--              *ngFor="let hotel of user?.hotels"-->
+    <!--              [value]="hotel.hotelId">-->
+    <!--              {{ hotel.description }}-->
+    <!--            </mat-option>-->
+    <!--          </mat-select>-->
+    <!--        </mat-form-field>-->
+    <!--      </div>-->
+
+    <button mat-icon-button [matMenuTriggerFor]="accountMenu" title="{{user?.name}}">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #accountMenu="matMenu">
+      <button mat-menu-item disabled>
+        Signed in as {{ user?.username }}
+      </button>
+      <mat-divider></mat-divider>
+
+      <button mat-menu-item (click)="onProfile()">
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </button>
+      <button mat-menu-item (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
   </div>
 </div>
 
-<!--<div class="breadcrumb-bar" *ngIf="navigationMode">-->
-<!--  <nav class="printable-area" aria-label="Breadcrumb">-->
-<!--    <ng-container *ngIf="menuService.breadcrumbMenus$ | async as breadcrumbMenus">-->
-<!--      <ng-container *ngFor="let menu of breadcrumbMenus; let last = last">-->
-<!--        <a-->
-<!--          *ngIf="!last"-->
-<!--          class="breadcrumb-link"-->
-<!--          href=""-->
-<!--          (click)="goToMenu($event, menu.menuId)">-->
-<!--          {{ menu.breadcrumbName || menu.title }}-->
-<!--        </a>-->
 
-<!--        <span *ngIf="last" class="breadcrumb-current">-->
-<!--          {{ menu.breadcrumbName || menu.title }}-->
-<!--        </span>-->
-
-<!--        <span class="breadcrumb-separator" *ngIf="!last">>></span>-->
-<!--      </ng-container>-->
-<!--    </ng-container>-->
-<!--  </nav>-->
-<!--</div>-->

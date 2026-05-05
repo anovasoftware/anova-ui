@@ -1,6 +1,6 @@
 // src/app/services/global.service.ts
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, distinctUntilChanged, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
@@ -29,11 +29,12 @@ export class GlobalService {
 
   private currentHotelIdSubject: BehaviorSubject<string>;
   currentHotelId$: Observable<string>;
+  currentHotel$: Observable<any | null>;
 
   private currentMenuIdSubject: BehaviorSubject<string>;
   currentMenuId$: Observable<string>;
 
-  isLoggedIn$ = this.global$.pipe(map(state => !!state.user));
+  // isLoggedIn$ = this.global$.pipe(map(state => !!state.user));
 
   constructor(
     private api: ApiService,
@@ -47,6 +48,15 @@ export class GlobalService {
     this.currentMenuId$ = this.currentMenuIdSubject.asObservable();
     this.currentHotelId$ = this.currentHotelIdSubject.asObservable();
 
+    this.currentHotel$ = combineLatest([
+      this.currentHotelId$,
+      this.user$
+    ]).pipe(
+      map(([hotelId, user]) =>
+        user?.hotels?.find(hotel => hotel.hotelId === hotelId) ?? null
+      ),
+      distinctUntilChanged((a, b) => a?.hotelId === b?.hotelId)
+    );
     this.authService.user$.subscribe(user => {
       this.updateUserState(user);
       if (!user) {
