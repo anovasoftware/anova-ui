@@ -45,6 +45,7 @@ export function normalizeUser(u: any): User | null {
       hotelId: h.hotelId,
       code: h.code,
       description: h.description,
+      currentEvent: h.currentEvent,
     }))
     : [];
 

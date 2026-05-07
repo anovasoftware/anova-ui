@@ -58,6 +58,15 @@
           (click)="$event.preventDefault()">
           {{ selectedHotel.description }}
         </a>
+        <span class="toolbar-separator" *ngIf="selectedHotel.currentEvent">|</span>
+
+        <a
+          *ngIf="selectedHotel.currentEvent"
+          class="header-link"
+          href=""
+          (click)="$event.preventDefault()">
+            {{ selectedHotel.currentEvent.code }}
+        </a>
         <mat-menu #hotelMenu="matMenu">
           <button
             mat-menu-item
@@ -74,43 +83,45 @@
           </button>
         </mat-menu>
       </div>
+
+
+      <!--      &lt;!&ndash; Hotel selector &ndash;&gt;-->
+      <!--      <div class="toolbar-selector" *ngIf="(user?.hotels ?? []).length > 0">-->
+      <!--        <mat-form-field appearance="outline" class="toolbar-field">-->
+      <!--          <mat-select-->
+      <!--            placeholder="Select Hotel"-->
+      <!--            [value]="selectedHotelId"-->
+      <!--            (selectionChange)="onHotelChange($event.value)">-->
+
+      <!--            <mat-option-->
+      <!--              *ngFor="let hotel of user?.hotels"-->
+      <!--              [value]="hotel.hotelId">-->
+      <!--              {{ hotel.description }}-->
+      <!--            </mat-option>-->
+      <!--          </mat-select>-->
+      <!--        </mat-form-field>-->
+      <!--      </div>-->
+
+      <button mat-icon-button [matMenuTriggerFor]="accountMenu" title="{{user?.name}}">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <mat-menu #accountMenu="matMenu">
+        <button mat-menu-item disabled>
+          Signed in as {{ user?.username }}
+        </button>
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="onProfile()">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-menu-item (click)="onLogout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
     </div>
-    <!--      &lt;!&ndash; Hotel selector &ndash;&gt;-->
-    <!--      <div class="toolbar-selector" *ngIf="(user?.hotels ?? []).length > 0">-->
-    <!--        <mat-form-field appearance="outline" class="toolbar-field">-->
-    <!--          <mat-select-->
-    <!--            placeholder="Select Hotel"-->
-    <!--            [value]="selectedHotelId"-->
-    <!--            (selectionChange)="onHotelChange($event.value)">-->
-
-    <!--            <mat-option-->
-    <!--              *ngFor="let hotel of user?.hotels"-->
-    <!--              [value]="hotel.hotelId">-->
-    <!--              {{ hotel.description }}-->
-    <!--            </mat-option>-->
-    <!--          </mat-select>-->
-    <!--        </mat-form-field>-->
-    <!--      </div>-->
-
-    <button mat-icon-button [matMenuTriggerFor]="accountMenu" title="{{user?.name}}">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-
-    <mat-menu #accountMenu="matMenu">
-      <button mat-menu-item disabled>
-        Signed in as {{ user?.username }}
-      </button>
-      <mat-divider></mat-divider>
-
-      <button mat-menu-item (click)="onProfile()">
-        <mat-icon>person</mat-icon>
-        <span>Profile</span>
-      </button>
-      <button mat-menu-item (click)="onLogout()">
-        <mat-icon>logout</mat-icon>
-        <span>Logout</span>
-      </button>
-    </mat-menu>
   </div>
 </div>
 

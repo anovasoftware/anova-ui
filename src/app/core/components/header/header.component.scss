@@ -26,8 +26,18 @@
 //    min-height: 48px;
 //  }
 //}
+.toolbar-context {
+  display: flex;
+  align-items: center;
+  //gap: 10px;
+}
 
-
+.toolbar-separator {
+  opacity: 0.5;
+  color: white;
+  font-size: 14px;
+  margin-right: 16px;
+}
 .app-title {
   font-size: 20px;
   letter-spacing: 1px;
@@ -168,3 +178,4 @@
   color: map.get(theme.$primary-palette, 30);
   font: 400 12px/20px Roboto, 'Helvetica Neue', sans-serif;
 }
+
