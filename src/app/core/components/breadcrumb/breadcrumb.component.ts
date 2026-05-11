@@ -44,21 +44,6 @@ export class BreadcrumbComponent implements OnInit {
       });
   }
 
-  // breadcrumbClick(event: Event, menuId: string): void {
-  //   event.preventDefault();
-  //
-  //   const menu = this.menuService.getMenuById(menuId);
-  //   if (!menu) {
-  //     return;
-  //   }
-  //   // console.log('menu', menu);
-  //   this.globalService.setCurrentMenuId(menuId);
-  //   this.menuService.setSelectedMenu(menu);
-  //
-  //   if (menu.page?.pageId && menu.page.pageId !== this.PageConstants.NOT_APPLICABLE) {
-  //     let promise = this.router.navigate(['/navigator', menu.page.pageId]);
-  //   }
-  // }
   breadcrumbClick(event: Event, menuId: string): void {
     event.preventDefault();
 

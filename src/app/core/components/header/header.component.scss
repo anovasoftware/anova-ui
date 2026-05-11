@@ -4,28 +4,6 @@
 @use 'styles/themes' as theme;
 @use 'styles/toolbar' as *;
 
-//.header-toolbar {
-//  $fg: map.get(theme.$primary-palette, 95);
-//
-//  display: flex;               // ✅ required for vertical centering to work
-//  align-items: center;         // ✅ vertically center children
-//
-//  min-height: 56px;   // default is 64px for desktop, 56px for mobile
-//  height: 56px;
-//  padding-left: 0;
-//  //background-color: mat.m2-get-color-from-palette($custom-blue-palette, 500);
-//  color: $fg;
-//  background-color: map.get(theme.$primary-palette, 40);
-//
-//  .mat-icon,
-//  .mat-icon-button {
-//    color: $fg;
-//  }
-//  .mat-toolbar-row {
-//    height: 48px;     // ensures inner row also adjusts
-//    min-height: 48px;
-//  }
-//}
 .toolbar-context {
   display: flex;
   align-items: center;
@@ -146,36 +124,36 @@
 /***************************************************************
 ***  breadcrumb section
 ****************************************************************/
-.breadcrumb-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  //font-size: 0.9rem;
-  padding: 8px 0 8px;
-  background-color: map.get(theme.$primary-palette, 95);
-}
-
-.breadcrumb-link {
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-  color: map.get(theme.$primary-palette, 30);
-  font: 400 12px/20px Roboto, 'Helvetica Neue', sans-serif;
-}
-
-.breadcrumb-link:hover {
-  opacity: 0.8;
-  text-decoration: underline;
-}
-
-.breadcrumb-separator {
-  color: map.get(theme.$primary-palette, 30);
-  opacity: 0.6;
-  padding: 0 4px 0 4px;
-}
-
-.breadcrumb-current {
-  text-decoration: none;
-  color: map.get(theme.$primary-palette, 30);
-  font: 400 12px/20px Roboto, 'Helvetica Neue', sans-serif;
-}
-
+//.breadcrumb-bar {
+//  display: flex;
+//  align-items: center;
+//  gap: 8px;
+//  //font-size: 0.9rem;
+//  padding: 8px 0 8px;
+//  background-color: map.get(theme.$primary-palette, 95);
+//}
+//
+//.breadcrumb-link {
+//  text-decoration: none;
+//  transition: opacity 0.2s ease;
+//  color: map.get(theme.$primary-palette, 30);
+//  font: 400 12px/20px Roboto, 'Helvetica Neue', sans-serif;
+//}
+//
+//.breadcrumb-link:hover {
+//  opacity: 0.8;
+//  text-decoration: underline;
+//}
+//
+//.breadcrumb-separator {
+//  color: map.get(theme.$primary-palette, 30);
+//  opacity: 0.6;
+//  padding: 0 4px 0 4px;
+//}
+//
+//.breadcrumb-current {
+//  text-decoration: none;
+//  color: map.get(theme.$primary-palette, 30);
+//  font: 400 12px/20px Roboto, 'Helvetica Neue', sans-serif;
+//}
+//

@@ -1,0 +1,51 @@
+.gangway-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 24px;
+}
+
+.count-card {
+  border-radius: 18px;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+}
+
+.count-label {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.count-number {
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.onboard-card {
+  border-top: 8px solid #2e7d32;
+
+  .count-number {
+    color: #2e7d32;
+  }
+}
+
+.ashore-card {
+  border-top: 8px solid #c62828;
+
+  .count-number {
+    color: #c62828;
+  }
+}
+
+.neutral-card {
+  border-top: 8px solid #607d8b;
+
+  .count-number {
+    color: #455a64;
+  }
+}

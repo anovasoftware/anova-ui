@@ -18,17 +18,6 @@ export class MenuService {
   selectedMenu$ = this.selectedMenuSubject.asObservable();
   private childrenMap: { [key: string]: Menu[] } = {};  // TODO: add this later
 
-  // breadcrumbMenus$: Observable<Menu[]> = combineLatest([
-  //   this.menus$,
-  //   this.selectedMenu$
-  // ]).pipe(
-  //   map(([menus, selectedMenu]) => {
-  //     if (!menus.length || !selectedMenu?.menuId) {
-  //       return [];
-  //     }
-  //     return this.buildMenuPath(menus, selectedMenu.menuId);
-  //   })
-  // );
   breadcrumbMenus$!: Observable<Menu[]>;
 
   constructor(
