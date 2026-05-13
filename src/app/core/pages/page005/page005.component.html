@@ -1,42 +1,93 @@
 <div class="printable-area gangway-dashboard">
-  <div class="count-card" [class]="card.cssClass" *ngFor="let card of statusCards">
-    <div class="count-label">
-      {{ getStatusDescription(card.statusId) }}
-    </div>
-    <div class="count-number">
-      {{ getTotalByStatus(card.statusId) }}
-    </div>
-  </div>
-</div>
+  <div class="summary-card-grid">
+    <div
+      class="count-card large-card"
+      *ngFor="let status of summaryStatuses()"
+      [ngClass]="status.cssClass">
 
-
-<div class="printable-area gangway-dashboard">
-
-  <div class="guest-type-section" *ngFor="let guestType of guestTypes">
-
-    <div class="guest-type-title">
-      {{ guestType.description }}
-    </div>
-
-    <div class="status-card-grid">
-      <div
-        class="count-card"
-        [ngClass]="card.cssClass"
-        *ngFor="let card of statusCards">
-
-        <div class="count-label">
-          {{ getStatusDescription(card.statusId) }}
-        </div>
-
-        <div class="count-number">
-          {{ getCount(guestType.typeId, card.statusId) }}
-        </div>
-
+      <div class="count-label">
+        {{ status.description }}
       </div>
+
+      <div class="count-number">
+        {{ getCount('TOT', status.statusId) }}
+      </div>
+
     </div>
 
   </div>
+
+  <table class="detail-table">
+
+    <thead>
+    <tr>
+      <th>Type</th>
+
+      <th *ngFor="let status of guestStatuses">
+        {{ status.description }}
+      </th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr *ngFor="let guestType of guestTypes">
+
+      <td class="type-column">
+        {{ guestType.description }}
+      </td>
+
+      <td *ngFor="let status of guestStatuses">
+
+        {{ getCount(guestType.typeId, status.statusId) }}
+
+      </td>
+
+    </tr>
+
+    </tbody>
+
+  </table>
 </div>
+<!--<div class="printable-area gangway-dashboard">-->
+<!--  <div class="count-card" [class]="card.cssClass" *ngFor="let card of statusCards">-->
+<!--    <div class="count-label">-->
+<!--      {{ getStatusDescription(card.statusId) }}-->
+<!--    </div>-->
+<!--    <div class="count-number">-->
+<!--      {{ getTotalByStatus(card.statusId) }}-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<div class="printable-area gangway-dashboard">-->
+
+<!--  <div class="guest-type-section" *ngFor="let guestType of guestTypes">-->
+
+<!--    <div class="guest-type-title">-->
+<!--      {{ guestType.description }}-->
+<!--    </div>-->
+
+<!--    <div class="status-card-grid">-->
+<!--      <div-->
+<!--        class="count-card"-->
+<!--        [ngClass]="card.cssClass"-->
+<!--        *ngFor="let card of statusCards">-->
+
+<!--        <div class="count-label">-->
+<!--          {{ getStatusDescription(card.statusId) }}-->
+<!--        </div>-->
+
+<!--        <div class="count-number">-->
+<!--          {{ getCount(guestType.typeId, card.statusId) }}-->
+<!--        </div>-->
+
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </div>-->
+<!--</div>-->
 
 
 

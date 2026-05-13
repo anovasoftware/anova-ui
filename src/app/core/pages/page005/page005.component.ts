@@ -34,29 +34,34 @@ export class Page005Component {
   guestStatuses: Status[] = [];
   counters: Counter[] = [];
 
-  statusCards = [
-    {
-      statusId: StatusConstants.GUEST_ONBOARD,
-      cssClass: 'onboard-card'
-    },
-    {
-      statusId: StatusConstants.GUEST_ASHORE,
-      cssClass: 'ashore-card'
-    },
-    {
-      statusId: StatusConstants.GUEST_ARRIVING,
-      cssClass: 'neutral-card'
-    },
-    {
-      statusId: StatusConstants.GUEST_DISEMBARKED,
-      cssClass: 'neutral-card'
-    },
-    // {
-    //   statusId: StatusConstants.GUEST_ONBOARD,
-    //   cssClass: 'neutral-card'
-    // },
-
-  ];
+  // statusCards = [
+  //   {
+  //     statusId: StatusConstants.GUEST_ONBOARD,
+  //     cssClass: 'onboard-card'
+  //   },
+  //   {
+  //     statusId: StatusConstants.GUEST_ASHORE,
+  //     cssClass: 'ashore-card'
+  //   },
+  //   {
+  //     statusId: StatusConstants.GUEST_ARRIVING,
+  //     cssClass: 'neutral-card'
+  //   },
+  //   {
+  //     statusId: StatusConstants.GUEST_DISEMBARKED,
+  //     cssClass: 'neutral-card'
+  //   },
+  //   {
+  //     statusId: 'TOT',
+  //     cssClass: 'neutral-card'
+  //   },
+  //
+  //   // {
+  //   //   statusId: StatusConstants.GUEST_ONBOARD,
+  //   //   cssClass: 'neutral-card'
+  //   // },
+  //
+  // ];
 
   constructor(
     protected globalService: GlobalService,
@@ -101,4 +106,20 @@ export class Page005Component {
     return status?.description ?? statusId;
   }
 
+  getStatusCssClass(statusId: string): string {
+    const status = this.guestStatuses.find(row =>
+      row.statusId === statusId
+    );
+
+    return status?.cssClass ?? '';
+  }
+  summaryStatuses(): Status[] {
+    return this.guestStatuses.filter(status =>
+      [
+        StatusConstants.GUEST_ONBOARD,
+        StatusConstants.GUEST_ASHORE,
+        'TOT'
+      ].includes(status.statusId)
+    );
+  }
 }
