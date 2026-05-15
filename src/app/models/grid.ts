@@ -17,6 +17,7 @@ export interface Grid {
   gridId: string;
   description: string;
   title: string;
+  formId: string;
   displayedColumns: string[];
   columns: Column[];
   rows: Row[];

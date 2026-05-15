@@ -9,7 +9,6 @@
     <div class="table-wrapper">
       <!--      <table mat-table [dataSource]="grid.rows" class="full-width-table grid-table">-->
       <table mat-table [dataSource]="dataSource" class="full-width-table grid-table">
-
         <ng-container *ngFor="let column of grid.columns" [matColumnDef]="column.field">
           <th mat-header-cell *matHeaderCellDef>
             {{ column.label }}
@@ -21,7 +20,13 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="grid.displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: grid.displayedColumns;"></tr>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: grid.displayedColumns;"
+          class="clickable-row"
+          (click)="onRowClick(grid, row)">
+        </tr>
       </table>
     </div>
   </section>

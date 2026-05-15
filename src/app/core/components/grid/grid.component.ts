@@ -129,4 +129,44 @@ export class GridComponent {
         return value;
     }
   }
+
+  onRowClick(grid: any, row: any): void {
+    const formId = grid?.formId;
+    const pk: string = row?.pk;
+    let message = '';
+
+    if (!pk) {
+      message = 'No id associated with the record.';
+    }
+    else if (!formId || formId === GridConstants.NOT_APPLICABLE) {
+      message = 'No page or form associate with grid';
+    }
+    else {
+      const params = {};
+      const action = 'update';
+
+      if (formId) {
+        const dialogRef = this.formDialog.openForm(
+          grid.formId,
+          pk,
+          action,
+          params
+        );
+        dialogRef.afterClosed().subscribe(result => {
+          if (result?.success) {
+            this.gridService.loadGrid(this.gridId, true);
+
+            this.snackBar.open('Record updated', 'Close', {
+              duration: 20000
+            });
+          }
+        });
+      }
+    }
+    if (message) {
+      this.snackBar.open(message, 'Close', {
+        duration: 20000
+      });
+    }
+  }
 }

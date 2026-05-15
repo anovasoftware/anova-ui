@@ -272,7 +272,10 @@ export class FormManagerComponent implements OnInit {
 
 
   onCancel() {
-    this.location.back();
+    // this.location.back();
+    this.dialogRef.close({
+      success: false
+    });
   }
 
   onFormExtra(extra: FormExtra): void {
