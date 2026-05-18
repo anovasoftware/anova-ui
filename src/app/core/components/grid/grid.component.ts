@@ -1,23 +1,17 @@
 import {Component, Input, ViewChild} from '@angular/core';
 import {GridConstants} from '../../../../constants/grid_constants';
+import {PageConstants} from '../../../../constants/page_constants';
+import {FormConstants} from '../../../../constants/form_constants';
 import {Router} from '@angular/router';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GlobalService} from '../../../services/global.service';
 import {GridService} from '../../../services/grid.service';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow,
-  MatRowDef,
-  MatTable
-} from '@angular/material/table';
+
+import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef} from '@angular/material/table';
+import {MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable} from '@angular/material/table';
+
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
@@ -130,39 +124,82 @@ export class GridComponent {
     }
   }
 
+  // onRowClick(grid: any, row: any): void {
+  //   const formId = grid?.formId;
+  //   const pk: string = row?.pk;
+  //   let message = '';
+  //
+  //   if (!pk) {
+  //     message = 'No id associated with the record.';
+  //   }
+  //   else if (!formId || formId === GridConstants.NOT_APPLICABLE) {
+  //     message = 'No page or form associate with grid';
+  //   }
+  //   else {
+  //     const params = {};
+  //     const action = 'update';
+  //
+  //     if (formId) {
+  //       const dialogRef = this.formDialog.openForm(
+  //         grid.formId,
+  //         pk,
+  //         action,
+  //         params
+  //       );
+  //       dialogRef.afterClosed().subscribe(result => {
+  //         if (result?.success) {
+  //           this.gridService.loadGrid(this.gridId, true);
+  //
+  //           this.snackBar.open('Record updated', 'Close', {
+  //             duration: 20000
+  //           });
+  //         }
+  //       });
+  //     }
+  //   }
+  //   if (message) {
+  //     this.snackBar.open(message, 'Close', {
+  //       duration: 20000
+  //     });
+  //   }
+  // }
   onRowClick(grid: any, row: any): void {
+    const pageId = grid?.pageId;
     const formId = grid?.formId;
     const pk: string = row?.pk;
+
     let message = '';
 
     if (!pk) {
       message = 'No id associated with the record.';
-    }
-    else if (!formId || formId === GridConstants.NOT_APPLICABLE) {
-      message = 'No page or form associate with grid';
-    }
-    else {
-      const params = {};
-      const action = 'update';
-
-      if (formId) {
-        const dialogRef = this.formDialog.openForm(
-          grid.formId,
+    } else if (pageId && pageId !== PageConstants.NOT_APPLICABLE) {
+      void this.router.navigate([`/page${pageId}`], {
+        queryParams: {
           pk,
-          action,
-          params
-        );
-        dialogRef.afterClosed().subscribe(result => {
-          if (result?.success) {
-            this.gridService.loadGrid(this.gridId, true);
+          action: 'update'
+        }
+      });
+    } else if (!formId || formId === FormConstants.NOT_APPLICABLE) {
+      message = 'No page or form associated with grid.';
+    } else {
+      const dialogRef = this.formDialog.openForm(
+        formId,
+        pk,
+        'update',
+        {}
+      );
 
-            this.snackBar.open('Record updated', 'Close', {
-              duration: 20000
-            });
-          }
-        });
-      }
+      dialogRef.afterClosed().subscribe(result => {
+        if (result?.success) {
+          this.gridService.loadGrid(this.gridId, true);
+
+          this.snackBar.open('Record updated', 'Close', {
+            duration: 20000
+          });
+        }
+      });
     }
+
     if (message) {
       this.snackBar.open(message, 'Close', {
         duration: 20000

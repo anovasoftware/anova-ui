@@ -146,7 +146,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         if (personId) {
           const user = result.data?.user;
-          this.authService.storeUser(user);
+          this.authService.storeUser(user, true);
         }
       }
     });
@@ -167,7 +167,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               next: (profileResponse) => {
                 console.log('getUserProfile response:', profileResponse);
                 this.user = profileResponse.data.user || profileResponse.data;
-                this.authService.storeUser(this.user);
+                this.authService.storeUser(this.user, true);
                 this.globalService.setCurrentMenuId(MenuConstants.HOME);
                 void this.router.navigateByUrl(`/navigator/${this.PageConstants.HOME}`);
                 // this.router.navigate(['/menu', homeMenuId]);

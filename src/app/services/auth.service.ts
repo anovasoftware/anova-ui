@@ -31,6 +31,29 @@ export class AuthService {
 
   }
 
+  initializeSession(): void {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      this.clearSession();
+      return;
+    }
+
+    this.api.get<ApiResponse<any>>('auth/session/')
+      .subscribe({
+        next: (response) => {
+          if (response?.success && response?.data?.user) {
+            this.storeUser(response.data.user, false);
+          } else {
+            this.clearSession();
+          }
+        },
+        error: () => {
+          this.clearSession();
+        }
+      });
+  }
+
 //   login(username: string, password: string): Observable<any> {
 //     return this.http.post<any>(this.apiUrl, {username, password})
 //       .pipe(
@@ -65,29 +88,44 @@ export class AuthService {
 
   }
 
-  storeUser(user: any): void {
+  // storeUser(user: any): void {
+  //   const normalized = normalizeUser(user);
+  //   localStorage.setItem('user', JSON.stringify(normalized));
+  //   localStorage.setItem('currentMenuId', this.MenuConstants.HOME);
+  //   localStorage.setItem(
+  //     'currentHotelId',
+  //     normalized?.lastHotelId || this.HotelConstants.NOT_APPLICABLE
+  //   );
+  //   this.userSubject.next(normalized);
+  // }
+  storeUser(user: any, resetContext = true): void {
     const normalized = normalizeUser(user);
+
     localStorage.setItem('user', JSON.stringify(normalized));
-    localStorage.setItem('currentMenuId', this.MenuConstants.HOME);
-    localStorage.setItem(
-      'currentHotelId',
-      normalized?.lastHotelId || this.HotelConstants.NOT_APPLICABLE
-    );
+
+    if (resetContext) {
+      localStorage.setItem('currentMenuId', this.MenuConstants.HOME);
+      localStorage.setItem(
+        'currentHotelId',
+        normalized?.lastHotelId || this.HotelConstants.NOT_APPLICABLE
+      );
+    }
+
     this.userSubject.next(normalized);
   }
 
-
-  clearUser(): void {
-    localStorage.removeItem('user');
-    this.userSubject.next(null);
+  logout(): void {
+    this.clearSession();
   }
 
-  logout(): void {
+  clearSession(): void {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('currentMenuId');
     localStorage.removeItem('currentHotelId');
-    this.clearUser();
+    localStorage.removeItem('user');
+    this.userSubject.next(null);
+
   }
 
   getCurrentHotelId(): string {

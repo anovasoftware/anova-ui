@@ -19,8 +19,9 @@ export class AppComponent implements OnInit {
   ) {}  // 👈 Inject it
 
   ngOnInit(): void {
+    this.authService.initializeSession();
     this.idleService.onIdle.subscribe(() => this.handleIdleTimeout());
-    // this.userService.loadGlobalState();  // 👈 Load user info once
+
   }
   private handleIdleTimeout(): void {
     console.log('User is idle: logging out');
