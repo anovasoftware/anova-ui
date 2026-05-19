@@ -129,8 +129,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.authService.logout();
+    this.globalService.setCurrentMenuId(MenuConstants.HOME);
+    // this.globalService.setCurrentMenuId(MenuConstants.HOME);
     // this.globalService.loadPublicMeta();  // Optional: refresh public meta
-    void this.router.navigate(['/navigator/001']);  // Or home page after logout
+    // void this.router.navigate(['/navigator/001']);  // Or home page after logout
   }
 
   onProfile() {

@@ -55,7 +55,7 @@ export class NavigatorComponent implements OnInit, OnDestroy {
           }
         }
       } else {
-        console.warn('Menus not loaded yet');
+        // console.warn('Menus not loaded yet');
       }
       // this.componentLoaded = true;
     });

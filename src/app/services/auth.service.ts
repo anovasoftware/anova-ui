@@ -10,6 +10,7 @@ import {MenuConstants} from '../../constants/menu_constants';
 import {HotelConstants} from '../../constants/hotel_constants';
 import {ApiService} from './api.service';
 import {ApiResponse} from '../models/api-response';
+import {GlobalService} from './global.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private api: ApiService,) {
+    private api: ApiService,
+    ) {
 
   }
 
@@ -125,7 +127,6 @@ export class AuthService {
     localStorage.removeItem('currentHotelId');
     localStorage.removeItem('user');
     this.userSubject.next(null);
-
   }
 
   getCurrentHotelId(): string {

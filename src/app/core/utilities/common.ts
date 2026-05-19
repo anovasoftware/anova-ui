@@ -27,6 +27,7 @@ export function normalizeUser(u: any): User | null {
         menuId: m.menuId,
         description: m.description,
         hotelRequired: m.hotelRequired,
+        hotelTypeIds: m.hotelTypeIds,
       }))
     : [];
 
@@ -43,6 +44,7 @@ export function normalizeUser(u: any): User | null {
   const hotels: Hotel[] = Array.isArray(u.hotels)
     ? u.hotels.map((h: any) => ({
       hotelId: h.hotelId,
+      typeId: h.typeId,
       code: h.code,
       description: h.description,
       currentEvent: h.currentEvent,

@@ -28,32 +28,31 @@ export class MenuService {
       this.menus$,
       this.globalService.currentMenuId$
     ]).pipe(
-      map(([menus, currentMenuId]) => {
-        if (!menus.length || !currentMenuId) {
-          return [];
-        }
-        return this.buildMenuPath(menus, currentMenuId);
-      })
+      map(([menus, currentMenuId]) =>
+        menus.length && currentMenuId
+          ? this.buildMenuPath(menus, currentMenuId)
+          : []
+      )
     );
-    this.globalService.user$.subscribe(user => {
-      if (user) {
-        this.loadMenus();
-      } else {
-        this.menusSubject.next([]);
-      }
-    });
-
-    this.globalService.currentHotelId$.subscribe(() => {
-      // optional: reload menus if hotel affects them
-      this.loadMenus();
-    });
+    this.globalService.currentHotel$.subscribe(hotel => {
+        if (hotel) {
+          this.loadMenus(hotel.typeId);
+        } else {
+          this.menusSubject.next([]);
+          this.selectedMenuSubject.next(null);
+        }
+      });
   }
 
-
-  loadMenus(): void {
+  loadMenus(hotelTypeId: string | null = null): void {
     this.api.get<ApiResponse<ApiData<Menu>>>('public/table/static/menu/').subscribe({
       next: (response) => {
-        const menus: Menu[] = response?.data.records || [];
+        let menus: Menu[] = response?.data.records || [];
+
+        menus = menus.filter(menu =>
+          menu.hotelTypeId === '000' ||
+          menu.hotelTypeId === hotelTypeId
+        );
         this.menusSubject.next(menus);
 
         if (!this.selectedMenuSubject.value && menus.length > 0) {

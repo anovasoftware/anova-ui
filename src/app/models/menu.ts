@@ -8,6 +8,7 @@ export interface Menu {
   parentMenuId: string;
   typeId: string;
   gridId: string;
+  hotelTypeId: string;
   description: string;
   title: string;
   subTitle?: string;

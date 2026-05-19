@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Router, RouterModule} from '@angular/router';
 import { GlobalService } from './services/global.service';
 import {IdleService} from './services/idle.service';
-import {AuthService} from './services/auth.service';  // 👈 Import it
+import {AuthService} from './services/auth.service';
+import {MenuConstants} from '../constants/menu_constants';  // 👈 Import it
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,8 @@ export class AppComponent implements OnInit {
   private handleIdleTimeout(): void {
     console.log('User is idle: logging out');
     this.authService.logout();
+    this.globalService.setCurrentMenuId(MenuConstants.HOME);
     // this.globalService.loadPublicMeta();
-    this.router.navigate(['/navigator/001']);  // Your home page
+    // this.router.navigate(['/navigator/001']);  // Your home page
   }
 }
