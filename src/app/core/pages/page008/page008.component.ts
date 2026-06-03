@@ -36,7 +36,7 @@ export class Page008Component implements OnInit {
     this.api.get<any>(`base/user/${recordId}/`).subscribe({
       next: response => {
         this.user = response?.data?.record || null;
-        console.log(this.user);
+        console.log('User:', this.user);
         this.componentLoaded = true;
       },
       error: error => {

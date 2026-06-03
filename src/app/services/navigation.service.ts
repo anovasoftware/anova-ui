@@ -4,21 +4,32 @@ import { MenuService } from './menu.service';
 import { GlobalService } from './global.service';
 import { Menu } from '../models/menu';
 import { PageConstants } from '../../constants/page_constants';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NavigationService {
-
+  private recordBreadcrumbSubject = new BehaviorSubject<string>('');
+  recordBreadcrumb$ = this.recordBreadcrumbSubject.asObservable();
   constructor(
     private router: Router,
     private menuService: MenuService,
     private globalService: GlobalService
   ) {}
 
+  setRecordBreadcrumb(label: string): void {
+    this.recordBreadcrumbSubject.next(label);
+  }
+
+  clearRecordBreadcrumb(): void {
+    this.recordBreadcrumbSubject.next('');
+  }
+
   navigateToMenu(menu: Menu): void {
     this.globalService.setCurrentMenuId(menu.menuId);
     this.menuService.setSelectedMenu(menu);
+    this.clearRecordBreadcrumb();
 
     if (menu.route) {
       let route = menu.route;

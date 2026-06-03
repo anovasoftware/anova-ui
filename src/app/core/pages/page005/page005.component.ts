@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {GlobalService} from '../../../services/global.service';
 import {GangwayService} from '../../../services/res/gangway.service';
 import {Observable} from 'rxjs';
@@ -34,6 +34,8 @@ export class Page005Component {
   guestStatuses: Status[] = [];
   counters: Counter[] = [];
 
+  @ViewChild('rfidInput') rfidInput!: ElementRef<HTMLInputElement>;
+
   // statusCards = [
   //   {
   //     statusId: StatusConstants.GUEST_ONBOARD,
@@ -68,7 +70,9 @@ export class Page005Component {
     private gangwayService: GangwayService,
   ) {
   }
-
+  ngAfterViewInit(): void {
+    this.focusRfidInput();
+  }
   ngOnInit(): void {
     this.dashboard$ = this.gangwayService.dashboard$;
 
@@ -82,6 +86,34 @@ export class Page005Component {
       this.guestStatuses = dashboard?.lookups?.guestStatuses ?? [];
       this.counters = dashboard?.counters ?? [];
     });
+  }
+  focusRfidInput(): void {
+    setTimeout(() => {
+      this.rfidInput?.nativeElement?.focus();
+    });
+  }
+
+
+  onRfidRead(value: string): void {
+    const rfidUid = (value || '').trim();
+
+    this.rfidInput.nativeElement.value = '';
+    console.log(rfidUid);
+
+    if (!rfidUid) {
+      this.focusRfidInput();
+      return;
+    }
+
+    // this.gangwayService.processRfidRead(rfidUid).subscribe({
+    //   next: () => {
+    //     this.loadDashboard(true);
+    //     this.focusRfidInput();
+    //   },
+    //   error: () => {
+    //     this.focusRfidInput();
+    //   }
+    // });
   }
 
   getTotalByStatus(statusId: string): number {
@@ -113,6 +145,7 @@ export class Page005Component {
 
     return status?.cssClass ?? '';
   }
+
   summaryStatuses(): Status[] {
     return this.guestStatuses.filter(status =>
       [

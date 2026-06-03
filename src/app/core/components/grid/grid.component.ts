@@ -16,6 +16,7 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {formatDate} from '../../utilities/date-utilities';
+import {NavigationService} from '../../../services/navigation.service';
 
 
 @Component({
@@ -45,7 +46,7 @@ export class GridComponent {
   private _gridId: string = GridConstants.TO_BE_ANNOUNCED;
   protected readonly GridConstants = GridConstants;
   public dataSource = new MatTableDataSource<any>();
-  public totalRows = 0;
+  // public totalRows = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -66,23 +67,35 @@ export class GridComponent {
     return this.gridService.grid$;
   }
 
+  // ngAfterViewInit(): void {
+  //   this.dataSource.paginator = this.paginator;
+  //
+  //   this.grid$.subscribe(grid => {
+  //     if (grid) {
+  //       this.dataSource.data = grid.rows || [];
+  //       this.totalRows = this.dataSource.data.length;
+  //     }
+  //   });
+  // }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-
-    this.grid$.subscribe(grid => {
-      if (grid) {
-        this.dataSource.data = grid.rows || [];
-        this.totalRows = this.dataSource.data.length;
-      }
-    });
   }
+  setGridData(grid: any): boolean {
+    const rows = grid?.rows || [];
 
+    if (this.dataSource.data !== rows) {
+      this.dataSource.data = rows;
+    }
+
+    return true;
+  }
   constructor(
     private router: Router,
     private formDialog: FormDialogService,
     private snackBar: MatSnackBar,
     protected globalService: GlobalService,
     private gridService: GridService,
+    private navigationService: NavigationService
   ) {
   }
 
@@ -173,6 +186,11 @@ export class GridComponent {
     if (!pk) {
       message = 'No id associated with the record.';
     } else if (pageId && pageId !== PageConstants.NOT_APPLICABLE) {
+      console.log(row);
+      this.navigationService.setRecordBreadcrumb(
+        row.displayAs
+      );
+
       void this.router.navigate([`/page${pageId}`], {
         queryParams: {
           pk,

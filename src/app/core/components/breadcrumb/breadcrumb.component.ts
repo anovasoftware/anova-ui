@@ -26,6 +26,7 @@ export class BreadcrumbComponent implements OnInit {
   navigationMode = false;
   private destroy$ = new Subject<void>();
   breadcrumbMenus: Menu[] = [];
+    recordBreadcrumb = '';
 
   constructor(
     private globalService: GlobalService,
@@ -42,6 +43,11 @@ export class BreadcrumbComponent implements OnInit {
         this.breadcrumbMenus = menus;
         this.navigationMode = this.globalService.isLoggedIn && menus.length > 0;
       });
+    this.navigationService.recordBreadcrumb$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(label => {
+        this.recordBreadcrumb = label;
+      });
   }
 
   breadcrumbClick(event: Event, menuId: string): void {
@@ -53,5 +59,8 @@ export class BreadcrumbComponent implements OnInit {
     }
 
     this.navigationService.navigateToMenu(menu);
+  }
+  isClickable(menu: Menu, last: boolean): boolean {
+    return !last || !!this.recordBreadcrumb;
   }
 }

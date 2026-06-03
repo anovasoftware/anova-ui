@@ -13,6 +13,11 @@ export function normalizeUser(u: any): User | null {
     }
     : null;
 
+  const displayAs =
+    u.displayAs ||
+    [person?.firstName, person?.lastName].filter(Boolean).join(' ') ||
+    u.username ||
+    '';
   // Normalize roles safely
   const roles: Role[] = Array.isArray(u.roles)
     ? u.roles.map((r: any) => ({
@@ -58,7 +63,7 @@ export function normalizeUser(u: any): User | null {
     loggedIn: u.loggedIn ?? false,
     lastHotelId: u.lastHotelId ?? null,
     isSuperuser: u.isSuperuser ?? false,
-
+    displayAs,
     person,
     roles,
     menus,

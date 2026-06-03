@@ -37,10 +37,16 @@
 
 .breadcrumb-current {
   text-decoration: none;
-  color: map.get(theme.$primary-palette, 30);
+  //color: map.get(theme.$primary-palette, 60);
+  color: map.get(theme.$highlight-palette, 50);
   font: 500 12px/20px Roboto, 'Helvetica Neue', sans-serif;
 }
-
+.breadcrumb-current-no-highlight {
+  text-decoration: none;
+  color: map.get(theme.$primary-palette, 30);
+  //color: map.get(theme.$highlight-palette, 50);
+  font: 500 12px/20px Roboto, 'Helvetica Neue', sans-serif;
+}
 
 //.breadcrumb-bar {
 //  display: flex;
