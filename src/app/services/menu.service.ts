@@ -35,13 +35,13 @@ export class MenuService {
       )
     );
     this.globalService.currentHotel$.subscribe(hotel => {
-        if (hotel) {
-          this.loadMenus(hotel.typeId);
-        } else {
-          this.menusSubject.next([]);
-          this.selectedMenuSubject.next(null);
-        }
-      });
+      if (hotel) {
+        this.loadMenus(hotel.typeId);
+      } else {
+        this.menusSubject.next([]);
+        this.selectedMenuSubject.next(null);
+      }
+    });
   }
 
   loadMenus(hotelTypeId: string | null = null): void {
@@ -80,6 +80,12 @@ export class MenuService {
 
   getMenuById(menuId: string): Menu | null {
     return this.menusSubject.getValue().find(m => m.menuId === menuId) ?? null;
+  }
+
+  getMenuByPageId(pageId: string): Menu | null {
+    return this.menusSubject.getValue().find(
+      m => m.page?.pageId === pageId
+    ) ?? null;
   }
 
   setSelectedMenu(menu: Menu | null): void {

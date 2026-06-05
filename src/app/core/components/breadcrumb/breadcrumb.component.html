@@ -3,14 +3,15 @@
     <ng-container *ngIf="menuService.breadcrumbMenus$ | async as breadcrumbMenus">
       <ng-container *ngFor="let menu of breadcrumbMenus; let last = last">
         <a
-          *ngIf="isClickable(menu, last)"
+          *ngIf="isClickable(menu, last) && !last"
           class="breadcrumb-link"
           href=""
           (click)="breadcrumbClick($event, menu.menuId)">
           {{ menu.breadcrumbName || menu.title }}
         </a>
 
-        <span *ngIf="!isClickable(menu, last)" class="breadcrumb-current-no-highlight">
+
+        <span *ngIf="!isClickable(menu, last) && !recordBreadcrumb" class="breadcrumb-current-no-highlight">
           {{ menu.breadcrumbName || menu.title }}
         </span>
 
@@ -18,7 +19,7 @@
       </ng-container>
     </ng-container>
 
-    <span class="breadcrumb-separator" *ngIf="recordBreadcrumb">>></span>
+<!--    <span class="breadcrumb-separator" *ngIf="recordBreadcrumb">>></span>-->
 
     <span *ngIf="recordBreadcrumb" class="breadcrumb-current">
       {{ recordBreadcrumb }}

@@ -4,7 +4,8 @@ import { Subject, timer, Subscription } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class IdleService {
   private idle$ = new Subject<void>();
-  private timeoutMillis = 75 * 60 * 1000; // 75 minutes
+  private minutes = 75;
+  private timeoutMillis = 60 * 1000 * this.minutes; // 75 minutes
   private timerSub: Subscription | null = null;
 
   constructor(private zone: NgZone) {

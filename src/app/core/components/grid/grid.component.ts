@@ -17,6 +17,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {formatDate} from '../../utilities/date-utilities';
 import {NavigationService} from '../../../services/navigation.service';
+import {MenuService} from '../../../services/menu.service';
 
 
 @Component({
@@ -95,7 +96,8 @@ export class GridComponent {
     private snackBar: MatSnackBar,
     protected globalService: GlobalService,
     private gridService: GridService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private menuService: MenuService,
   ) {
   }
 
@@ -137,45 +139,6 @@ export class GridComponent {
     }
   }
 
-  // onRowClick(grid: any, row: any): void {
-  //   const formId = grid?.formId;
-  //   const pk: string = row?.pk;
-  //   let message = '';
-  //
-  //   if (!pk) {
-  //     message = 'No id associated with the record.';
-  //   }
-  //   else if (!formId || formId === GridConstants.NOT_APPLICABLE) {
-  //     message = 'No page or form associate with grid';
-  //   }
-  //   else {
-  //     const params = {};
-  //     const action = 'update';
-  //
-  //     if (formId) {
-  //       const dialogRef = this.formDialog.openForm(
-  //         grid.formId,
-  //         pk,
-  //         action,
-  //         params
-  //       );
-  //       dialogRef.afterClosed().subscribe(result => {
-  //         if (result?.success) {
-  //           this.gridService.loadGrid(this.gridId, true);
-  //
-  //           this.snackBar.open('Record updated', 'Close', {
-  //             duration: 20000
-  //           });
-  //         }
-  //       });
-  //     }
-  //   }
-  //   if (message) {
-  //     this.snackBar.open(message, 'Close', {
-  //       duration: 20000
-  //     });
-  //   }
-  // }
   onRowClick(grid: any, row: any): void {
     const pageId = grid?.pageId;
     const formId = grid?.formId;
@@ -186,11 +149,15 @@ export class GridComponent {
     if (!pk) {
       message = 'No id associated with the record.';
     } else if (pageId && pageId !== PageConstants.NOT_APPLICABLE) {
-      console.log(row);
       this.navigationService.setRecordBreadcrumb(
         row.displayAs
       );
+      const pageMenu = this.menuService.getMenuByPageId(pageId);
 
+      if (pageMenu) {
+        this.globalService.setCurrentMenuId(pageMenu.menuId);
+        this.menuService.setSelectedMenu(pageMenu);
+      }
       void this.router.navigate([`/page${pageId}`], {
         queryParams: {
           pk,

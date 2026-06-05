@@ -20,17 +20,7 @@ import {WidgetBaseComponent} from '../widget-base.component';
   styleUrl: './widget-textbox.component.scss'
 })
 export class WidgetTextboxComponent extends WidgetBaseComponent{
-  // @Input() field!: FormField;
-  // @Input() formGroup!: FormGroup;
-  //
-  // protected readonly TypeConstants = TypeConstants;
-
   get inputType(): string {
     return this.field?.controlType?.toLowerCase() || 'text';
   }
-
-  // hasError(name: string, error: string): boolean {
-  //   const control = this.formGroup.get(name);
-  //   return !!control && control.hasError(error);
-  // }
 }

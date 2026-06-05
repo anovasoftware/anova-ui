@@ -1,0 +1,14 @@
+<div class="chips-widget">
+  <label class="chips-label">{{ field.label }}</label>
+
+  <mat-chip-listbox multiple>
+    <mat-chip-option
+      *ngFor="let option of options"
+      [selected]="isSelected(option)"
+      [disabled]="option.disabledFlag"
+      (click)="toggleOption(option)">
+      {{ option.displayValue }}
+    </mat-chip-option>
+  </mat-chip-listbox>
+</div>
+

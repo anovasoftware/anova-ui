@@ -1,3 +1,44 @@
 <div class="printable-area" *ngIf="componentLoaded">
-  <h2>{{user?.username}}</h2>
+  <!--  <h2>{{ user?.username }}</h2>-->
+
+  <mat-tab-group [mat-stretch-tabs]="false" class="mat-elevation-z4">
+    <mat-tab label="Profile">
+      <ng-container *ngIf="user?.person as person">
+        <app-form-manager
+          [formId]="FormConstants.PROFILE"
+          [recordId]="person.personId"
+          action="view"
+          [inline]="true"
+        >
+        </app-form-manager>
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="launchForm(FormConstants.PROFILE, person.personId, 'update')">
+          Edit
+        </button>
+      </ng-container>
+    </mat-tab>
+
+    <mat-tab label="Hotel Access">
+      <ng-container *ngIf="user as currentUser">
+        <app-form-manager
+          [formId]="FormConstants.USER_HOTEL"
+          [recordId]="currentUser.userId"
+          action="update"
+          [inline]="true"
+        >
+        </app-form-manager>
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="launchForm(FormConstants.USER_HOTEL, currentUser.userId, 'update')">
+          Edit
+        </button>
+      </ng-container>
+    </mat-tab>
+
+    <mat-tab label="Roles">
+    </mat-tab>
+  </mat-tab-group>
 </div>

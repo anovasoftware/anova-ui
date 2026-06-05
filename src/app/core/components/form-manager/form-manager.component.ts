@@ -4,10 +4,9 @@ import {Location} from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
-  FormControl,
   ReactiveFormsModule,
   Validators,
-  AbstractControlOptions, ValidatorFn
+  ValidatorFn
 } from '@angular/forms';
 import {FormService} from '../../../services/form.service';
 import {Form, FormExtra} from '../../../models/form';
@@ -16,17 +15,17 @@ import {TypeConstants} from '../../../../constants/type_constants';
 import {FormExtraConstants} from '../../../../constants/form_extra_constants';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {MatButton, MatButtonModule} from '@angular/material/button';
+import {MatButtonModule} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {handleForm001Response} from '../../../form-handlers/form001.handler';
 import {AuthService} from '../../../services/auth.service';
-import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from '@angular/material/card';
+import {MatCardContent, MatCardHeader, MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {FormConstants} from '../../../../constants/form_constants';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {WidgetTextareaComponent} from '../../widgets/widget-textarea/widget-textarea.component';
 import {WidgetSelect1Component} from '../../widgets/widget-select1/widget-select1.component';
+import {WidgetChipsComponent} from '../../widgets/widget-chips/widget-chips.component';
 
 
 type DialogData = {
@@ -52,6 +51,7 @@ type DialogData = {
     MatIconModule,
     WidgetTextareaComponent,
     WidgetSelect1Component,
+    WidgetChipsComponent,
   ],
   templateUrl: './form-manager.component.html',
   styleUrl: './form-manager.component.scss'
@@ -61,6 +61,7 @@ export class FormManagerComponent implements OnInit {
   @Input() recordId!: string;
   @Input() action = 'create';
   @Input() params?: any;
+  @Input() inline = false;
 
   protected readonly formHandlers: { [formId: string]: (response: any) => void } = {};
   protected readonly TypeConstants = TypeConstants;
@@ -116,9 +117,9 @@ export class FormManagerComponent implements OnInit {
             this.form = form;
             this.buildFormGroup();
 
-            //   if (this.form.readonly) {
-            //    this.formGroup.disable({ emitEvent: false });
-            // }
+            if (this.isViewMode) {
+              this.formGroup.disable({emitEvent: false});
+            }
 
             // this.debugFormValidity();
             this.header = this.form.header;
@@ -147,36 +148,23 @@ export class FormManagerComponent implements OnInit {
   }
 
   private buildFormGroup(): void {
-    if (!this.form?.formFields) {
-      return;
+    if (this.form?.formFields) {
+      for (const control of this.form.formFields) {
+        const validators = this.buildValidators(control);
+
+        const fc = this.fb.nonNullable.control(
+          {
+            value: control.value ?? '',
+            disabled: control.readonly,
+          },
+          {
+            validators,
+            updateOn: 'change',
+          });
+
+        this.formGroup.addControl(control.name, fc);
+      }
     }
-
-    for (const control of this.form.formFields) {
-      const validators = this.buildValidators(control);
-
-      const fc = this.fb.nonNullable.control(control.value ?? '', {
-        validators,
-        updateOn: 'change',
-      });
-
-      this.formGroup.addControl(control.name, fc);
-      // const validators = this.buildValidators(control);
-      // // const options = validators.length ? { validators } as AbstractControlOptions: undefined;
-      // const options = validators.length
-      //   ? {validators: validators as ValidatorFn[]}
-      //   : undefined;
-      //
-      // const fc = this.fb.nonNullable.control(control.value, options);
-      // // if (control.disabled) {
-      // //   fc.disable({ emitEvent: false });
-      // // }
-      // this.formGroup.addControl(control.name, fc);
-      // // this.formGroup.addControl(
-      // //   control.name,
-      // //   this.fb.nonNullable.control(control.value, options)
-      // // );
-    }
-
   }
 
   private buildValidators(control: any): ValidatorFn[] {
@@ -238,9 +226,9 @@ export class FormManagerComponent implements OnInit {
             console.log(`No post-submit handling defined for form ${this.formId}.`);
           }
         }
-        this.dialogRef?.close(response);
-        // this.componentLoaded = true;
-        // Handle success
+        if (!this.inline) {
+          this.dialogRef?.close(response);
+        }
       },
       error: (err) => {
         // Default error message
@@ -258,24 +246,16 @@ export class FormManagerComponent implements OnInit {
     });
   }
 
-  // private storeJwtTokensIfPresent(response: any): void {
-  //   const access = response?.data?.access;
-  //   const refresh = response?.data?.refresh;
-  //
-  //   if (access) localStorage.setItem('access_token', access);
-  //   if (refresh) localStorage.setItem('refresh_token', refresh);
-  //
-  //   // optional: if your API also returns a user object
-  //   const user = response?.data?.user;
-  //   if (user) localStorage.setItem('user', JSON.stringify(user));
-  // }
 
+  onCancel(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close({
+        success: false
+      });
+      return;
+    }
 
-  onCancel() {
-    // this.location.back();
-    this.dialogRef.close({
-      success: false
-    });
+    this.location.back();
   }
 
   onFormExtra(extra: FormExtra): void {
@@ -284,13 +264,6 @@ export class FormManagerComponent implements OnInit {
     switch (typeId) {
       case TypeConstants.FORM_EXTRA_LINK:
         this.formDialog.switchFrom(this.dialogRef, extra.targetFormId, 'new');
-        // // this.location.back();
-        // this.dialogRef?.close();
-        // this.dialog.open(FormManagerComponent, {
-        //   width: '500px',
-        //   maxWidth: '90vw',
-        //   data: { formId: extra.targetFormId, pk: 'new' }
-        // });
         break;
 
       default:
@@ -315,6 +288,15 @@ export class FormManagerComponent implements OnInit {
     });
   }
 
+  get isViewMode(): boolean {
+    return this.action === 'view';
+  }
+
+  get matCardClass(): string {
+    return this.inline
+      ? 'form-card-inline mat-typography'
+      : 'form-card mat-typography';
+  }
 }
 
 

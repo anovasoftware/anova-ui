@@ -3,14 +3,25 @@ import {ActivatedRoute} from '@angular/router';
 import {ApiService} from '../../../services/api.service';
 import {User} from '../../../models/user';
 import {NgIf} from '@angular/common';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {FormManagerComponent} from '../../components/form-manager/form-manager.component';
+import {FormConstants} from '../../../../constants/form_constants';
+import {MatButton} from '@angular/material/button';
+import {PersonConstants} from '../../../../constants/person_constants';
+import {FormDialogService} from '../../../services/form-dialog.service';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-page008',
   imports: [
-    NgIf
+    NgIf,
+    MatTabGroup,
+    MatTab,
+    FormManagerComponent,
+    MatButton
   ],
   templateUrl: './page008.component.html',
-  styleUrl: './page008.component.css'
+  styleUrl: './page008.component.scss'
 })
 export class Page008Component implements OnInit {
   pk = '';
@@ -19,8 +30,11 @@ export class Page008Component implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private api: ApiService
-  ) {}
+    private api: ApiService,
+    private formDialog: FormDialogService,
+    private authService: AuthService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
@@ -36,7 +50,6 @@ export class Page008Component implements OnInit {
     this.api.get<any>(`base/user/${recordId}/`).subscribe({
       next: response => {
         this.user = response?.data?.record || null;
-        console.log('User:', this.user);
         this.componentLoaded = true;
       },
       error: error => {
@@ -44,4 +57,27 @@ export class Page008Component implements OnInit {
       }
     });
   }
+
+  onProfile() {
+    const params = {};
+    const personId = this.user?.person?.personId;
+    const action = 'update';
+    const dialogRef = this.formDialog.openForm(FormConstants.PROFILE, personId, action, params);
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  launchForm(formId: string, recordId: string, action: string, params = {}): void {
+    const dialogRef = this.formDialog.openForm(
+      formId,
+      recordId,
+      action,
+      params);
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  protected readonly FormConstants = FormConstants;
 }

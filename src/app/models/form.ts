@@ -20,6 +20,7 @@ export interface FormField {
   minLength: number;
   maxLength: number;
   dataOptions: DataOption[];
+  dataOptionsSelected: String[];
 }
 
 export interface FormExtra {

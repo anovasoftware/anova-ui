@@ -1,8 +1,8 @@
 <div *ngIf="componentLoaded">
 
-<!--  <img src="/assets/images/watermark.svg" class="background-watermark" alt="Seagull">-->
-  <mat-card class="form-card mat-typography">
-    <mat-card-header>
+  <!--  <img src="/assets/images/watermark.svg" class="background-watermark" alt="Seagull">-->
+  <mat-card [ngClass]="matCardClass">
+    <mat-card-header *ngIf="!inline">
       <mat-card-title>
         <div class="warning" *ngIf="form?.readonly">Record is static and cannot be updated.</div>
         <div class="header-with-icon">
@@ -39,6 +39,11 @@
               [field]="control"
               [formGroup]="formGroup">
             </app-widget-select1>
+            <app-widget-chips
+              *ngSwitchCase="TypeConstants.CONTROL_CHIPS"
+              [field]="control"
+              [formGroup]="formGroup">
+            </app-widget-chips>
 
 
             <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"
@@ -46,13 +51,14 @@
                    [formControlName]="control.name">
 
             <div *ngSwitchDefault class="unknown-type-warning mat-elevation-z2">
-              ⚠️ {{ control.label }}: Type '{{ control.type.description }}' not defined yet!
+              ⚠️ {{ control.label }}: Type '{{control.type.typeId}}-{{ control.type.description }}' not defined yet!
             </div>
           </ng-container>
         </div>
 
-        <div class="button-row">
+        <div class="button-row" *ngIf="!isViewMode">
           <button
+            *ngIf="!inline"
             mat-stroked-button
             type="button"
             (click)="onCancel()">
@@ -75,7 +81,7 @@
           <a *ngIf="extra?.type?.typeId === TypeConstants.FORM_EXTRA_LINK"
              class="form-extra-link"
              (click)="onFormExtra(extra)">
-              {{ extra.label }}
+            {{ extra.label }}
           </a>
         </ng-container>
       </div>
@@ -90,8 +96,6 @@
           </button>
         </div>
       </form>
-
-
 
       <div class="form-id-display">
         Form ID: {{ formId }}
