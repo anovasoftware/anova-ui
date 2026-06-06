@@ -1,6 +1,6 @@
 // constants file
 export class Constants {
-  static readonly VERSION = '03.01.12';
+  static readonly VERSION = '03.01.13';
 
   static readonly DATE_FMT = 'yyyy.MM.dd';
 
