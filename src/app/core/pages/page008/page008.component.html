@@ -11,12 +11,16 @@
           [inline]="true"
         >
         </app-form-manager>
-        <button
-          mat-stroked-button
-          type="button"
-          (click)="launchForm(FormConstants.PROFILE, person.personId, 'update')">
-          Edit
-        </button>
+        <div class="button-row">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="launchForm(FormConstants.PROFILE, person.personId, 'update')">
+            Edit
+          </button>
+        </div>
+
       </ng-container>
     </mat-tab>
 
@@ -29,16 +33,37 @@
           [inline]="true"
         >
         </app-form-manager>
-<!--        <button-->
-<!--          mat-stroked-button-->
-<!--          type="button"-->
-<!--          (click)="launchForm(FormConstants.USER_HOTEL, currentUser.userId, 'update')">-->
-<!--          Edit-->
-<!--        </button>-->
+<!--        <div class="button-row">-->
+<!--          <button-->
+<!--            mat-stroked-button-->
+<!--            type="button"-->
+<!--            (click)="launchForm(FormConstants.USER_HOTEL, currentUser.userId, 'update')">-->
+<!--            Editx-->
+<!--          </button>-->
+<!--          <button-->
+<!--            mat-raised-button-->
+<!--            color="primary"-->
+<!--            type="submit"-->
+<!--            >-->
+<!--            Edit2-->
+<!--          </button>-->
+<!--        </div>-->
+
       </ng-container>
     </mat-tab>
 
     <mat-tab label="Roles">
+      <ng-container *ngIf="user as currentUser">
+        <app-form-manager
+          [formId]="FormConstants.USER_ROLE"
+          [recordId]="currentUser.userId"
+          action="update"
+          [inline]="true"
+        >
+        </app-form-manager>
+      </ng-container>
+
     </mat-tab>
   </mat-tab-group>
 </div>
+{{user?.userId}}

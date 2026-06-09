@@ -18,8 +18,8 @@ export class FormService {
     return this.api.get<FormResponse>(url);
   }
 
-  submitForm(formId: string, formData: any): Observable<any> {
-    const url = this.getUrl(formId, null)
+  submitForm(formId: string, recordId: string, formData: any): Observable<any> {
+    const url = this.getUrl(formId, recordId)
     return this.api.post(url, formData);
   }
 

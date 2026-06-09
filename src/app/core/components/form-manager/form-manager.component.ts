@@ -194,7 +194,7 @@ export class FormManagerComponent implements OnInit {
   }
 
   submitForm(): void {
-    this.componentLoaded = false;
+    // this.componentLoaded = false;
     if (!this.form || !this.formGroup) {
       this.error = 'Form is not loaded.';
       return;
@@ -213,7 +213,7 @@ export class FormManagerComponent implements OnInit {
       ...this.formGroup.value
     };
 
-    this.service.submitForm(this.formId, payload).subscribe({
+    this.service.submitForm(this.formId, this.recordId, payload).subscribe({
       next: (response) => {
         const data = response.data;
         if (response.success) {

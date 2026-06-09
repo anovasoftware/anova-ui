@@ -12,6 +12,7 @@ import {ApiService} from './api.service';
 import {ApiResponse} from '../models/api-response';
 import {GlobalService} from './global.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,61 +25,72 @@ export class AuthService {
   private apiUrl = 'http://localhost:8000/api/token/';
   private userSubject = new BehaviorSubject<User | null>(this.loadUserFromStorage());
   user$ = this.userSubject.asObservable();
-
+  private readonly ACCESS_TOKEN = 'accessToken';
+  private readonly REFRESH_TOKEN = 'refreshToken';
 
   constructor(
     private http: HttpClient,
     private api: ApiService,
-    ) {
+  ) {
 
   }
 
-  initializeSession(): void {
-    const token = localStorage.getItem('token');
+  // initializeSession(): void {
+  //   const token = localStorage.getItem(this.ACCESS_TOKEN);
+  //
+  //   if (!token) {
+  //     this.clearSession();
+  //     return;
+  //   }
+  //
+  //   this.api.get<ApiResponse<any>>('auth/session/')
+  //     .subscribe({
+  //       next: (response) => {
+  //         if (response?.success && response?.data?.user) {
+  //           this.storeUser(response.data.user, false);
+  //         } else {
+  //           this.clearSession();
+  //         }
+  //       },
+  //       error: (error) => {
+  //         console.error('initializeSession error', error);
+  //         this.clearSession();
+  //       }
+  //     });
+  // }
 
-    if (!token) {
-      this.clearSession();
+  initializeSession(): void {
+    const accessToken = localStorage.getItem(this.ACCESS_TOKEN);
+    const userJson = localStorage.getItem('user');
+
+    if (!accessToken || !userJson) {
+      this.userSubject.next(null);
       return;
     }
 
-    this.api.get<ApiResponse<any>>('auth/session/')
-      .subscribe({
-        next: (response) => {
-          if (response?.success && response?.data?.user) {
-            this.storeUser(response.data.user, false);
-          } else {
-            this.clearSession();
-          }
-        },
-        error: () => {
-          this.clearSession();
-        }
-      });
+    try {
+      const user = JSON.parse(userJson);
+      this.userSubject.next(user);
+    } catch {
+      this.clearSession();
+    }
   }
 
-//   login(username: string, password: string): Observable<any> {
-//     return this.http.post<any>(this.apiUrl, {username, password})
-//       .pipe(
-//         tap(response => {
-//           this.storeTokens(response.access, response.refresh);
-//         })
-//       );
-//   }
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(this.apiUrl, {username, password});
   }
 
   storeTokens(access: string, refresh: string) {
-    localStorage.setItem('access_token', access);
-    localStorage.setItem('refresh_token', refresh);
+    localStorage.setItem(this.ACCESS_TOKEN, access);
+    localStorage.setItem(this.REFRESH_TOKEN, refresh);
   }
 
   getAccessToken(): string | null {
-    return localStorage.getItem('access_token');
+    return localStorage.getItem(this.ACCESS_TOKEN);
   }
 
   getRefreshToken(): string | null {
-    return localStorage.getItem('refresh_token');
+    return localStorage.getItem(this.REFRESH_TOKEN);
   }
 
   private loadUserFromStorage(): User | null {
@@ -90,16 +102,6 @@ export class AuthService {
 
   }
 
-  // storeUser(user: any): void {
-  //   const normalized = normalizeUser(user);
-  //   localStorage.setItem('user', JSON.stringify(normalized));
-  //   localStorage.setItem('currentMenuId', this.MenuConstants.HOME);
-  //   localStorage.setItem(
-  //     'currentHotelId',
-  //     normalized?.lastHotelId || this.HotelConstants.NOT_APPLICABLE
-  //   );
-  //   this.userSubject.next(normalized);
-  // }
   storeUser(user: any, resetContext = true): void {
     const normalized = normalizeUser(user);
 
@@ -121,8 +123,8 @@ export class AuthService {
   }
 
   clearSession(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    localStorage.removeItem(this.ACCESS_TOKEN);
+    localStorage.removeItem(this.REFRESH_TOKEN);
     localStorage.removeItem('currentMenuId');
     localStorage.removeItem('currentHotelId');
     localStorage.removeItem('user');

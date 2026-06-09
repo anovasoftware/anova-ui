@@ -3,7 +3,9 @@
     <mat-form-field
       appearance="outline"
       subscriptSizing="fixed"
-      class="form-field-full">
+      class="form-field-full"
+       [class.readonly-form-field]="field.readonly"
+    >
 
     <mat-label>{{field.label}}</mat-label>
     <input
@@ -13,8 +15,8 @@
       [id]="field.name"
       [placeholder]="field.placeholder || ''"
       [readonly]="field.readonly"
-      [class.readonly-field]="field.readonly"
-      [tabIndex]="field.readonly ? -1 : 0">
+      [tabIndex]="field.readonly ? -1 : 0"
+    >
 
     <!-- Validation errors -->
     <mat-error *ngIf="formGroup.get(field.name)?.invalid && (formGroup.get(field.name)?.touched || formGroup.get(field.name)?.dirty)">

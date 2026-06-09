@@ -45,7 +45,7 @@ mat-card.form-card-inline {
   width: 500px;
   padding: 12px;
   background-color: map.get(theme.$tertiary-palette, 100);
-  border: map.get(theme.$primary-palette, 40) solid 2px;
+  border: map.get(theme.$tertiary-palette, 80) solid 2px;
   margin-top: 24px;
   //border-radius: 8px;
   //box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -276,3 +276,19 @@ mat-card.form-card-inline {
 .form-inline {
   width: 300px;
 }
+
+.readonly-form-field {
+  .mat-mdc-text-field-wrapper {
+   }
+
+  .mdc-floating-label,
+  .mat-mdc-input-element {
+    color: map.get(theme.$neutral-palette, 50) !important;
+  }
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: map.get(theme.$neutral-palette, 60) !important;
+  }
+}
+
