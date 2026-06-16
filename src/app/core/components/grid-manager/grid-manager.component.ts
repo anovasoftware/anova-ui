@@ -14,6 +14,8 @@ import {GridConstants} from '../../../../constants/grid_constants';
 })
 export class GridManagerComponent {
   @Input() gridId: string = GridConstants.TO_BE_ANNOUNCED;
+  @Input() params: Record<string, string> = {};
+
   protected readonly GridConstants= GridConstants;
 
 

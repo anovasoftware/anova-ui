@@ -1,3 +1,7 @@
+@use 'sass:map';
+@use 'styles/variables';
+@use 'styles/themes' as theme;
+
 .chips-container {
   display: flex;
   flex-wrap: wrap;
@@ -6,4 +10,21 @@
 
 mat-chip-option {
   width: 220px;
+}
+
+.chips-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 16px 0;
+  max-width: 500px;
+}
+
+.chips-label {
+  margin: 0 0 0 0;
+  padding: 2px 2px 2px 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: map.get(theme.$neutral-palette, 30);
+  //background-color: map.get(theme.$neutral-palette, 60);
 }

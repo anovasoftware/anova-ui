@@ -19,4 +19,5 @@ export interface Menu {
   disabled?: boolean;
   hotelRequired?: boolean;
   children?: Menu[];
+  params?: Record<string, string>;
 }

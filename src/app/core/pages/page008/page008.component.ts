@@ -10,6 +10,8 @@ import {MatButton} from '@angular/material/button';
 import {PersonConstants} from '../../../../constants/person_constants';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {AuthService} from '../../../services/auth.service';
+import {TypeConstants} from '../../../../constants/type_constants';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-page008',
@@ -27,7 +29,7 @@ export class Page008Component implements OnInit {
   pk = '';
   user: User | null = null;
   componentLoaded = false;
-
+  selectedTabIndexes: { [key: string]: number } = {};
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
@@ -80,4 +82,5 @@ export class Page008Component implements OnInit {
   }
 
   protected readonly FormConstants = FormConstants;
+  protected readonly TypeConstants = TypeConstants;
 }

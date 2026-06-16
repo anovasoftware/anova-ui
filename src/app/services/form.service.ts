@@ -13,8 +13,8 @@ export class FormService {
   constructor(private api: ApiService) {
   }
 
-  loadForm(formId: string, recordId: string, action: string): Observable<FormResponse> {
-    const url = this.getUrl(formId, action, recordId);
+  loadForm(formId: string, recordId: string, action: string, params: any): Observable<FormResponse> {
+    const url = this.getUrl(formId, action, recordId, params);
     return this.api.get<FormResponse>(url);
   }
 
@@ -23,18 +23,26 @@ export class FormService {
     return this.api.post(url, formData);
   }
 
-  getUrl(formId: string, recordId?: string | null, action?: string | null,): string {
-    let url = `${this.baseUrl}${formId}`;
+  getUrl(formId: string, recordId?: string | null, action?: string | null, params?: any): string {
 
-    url += '?dummy=dummy';
+    const searchParams = new URLSearchParams();
+    // let url = `${this.baseUrl}${formId}`;
 
     if (recordId) {
-      url += `&recordId=${encodeURIComponent(recordId)}`;
+      searchParams.set('recordId', recordId);
     }
+
     if (action) {
-      url += `&action=${encodeURIComponent(action)}`;
+      searchParams.set('action', action);
     }
-    return url;
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          searchParams.set(key, String(value));
+        }
+      });
+    }
+    return `${this.baseUrl}${formId}?${searchParams.toString()}`;
   }
 }
 

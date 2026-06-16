@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { MenuService } from './menu.service';
-import { GlobalService } from './global.service';
-import { Menu } from '../models/menu';
-import { PageConstants } from '../../constants/page_constants';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {MenuService} from './menu.service';
+import {GlobalService} from './global.service';
+import {Menu} from '../models/menu';
+import {PageConstants} from '../../constants/page_constants';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
@@ -12,11 +12,13 @@ import {BehaviorSubject} from 'rxjs';
 export class NavigationService {
   private recordBreadcrumbSubject = new BehaviorSubject<string>('');
   recordBreadcrumb$ = this.recordBreadcrumbSubject.asObservable();
+
   constructor(
     private router: Router,
     private menuService: MenuService,
     private globalService: GlobalService
-  ) {}
+  ) {
+  }
 
   setRecordBreadcrumb(label: string): void {
     this.recordBreadcrumbSubject.next(label);
@@ -31,6 +33,10 @@ export class NavigationService {
     this.menuService.setSelectedMenu(menu);
     this.clearRecordBreadcrumb();
 
+    const queryParams = {
+      gridId: menu.gridId,
+      ...(menu.params ?? {})
+    };
     if (menu.route) {
       let route = menu.route;
 
@@ -38,9 +44,10 @@ export class NavigationService {
         route = `/page${menu.page.pageId}`;
       }
 
-      void this.router.navigate([route], {
-        queryParams: { gridId: menu.gridId }
-      });
+      void this.router.navigate([route], { queryParams });
+      // void this.router.navigate([route], {
+      //   queryParams: {gridId: menu.gridId}
+      // });
       return;
     }
 
@@ -48,9 +55,10 @@ export class NavigationService {
       menu.page?.pageId &&
       menu.page.pageId !== PageConstants.NOT_APPLICABLE
     ) {
-      void this.router.navigate([`/page${menu.page.pageId}`], {
-        queryParams: { gridId: menu.gridId }
-      });
+      void this.router.navigate([`/page${menu.page.pageId}`], {queryParams});
+      // void this.router.navigate([`/page${menu.page.pageId}`], {
+      //   queryParams: {gridId: menu.gridId}
+      // });
       return;
     }
 

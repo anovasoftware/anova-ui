@@ -30,40 +30,36 @@
           [formId]="FormConstants.USER_HOTEL"
           [recordId]="currentUser.userId"
           action="update"
-          [inline]="true"
-        >
+          [inline]="true">
         </app-form-manager>
-<!--        <div class="button-row">-->
-<!--          <button-->
-<!--            mat-stroked-button-->
-<!--            type="button"-->
-<!--            (click)="launchForm(FormConstants.USER_HOTEL, currentUser.userId, 'update')">-->
-<!--            Editx-->
-<!--          </button>-->
-<!--          <button-->
-<!--            mat-raised-button-->
-<!--            color="primary"-->
-<!--            type="submit"-->
-<!--            >-->
-<!--            Edit2-->
-<!--          </button>-->
-<!--        </div>-->
-
       </ng-container>
     </mat-tab>
 
-    <mat-tab label="Roles">
+    <mat-tab label="Anova Roles">
       <ng-container *ngIf="user as currentUser">
         <app-form-manager
           [formId]="FormConstants.USER_ROLE"
           [recordId]="currentUser.userId"
           action="update"
           [inline]="true"
-        >
+          [params]="{ typeId: TypeConstants.ROLE_SYSTEM }">
         </app-form-manager>
       </ng-container>
 
     </mat-tab>
+    <mat-tab label="Hotel Roles">
+      <ng-container *ngIf="user as currentUser">
+        <app-form-manager
+          [formId]="FormConstants.USER_ROLE"
+          [recordId]="currentUser.userId"
+          action="update"
+          [inline]="true"
+          [params]="{ typeId: TypeConstants.ROLE_HOTEL }">
+        </app-form-manager>
+      </ng-container>
+
+    </mat-tab>
+
   </mat-tab-group>
 </div>
 {{user?.userId}}

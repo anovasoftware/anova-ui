@@ -26,6 +26,7 @@ import {FormDialogService} from '../../../services/form-dialog.service';
 import {WidgetTextareaComponent} from '../../widgets/widget-textarea/widget-textarea.component';
 import {WidgetSelect1Component} from '../../widgets/widget-select1/widget-select1.component';
 import {WidgetChipsComponent} from '../../widgets/widget-chips/widget-chips.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 type DialogData = {
@@ -84,6 +85,7 @@ export class FormManagerComponent implements OnInit {
     private location: Location,
     private dialog: MatDialog,
     private formDialog: FormDialogService,
+    private snackBar: MatSnackBar,
     @Optional() private dialogRef: MatDialogRef<FormManagerComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
@@ -95,6 +97,7 @@ export class FormManagerComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(JSON.stringify(this.params));
     if (this.data) {
       this.formId = this.data.formId ?? this.formId;
       this.recordId = this.data.recordId ?? this.recordId;
@@ -107,7 +110,7 @@ export class FormManagerComponent implements OnInit {
   loadForm(): void {
     this.error = null;
 
-    this.service.loadForm(this.formId, this.action, this.recordId).subscribe({
+    this.service.loadForm(this.formId, this.action, this.recordId, this.params).subscribe({
       next: (response) => {
         if (!response.success) {
           console.error('loadForm failed:', response.message, response.errors);
@@ -225,6 +228,10 @@ export class FormManagerComponent implements OnInit {
           } else {
             console.log(`No post-submit handling defined for form ${this.formId}.`);
           }
+          this.snackBar.open('Record updated', 'Close', {
+            duration: 20000
+          });
+
         }
         if (!this.inline) {
           this.dialogRef?.close(response);

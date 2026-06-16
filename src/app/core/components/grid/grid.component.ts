@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {GridConstants} from '../../../../constants/grid_constants';
 import {PageConstants} from '../../../../constants/page_constants';
 import {FormConstants} from '../../../../constants/form_constants';
@@ -43,44 +43,29 @@ import {MenuService} from '../../../services/menu.service';
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
 })
-export class GridComponent {
-  private _gridId: string = GridConstants.TO_BE_ANNOUNCED;
+export class GridComponent implements OnChanges {
+  @Input() gridId: string = GridConstants.TO_BE_ANNOUNCED;
+  @Input() params: Record<string, string> = {};
+
   protected readonly GridConstants = GridConstants;
   public dataSource = new MatTableDataSource<any>();
-  // public totalRows = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  @Input()
-  set gridId(value: string) {
-    this._gridId = value || GridConstants.TO_BE_ANNOUNCED;
-
-    if (value) {
-      this.gridService.loadGrid(value);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.gridId && this.gridId !== GridConstants.TO_BE_ANNOUNCED) {
+      this.gridService.loadGrid(this.gridId, true, this.params);
     }
-  }
-
-  get gridId(): string {
-    return this._gridId;
   }
 
   get grid$() {
     return this.gridService.grid$;
   }
 
-  // ngAfterViewInit(): void {
-  //   this.dataSource.paginator = this.paginator;
-  //
-  //   this.grid$.subscribe(grid => {
-  //     if (grid) {
-  //       this.dataSource.data = grid.rows || [];
-  //       this.totalRows = this.dataSource.data.length;
-  //     }
-  //   });
-  // }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
+
   setGridData(grid: any): boolean {
     const rows = grid?.rows || [];
 
@@ -90,6 +75,7 @@ export class GridComponent {
 
     return true;
   }
+
   constructor(
     private router: Router,
     private formDialog: FormDialogService,
@@ -176,7 +162,7 @@ export class GridComponent {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result?.success) {
-          this.gridService.loadGrid(this.gridId, true);
+          this.gridService.loadGrid(this.gridId, true, this.params);
 
           this.snackBar.open('Record updated', 'Close', {
             duration: 20000
