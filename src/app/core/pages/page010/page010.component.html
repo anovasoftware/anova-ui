@@ -1,0 +1,31 @@
+<div class="printable-area" *ngIf="componentLoaded">
+  <mat-tab-group [mat-stretch-tabs]="false" class="mat-elevation-z4">
+    <mat-tab label="Role Detail">
+      <ng-container *ngIf="pk">
+        <app-form-manager
+          [formId]="FormConstants.ROLE"
+          [recordId]="pk"
+          action="view"
+          [inline]="true"
+        >
+        </app-form-manager>
+        <div class="button-row">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="editRole()">
+            Edit
+          </button>
+        </div>
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="Processes">
+      <ng-container *ngIf="pk">
+        <app-grid-manager [gridId]="GridConstants.ROLE_PROCESS"></app-grid-manager>
+      </ng-container>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+

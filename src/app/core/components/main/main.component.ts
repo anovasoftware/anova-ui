@@ -61,7 +61,7 @@ export class MainComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
-    this.menuService.loadMenus();
+    // this.menuService.loadMenus();
 
     this.menuService.selectedMenu$
       .pipe(takeUntil(this.destroy$))
