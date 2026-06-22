@@ -51,7 +51,7 @@
                    [formControlName]="control.name">
 
             <div *ngSwitchDefault class="unknown-type-warning mat-elevation-z2">
-              ⚠️ {{ control.label }}: Type '{{control.type.typeId}}-{{ control.type.description }}' not defined yet!
+              ⚠️ {{ control.label }}: Type '{{ control.type.typeId }}-{{ control.type.description }}' not defined yet!
             </div>
           </ng-container>
         </div>
@@ -97,8 +97,14 @@
         </div>
       </form>
 
-      <div class="form-id-display">
-        Form ID: {{ formId }}
+      <div class="form-footer">
+        <div class="form-id-display">
+          ID: {{ recordId }}
+        </div>
+
+        <div class="form-id-display">
+          Form ID: {{ formId }}
+        </div>
       </div>
     </mat-card-content>
 

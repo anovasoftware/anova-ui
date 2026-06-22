@@ -213,7 +213,7 @@ export class FormManagerComponent implements OnInit {
 
     const payload = {
       recordId: this.recordId,
-      ...this.formGroup.value
+      ...this.formGroup.getRawValue()
     };
 
     this.service.submitForm(this.formId, this.recordId, payload).subscribe({

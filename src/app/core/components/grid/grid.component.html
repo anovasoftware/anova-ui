@@ -1,4 +1,4 @@
-<div class="printable-area">
+<div [ngClass]="{ 'printable-area': usePageContainer }">
   <section *ngIf="grid$ | async as grid">
 
     <ng-container *ngIf="setGridData(grid)">
@@ -7,6 +7,15 @@
         class="grid-title">
         {{ grid.title }}
       </h3>
+
+    <button
+      *ngIf="grid.canCreate"
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="onAddClick(grid)">
+      Add
+    </button>
 
       <div class="table-wrapper">
         <!--      <table mat-table [dataSource]="grid.rows" class="full-width-table grid-table">-->

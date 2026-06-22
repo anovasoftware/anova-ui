@@ -244,14 +244,33 @@ mat-card.form-card-inline {
   }
 }
 
-.form-id-display {
-  text-align: right;
+//.form-id-display {
+//  text-align: right;
+//  margin-top: 12px;
+//  font-size: 0.8rem;
+//  color: map.get(theme.$tertiary-palette, 30);
+//  opacity: 0.7;
+//}
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 12px;
+}
+
+.form-id-display {
   font-size: 0.8rem;
   color: map.get(theme.$tertiary-palette, 30);
   opacity: 0.7;
 }
 
+.form-id-display:first-child {
+  text-align: left;
+}
+
+.form-id-display:last-child {
+  text-align: right;
+}
 .form-extras {
   display: flex;
   flex-direction: column;

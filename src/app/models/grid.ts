@@ -22,4 +22,5 @@ export interface Grid {
   displayedColumns: string[];
   columns: Column[];
   rows: Row[];
+  canCreate: boolean;
 }

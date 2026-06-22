@@ -1,0 +1,29 @@
+<app-page-tab *ngIf="componentLoaded">
+  <mat-tab-group [mat-stretch-tabs]="false">
+    <mat-tab label="Cabin Categories">
+      <app-grid-manager
+        [gridId]="GridConstants.ROOM_CATEGORY"
+        [usePageContainer]="false">
+      </app-grid-manager>
+    </mat-tab>
+    <mat-tab label="Decks/Floors">
+      <app-grid-manager
+        [gridId]="GridConstants.FLOOR"
+        [usePageContainer]="false">
+      </app-grid-manager>
+    </mat-tab>
+    <mat-tab label="Cabins">
+      <app-grid-manager
+        [gridId]="GridConstants.ROOM"
+        [usePageContainer]="false">
+      </app-grid-manager>
+    </mat-tab>
+    <mat-tab label="Layout">
+      <div class="placeholder">
+        Visual cabin layout coming later.
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
+</app-page-tab>
