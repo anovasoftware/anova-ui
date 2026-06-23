@@ -28,6 +28,7 @@ import {WidgetSelect1Component} from '../../widgets/widget-select1/widget-select
 import {WidgetChipsComponent} from '../../widgets/widget-chips/widget-chips.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {WidgetSpinnerComponent} from '../../widgets/widget-spinner/widget-spinner.component';
+import {WidgetDate1Component} from '../../widgets/widget-date1/widget-date1.component';
 
 
 type DialogData = {
@@ -55,6 +56,7 @@ type DialogData = {
     WidgetSelect1Component,
     WidgetChipsComponent,
     WidgetSpinnerComponent,
+    WidgetDate1Component,
   ],
   templateUrl: './form-manager.component.html',
   styleUrl: './form-manager.component.scss'

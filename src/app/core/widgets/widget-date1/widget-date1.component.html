@@ -1,1 +1,17 @@
-<p>widget-date1 works!</p>
+<div [formGroup]="formGroup">
+  <mat-form-field appearance="outline" class="form-field-full">
+    <mat-label>{{ field.label }}</mat-label>
+
+
+    <input
+      matInput
+      [formControlName]="field.name"
+      placeholder="YYYY-MM-DD"
+      maxlength="10"
+      autocomplete="off"
+      (input)="onDateInput($event)"
+      (keydown)="onKeyDown($event)">
+
+  </mat-form-field>
+</div>
+
