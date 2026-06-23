@@ -45,6 +45,7 @@ export class MenuService {
   }
 
   loadMenus(hotelTypeId: string | null = null): void {
+    console.log('loading menus');
     this.api.get<ApiResponse<ApiData<Menu>>>('public/table/static/menu/').subscribe({
       next: (response) => {
         let menus: Menu[] = response?.data.records || [];

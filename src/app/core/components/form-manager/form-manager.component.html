@@ -44,6 +44,11 @@
               [field]="control"
               [formGroup]="formGroup">
             </app-widget-chips>
+            <app-widget-spinner
+              *ngSwitchCase="TypeConstants.CONTROL_SPINNER"
+              [field]="control"
+              [formGroup]="formGroup">
+            </app-widget-spinner>
 
 
             <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"

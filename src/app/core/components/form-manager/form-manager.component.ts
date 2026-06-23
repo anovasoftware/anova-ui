@@ -27,6 +27,7 @@ import {WidgetTextareaComponent} from '../../widgets/widget-textarea/widget-text
 import {WidgetSelect1Component} from '../../widgets/widget-select1/widget-select1.component';
 import {WidgetChipsComponent} from '../../widgets/widget-chips/widget-chips.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {WidgetSpinnerComponent} from '../../widgets/widget-spinner/widget-spinner.component';
 
 
 type DialogData = {
@@ -53,6 +54,7 @@ type DialogData = {
     WidgetTextareaComponent,
     WidgetSelect1Component,
     WidgetChipsComponent,
+    WidgetSpinnerComponent,
   ],
   templateUrl: './form-manager.component.html',
   styleUrl: './form-manager.component.scss'
