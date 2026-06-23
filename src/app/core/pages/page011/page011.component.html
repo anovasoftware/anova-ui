@@ -1,5 +1,27 @@
 <app-page-tab *ngIf="componentLoaded">
   <mat-tab-group [mat-stretch-tabs]="false">
+    <mat-tab label="Hotel/Ship Details">
+      <ng-container *ngIf="hotelId">
+        <app-form-manager
+          [formId]="FormConstants.HOTEL"
+          [recordId]=hotelId
+          action="view"
+          [inline]="true"
+        >
+        </app-form-manager>
+        <div class="button-row">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="editHotelDetails()">
+            Edit
+          </button>
+        </div>
+
+      </ng-container>
+    </mat-tab>
+
     <mat-tab label="Cabin Categories">
       <app-grid-manager
         [gridId]="GridConstants.ROOM_CATEGORY"

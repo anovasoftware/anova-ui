@@ -127,6 +127,7 @@ export class FormManagerComponent implements OnInit {
             // this.debugFormValidity();
             this.header = this.form.header;
             this.componentLoaded = true;
+            console.log(this.form);
           }
         }
       },
