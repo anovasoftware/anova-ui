@@ -18,8 +18,9 @@ export interface GlobalState {
 
 export interface BreadcrumbItem {
   label: string;
-  route?: string;
-  queryParams?: Record<string, string>;
+  commands?: any[];
+  queryParams?: Record<string, any>;
+  menuId: string;
 }
 
 @Injectable({providedIn: 'root'})
@@ -147,10 +148,39 @@ export class GlobalService {
     this.authService.setCurrentHotelId(value);
   }
 
+  // setCurrentMenuId(menuId: string): void {
+  //   const value = menuId || MenuConstants.HOME;
+  //   this.currentMenuIdSubject.next(value);
+  //   this.authService.setCurrentMenuId(value);
+  //
+  //   if (value === MenuConstants.HOME) {
+  //     this.setBreadcrumbs([
+  //       {
+  //         label: 'Home',
+  //         commands: [`/navigator`],
+  //         menuId: MenuConstants.HOME
+  //       }
+  //     ]);
+  //   }
+  // }
+
   setCurrentMenuId(menuId: string): void {
     const value = menuId || MenuConstants.HOME;
-    this.currentMenuIdSubject.next(value);
-    this.authService.setCurrentMenuId(value);
+
+    queueMicrotask(() => {
+      this.currentMenuIdSubject.next(value);
+      this.authService.setCurrentMenuId(value);
+
+      if (value === MenuConstants.HOME) {
+        this.setBreadcrumbs([
+          {
+            label: 'Home',
+            commands: ['/navigator'],
+            menuId: MenuConstants.HOME
+          }
+        ]);
+      }
+    });
   }
 
   setCurrentPageId(pageId: string): void {
@@ -181,5 +211,10 @@ export class GlobalService {
 
   clearBreadcrumbs(): void {
     this.breadcrumbsSubject.next([]);
+  }
+
+  trimBreadcrumbsAt(index: number): void {
+    const current = this.breadcrumbsSubject.value;
+    this.breadcrumbsSubject.next(current.slice(0, index + 1));
   }
 }

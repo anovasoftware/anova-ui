@@ -103,8 +103,9 @@ export class NavigationService {
 
       const breadcrumbItem = {
         label: menu.breadcrumbName || menu.description,
-        route,
-        queryParams
+        commands: [route],
+        queryParams,
+        menuId: menu.menuId,
       };
 
       if (menu.parentMenuId && menu.parentMenuId !== MenuConstants.NOT_APPLICABLE) {

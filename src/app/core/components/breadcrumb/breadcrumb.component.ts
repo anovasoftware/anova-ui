@@ -1,13 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {takeUntil} from 'rxjs/operators';
+import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import {GlobalService} from '../../../services/global.service';
-import {MenuService} from '../../../services/menu.service';
-import {Menu} from '../../../models/menu';
-import {PageConstants} from '../../../../constants/page_constants';
-import {NavigationService} from '../../../services/navigation.service';
+import {BreadcrumbItem, GlobalService} from '../../../services/global.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -17,33 +14,26 @@ import {NavigationService} from '../../../services/navigation.service';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit, OnDestroy {
-  protected readonly PageConstants = PageConstants;
 
-  navigationMode = false;
-  breadcrumbMenus: Menu[] = [];
-  recordBreadcrumb = '';
+  breadcrumbItems: BreadcrumbItem[] = [];
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private globalService: GlobalService,
-    protected menuService: MenuService,
-    protected navigationService: NavigationService
+    private router: Router
   ) {
   }
 
-  ngOnInit(): void {
-    this.menuService.breadcrumbMenus$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(menus => {
-        this.breadcrumbMenus = menus;
-        this.navigationMode = this.globalService.isLoggedIn && menus.length > 0;
-      });
+  get navigationMode(): boolean {
+    return this.globalService.isLoggedIn && this.breadcrumbItems.length > 0;
+  }
 
-    this.navigationService.recordBreadcrumb$
+  ngOnInit(): void {
+    this.globalService.breadcrumbs$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(label => {
-        this.recordBreadcrumb = label || '';
+      .subscribe(items => {
+        this.breadcrumbItems = items;
       });
   }
 
@@ -52,20 +42,23 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  breadcrumbClick(event: Event, menuId: string): void {
+  breadcrumbClick(event: Event, item: BreadcrumbItem, index: number): void {
     event.preventDefault();
 
-    const menu = this.menuService.getMenuById(menuId);
+    if (item.commands) {
+      this.globalService.trimBreadcrumbsAt(index);
+      if (item.menuId) {
+        this.globalService.setCurrentMenuId(item.menuId);
+      }
 
-    if (!menu || menu.disabled) {
-      return;
+      this.router.navigate(item.commands, {
+        queryParams: item.queryParams
+      });
     }
-
-    this.navigationService.navigateToMenu(menu);
   }
 
-  isClickable(menu: Menu, last: boolean): boolean {
-    return !last || !!this.recordBreadcrumb;
+  isClickable(item: BreadcrumbItem): boolean {
+    return !!item.commands;
   }
 }
 

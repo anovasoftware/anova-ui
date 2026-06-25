@@ -18,22 +18,22 @@ export class MenuService {
   selectedMenu$ = this.selectedMenuSubject.asObservable();
   private childrenMap: { [key: string]: Menu[] } = {};  // TODO: add this later
 
-  breadcrumbMenus$!: Observable<Menu[]>;
+  // breadcrumbMenus$!: Observable<Menu[]>;
 
   constructor(
     private api: ApiService,
     private globalService: GlobalService
   ) {
-    this.breadcrumbMenus$ = combineLatest([
-      this.menus$,
-      this.globalService.currentMenuId$
-    ]).pipe(
-      map(([menus, currentMenuId]) =>
-        menus.length && currentMenuId
-          ? this.buildMenuPath(menus, currentMenuId)
-          : []
-      )
-    );
+    // this.breadcrumbMenus$ = combineLatest([
+    //   this.menus$,
+    //   this.globalService.currentMenuId$
+    // ]).pipe(
+    //   map(([menus, currentMenuId]) =>
+    //     menus.length && currentMenuId
+    //       ? this.buildMenuPath(menus, currentMenuId)
+    //       : []
+    //   )
+    // );
     this.globalService.currentHotel$.subscribe(hotel => {
       if (hotel) {
         this.loadMenus(hotel.typeId);

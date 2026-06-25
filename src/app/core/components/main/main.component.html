@@ -1,4 +1,4 @@
-<ng-container *ngIf="componentLoaded; else loading">
+<!--<ng-container *ngIf="componentLoaded; else loading">-->
   <div class="app-shell">
     <app-header></app-header>
     <!--<app-sidebar></app-sidebar>  &lt;!&ndash; ✅ Ensure this exists &ndash;&gt;-->
@@ -15,10 +15,11 @@
       <router-outlet></router-outlet>
 
     </div>
+    <app-footer [referenceId]="(referenceId$ | async) || ''"></app-footer>
 
-    <app-footer [referenceId]="referenceId$ | async"></app-footer>
+<!--    <app-footer [referenceId]="referenceId$ | async"></app-footer>-->
   </div>
-</ng-container>
+<!--</ng-container>-->
 
 <ng-template #loading>
   <div class="app-loading">Loading...</div>

@@ -6,8 +6,8 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
 import {BreadcrumbComponent} from '../breadcrumb/breadcrumb.component';
 import {ApiService} from '../../../services/api.service';
 import {MenuService} from '../../../services/menu.service';
-import {map, takeUntil} from 'rxjs/operators';
-import {combineLatest, Observable, Subject} from 'rxjs';
+import {map, observeOn, takeUntil} from 'rxjs/operators';
+import {asyncScheduler, combineLatest, Observable, Subject} from 'rxjs';
 import {FooterComponent} from '../footer/footer.component';
 import {Menu} from '../../../models/menu';
 import {GlobalService} from '../../../services/global.service';
@@ -55,7 +55,8 @@ export class MainComponent implements OnInit, OnDestroy {
         const pagePart = pageId ? pageId.padStart(3, '0') : '---';
 
         return `M${menuPart}-P${pagePart}`;
-      })
+      }),
+      observeOn(asyncScheduler)
     );
 
     this.menuService.selectedMenu$
@@ -64,7 +65,7 @@ export class MainComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.currentMenu = menu;
           document.title = 'AnovaSea';
-          this.componentLoaded = true;
+          // this.componentLoaded = true;
         });
       });
   }
