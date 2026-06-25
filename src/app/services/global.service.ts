@@ -16,6 +16,12 @@ export interface GlobalState {
   user: User | null;
 }
 
+export interface BreadcrumbItem {
+  label: string;
+  route?: string;
+  queryParams?: Record<string, string>;
+}
+
 @Injectable({providedIn: 'root'})
 export class GlobalService {
   protected readonly MenuConstants = MenuConstants;
@@ -34,7 +40,11 @@ export class GlobalService {
   private currentMenuIdSubject: BehaviorSubject<string>;
   currentMenuId$: Observable<string>;
 
-  // isLoggedIn$ = this.global$.pipe(map(state => !!state.user));
+  private currentPageIdSubject: BehaviorSubject<string>;
+  currentPageId$: Observable<string>;
+
+  private breadcrumbsSubject = new BehaviorSubject<BreadcrumbItem[]>([]);
+  breadcrumbs$ = this.breadcrumbsSubject.asObservable();
 
   constructor(
     private api: ApiService,
@@ -47,6 +57,9 @@ export class GlobalService {
 
     this.currentMenuId$ = this.currentMenuIdSubject.asObservable();
     this.currentHotelId$ = this.currentHotelIdSubject.asObservable();
+
+    this.currentPageIdSubject = new BehaviorSubject<string>(MenuConstants.NOT_APPLICABLE);
+    this.currentPageId$ = this.currentPageIdSubject.asObservable();
 
     this.currentHotel$ = combineLatest([
       this.currentHotelId$,
@@ -67,6 +80,11 @@ export class GlobalService {
         this.setCurrentHotelId(hotelId);
       }
     });
+    this.breadcrumbs$.subscribe(breadcrumbs => {
+      // console.log('Breadcrumbs updated:', breadcrumbs);
+      // console.table(breadcrumbs);
+    });
+
     // const initialMenuId = this.authService.getCurrentMenuId();
     // const initialHotelId = this.authService.getCurrentHotelId();
     //
@@ -133,5 +151,35 @@ export class GlobalService {
     const value = menuId || MenuConstants.HOME;
     this.currentMenuIdSubject.next(value);
     this.authService.setCurrentMenuId(value);
+  }
+
+  setCurrentPageId(pageId: string): void {
+    this.currentPageIdSubject.next(pageId);
+  }
+
+  getCurrentPageId(): string {
+    return this.currentPageIdSubject.value;
+  }
+
+  setBreadcrumbs(items: BreadcrumbItem[]): void {
+    this.breadcrumbsSubject.next(items);
+  }
+
+  pushBreadcrumb(item: BreadcrumbItem): void {
+    this.breadcrumbsSubject.next([
+      ...this.breadcrumbsSubject.value,
+      item
+    ]);
+    console.log(
+      this.breadcrumbsSubject.value
+        .map(x => x.label)
+        .join(' > ')
+    );
+
+    // console.table(this.breadcrumbsSubject.value);
+  }
+
+  clearBreadcrumbs(): void {
+    this.breadcrumbsSubject.next([]);
   }
 }

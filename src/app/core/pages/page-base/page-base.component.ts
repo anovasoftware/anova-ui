@@ -3,10 +3,13 @@ import {Directive, OnInit} from '@angular/core';
 import {GridConstants} from '../../../../constants/grid_constants';
 import {ApiService} from '../../../services/api.service';
 import {FormDialogService} from '../../../services/form-dialog.service';
+import {MenuConstants} from '../../../../constants/menu_constants';
 
 @Directive()
 export abstract class PageBaseComponent implements OnInit {
   gridId: string = GridConstants.NOT_APPLICABLE;
+  menuId: string = MenuConstants.NOT_APPLICABLE;
+
   params: Record<string, string> = {};
   pk = '';
   componentLoaded = false;
@@ -28,6 +31,7 @@ export abstract class PageBaseComponent implements OnInit {
     this.route.queryParams.subscribe(queryParams => {
       const {gridId, ...params} = queryParams;
       this.gridId = queryParams['gridId'] ?? GridConstants.NOT_APPLICABLE;
+      this.menuId = params['menuId'] || MenuConstants.NOT_APPLICABLE;
       this.pk = queryParams['pk'] ?? '';
 
       this.params = params;

@@ -5,6 +5,7 @@ import {GlobalService} from './global.service';
 import {Menu} from '../models/menu';
 import {PageConstants} from '../../constants/page_constants';
 import {BehaviorSubject} from 'rxjs';
+import {MenuConstants} from '../../constants/menu_constants';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +29,48 @@ export class NavigationService {
     this.recordBreadcrumbSubject.next('');
   }
 
+  // navigateToMenu(menu: Menu): void {
+  //   this.globalService.setCurrentMenuId(menu.menuId);
+  //   this.menuService.setSelectedMenu(menu);
+  //   this.clearRecordBreadcrumb();
+  //
+  //   const queryParams = {
+  //     gridId: menu.gridId,
+  //     // menuId: menu.menuId,
+  //     ...(menu.params ?? {})
+  //   };
+  //   const breadcrumb = {
+  //     label: menu.breadcrumbName || menu.description,
+  //     route: '',
+  //     queryParams
+  //   };
+  //
+  //   if (menu.route) {
+  //     let route = menu.route;
+  //
+  //     if (route === 'page' && menu.page?.pageId) {
+  //       route = `/page${menu.page.pageId}`;
+  //       this.globalService.setCurrentPageId(menu.page.pageId);
+  //     }
+  //
+  //     void this.router.navigate([route], {queryParams});
+  //     return;
+  //   }
+  //
+  //   if (menu.page?.pageId && menu.page.pageId !== PageConstants.NOT_APPLICABLE
+  //   ) {
+  //     void this.router.navigate([`/page${menu.page.pageId}`], {queryParams});
+  //     return;
+  //   }
+  //
+  //   if (this.menuService.hasChildren(menu.menuId)) {
+  //     if (!this.router.url.startsWith('/navigator')) {
+  //       void this.router.navigate(['/navigator']);
+  //     }
+  //     return;
+  //   }
+  // }
   navigateToMenu(menu: Menu): void {
-    this.globalService.setCurrentMenuId(menu.menuId);
     this.menuService.setSelectedMenu(menu);
     this.clearRecordBreadcrumb();
 
@@ -37,36 +78,42 @@ export class NavigationService {
       gridId: menu.gridId,
       ...(menu.params ?? {})
     };
+
+    let route: string | null = null;
+
     if (menu.route) {
-      let route = menu.route;
+      route = menu.route;
 
       if (route === 'page' && menu.page?.pageId) {
         route = `/page${menu.page.pageId}`;
+        this.globalService.setCurrentPageId(menu.page.pageId);
       }
-
-      void this.router.navigate([route], { queryParams });
-      // void this.router.navigate([route], {
-      //   queryParams: {gridId: menu.gridId}
-      // });
-      return;
-    }
-
-    if (
+    } else if (
       menu.page?.pageId &&
       menu.page.pageId !== PageConstants.NOT_APPLICABLE
     ) {
-      void this.router.navigate([`/page${menu.page.pageId}`], {queryParams});
-      // void this.router.navigate([`/page${menu.page.pageId}`], {
-      //   queryParams: {gridId: menu.gridId}
-      // });
-      return;
+      route = `/page${menu.page.pageId}`;
+      this.globalService.setCurrentPageId(menu.page.pageId);
+    } else if (this.menuService.hasChildren(menu.menuId)) {
+      route = '/navigator';
     }
 
-    if (this.menuService.hasChildren(menu.menuId)) {
-      if (!this.router.url.startsWith('/navigator')) {
-        void this.router.navigate(['/navigator']);
+    if (route) {
+      this.globalService.setCurrentMenuId(menu.menuId);
+
+      const breadcrumbItem = {
+        label: menu.breadcrumbName || menu.description,
+        route,
+        queryParams
+      };
+
+      if (menu.parentMenuId && menu.parentMenuId !== MenuConstants.NOT_APPLICABLE) {
+        this.globalService.pushBreadcrumb(breadcrumbItem);
+      } else {
+        this.globalService.setBreadcrumbs([breadcrumbItem]);
       }
-      return;
+
+      void this.router.navigate([route], {queryParams});
     }
   }
 }

@@ -6,10 +6,11 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
 import {BreadcrumbComponent} from '../breadcrumb/breadcrumb.component';
 import {ApiService} from '../../../services/api.service';
 import {MenuService} from '../../../services/menu.service';
-import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {map, takeUntil} from 'rxjs/operators';
+import {combineLatest, Observable, Subject} from 'rxjs';
 import {FooterComponent} from '../footer/footer.component';
 import {Menu} from '../../../models/menu';
+import {GlobalService} from '../../../services/global.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -35,33 +36,27 @@ export class MainComponent implements OnInit, OnDestroy {
   public componentLoaded = false;
 
   private destroy$ = new Subject<void>();
+  referenceId$!: Observable<string>;
 
   constructor(
     private apiService: ApiService,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private globalService: GlobalService,
   ) {
   }
 
-  // ngOnInit(): void {
-  //   this.menuService.selectedMenu$
-  //     .pipe(takeUntil(this.destroy$))
-  //     .subscribe(menu => {
-  //       setTimeout(() => {
-  //         this.currentMenu = menu;
-  //
-  //         // const docTitle = 'AnovaSea';
-  //         // if (menu) {
-  //         // } else {
-  //         //   document.title = 'My App';
-  //         // }
-  //         document.title = 'AnovaSea';
-  //         this.componentLoaded = true;
-  //       });
-  //     });
-  // }
-
   ngOnInit(): void {
-    // this.menuService.loadMenus();
+    this.referenceId$ = combineLatest([
+      this.globalService.currentMenuId$,
+      this.globalService.currentPageId$
+    ]).pipe(
+      map(([menuId, pageId]) => {
+        const menuPart = menuId ? menuId.padStart(3, '0') : '---';
+        const pagePart = pageId ? pageId.padStart(3, '0') : '---';
+
+        return `M${menuPart}-P${pagePart}`;
+      })
+    );
 
     this.menuService.selectedMenu$
       .pipe(takeUntil(this.destroy$))
@@ -73,20 +68,23 @@ export class MainComponent implements OnInit, OnDestroy {
         });
       });
   }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  get referenceId(): string {
-    if (!this.currentMenu) {
-      return '';
-    }
 
-    const menuPart = this.currentMenu.menuId?.padStart(3, '0') ?? '---';
-    const pagePart = this.currentMenu.page?.pageId?.padStart(3, '0') ?? '---';
+  // get referenceId(): string {
+  //   let referenceId = '#';
+  //   if (this.currentMenu) {
+  //     const menuPart = this.currentMenu.menuId?.padStart(3, '0') ?? '---';
+  //     // const pagePart = this.currentMenu.page?.pageId?.padStart(3, '0') ?? '---';
+  //     const pagePart = this.globalService.getCurrentPageId();
+  //     referenceId = `M${menuPart}-P${pagePart}`;
+  //   }
+  //   return referenceId
+  // }
 
-    return `M${menuPart}-P${pagePart}`;
-  }
   get showPageHeader(): boolean {
     return !!(this.currentMenu?.title || this.currentMenu?.subTitle) && false;
   }

@@ -1,29 +1,58 @@
 <div class="breadcrumb-bar" *ngIf="navigationMode">
   <nav class="printable-area" aria-label="Breadcrumb">
-    <ng-container *ngIf="menuService.breadcrumbMenus$ | async as breadcrumbMenus">
-      <ng-container *ngFor="let menu of breadcrumbMenus; let last = last">
-        <a
-          *ngIf="isClickable(menu, last) && !last"
-          class="breadcrumb-link"
-          href=""
-          (click)="breadcrumbClick($event, menu.menuId)">
-          {{ menu.breadcrumbName || menu.title }}
-        </a>
 
+    <ng-container *ngFor="let menu of breadcrumbMenus; let last = last">
 
-        <span *ngIf="!isClickable(menu, last) && !recordBreadcrumb" class="breadcrumb-current-no-highlight">
+      <a
+        *ngIf="isClickable(menu, last); else currentBreadcrumb"
+        class="breadcrumb-link"
+        href=""
+        (click)="breadcrumbClick($event, menu.menuId)">
+        {{ menu.breadcrumbName || menu.title }}
+      </a>
+
+      <ng-template #currentBreadcrumb>
+        <span class="breadcrumb-current-no-highlight">
           {{ menu.breadcrumbName || menu.title }}
         </span>
+      </ng-template>
 
-        <span class="breadcrumb-separator" *ngIf="!last">>></span>
-      </ng-container>
+      <span class="breadcrumb-separator" *ngIf="!last || recordBreadcrumb">>></span>
+
     </ng-container>
-
-<!--    <span class="breadcrumb-separator" *ngIf="recordBreadcrumb">>></span>-->
 
     <span *ngIf="recordBreadcrumb" class="breadcrumb-current">
       {{ recordBreadcrumb }}
     </span>
+
   </nav>
 </div>
+<!--<div class="breadcrumb-bar" *ngIf="navigationMode">-->
+<!--  <nav class="printable-area" aria-label="Breadcrumb">-->
+<!--    <ng-container *ngIf="menuService.breadcrumbMenus$ | async as breadcrumbMenus">-->
+<!--      <ng-container *ngFor="let menu of breadcrumbMenus; let last = last">-->
+<!--        <a-->
+<!--          *ngIf="isClickable(menu, last) && !last"-->
+<!--          class="breadcrumb-link"-->
+<!--          href=""-->
+<!--          (click)="breadcrumbClick($event, menu.menuId)">-->
+<!--          {{ menu.breadcrumbName || menu.title }}-->
+<!--        </a>-->
+
+
+<!--        <span *ngIf="!isClickable(menu, last) && !recordBreadcrumb" class="breadcrumb-current-no-highlight">-->
+<!--          {{ menu.breadcrumbName || menu.title }}-->
+<!--        </span>-->
+
+<!--        <span class="breadcrumb-separator" *ngIf="!last">>></span>-->
+<!--      </ng-container>-->
+<!--    </ng-container>-->
+
+<!--&lt;!&ndash;    <span class="breadcrumb-separator" *ngIf="recordBreadcrumb">>></span>&ndash;&gt;-->
+
+<!--    <span *ngIf="recordBreadcrumb" class="breadcrumb-current">-->
+<!--      {{ recordBreadcrumb }}-->
+<!--    </span>-->
+<!--  </nav>-->
+<!--</div>-->
 

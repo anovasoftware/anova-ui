@@ -29,6 +29,15 @@
         </app-grid-manager>
       </ng-container>
     </mat-tab>
+    <mat-tab label="Menus">
+      <ng-container *ngIf="pk">
+        <app-grid-manager
+          [gridId]="GridConstants.GRID_ROLE_MENU"
+          [usePageContainer]="false"
+          [params]="{ roleId: pk }">
+        </app-grid-manager>
+      </ng-container>
+    </mat-tab>
 
   </mat-tab-group>
 </div>

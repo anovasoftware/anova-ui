@@ -19,6 +19,7 @@ import {formatDate} from '../../utilities/date-utilities';
 import {NavigationService} from '../../../services/navigation.service';
 import {MenuService} from '../../../services/menu.service';
 import {MatButton} from '@angular/material/button';
+import {MenuConstants} from '../../../../constants/menu_constants';
 
 
 @Component({
@@ -48,6 +49,7 @@ import {MatButton} from '@angular/material/button';
 })
 export class GridComponent implements OnChanges {
   @Input() gridId: string = GridConstants.TO_BE_ANNOUNCED;
+  @Input() menuId: string = MenuConstants.NOT_APPLICABLE;
   @Input() usePageContainer = true;
   @Input() params: Record<string, string> = {};
 
@@ -154,11 +156,16 @@ export class GridComponent implements OnChanges {
     } else if (pageId && pageId !== PageConstants.NOT_APPLICABLE && action === 'update') {
       this.navigationService.setRecordBreadcrumb(row?.displayAs);
 
-      const pageMenu = this.menuService.getMenuByPageId(pageId);
-
-      if (pageMenu) {
-        this.globalService.setCurrentMenuId(pageMenu.menuId);
-        this.menuService.setSelectedMenu(pageMenu);
+      if (this.menuId !== MenuConstants.NOT_APPLICABLE) {
+        this.globalService.setCurrentMenuId(this.menuId);
+        this.menuService.setSelectedMenu(this.menuService.getMenuById(this.menuId));
+      } else {
+        const pageMenu = this.menuService.getMenuByPageId(pageId);
+        this.globalService.setCurrentPageId(pageId);
+        if (pageMenu) {
+          this.globalService.setCurrentMenuId(pageMenu.menuId);
+          this.menuService.setSelectedMenu(pageMenu);
+        }
       }
 
       void this.router.navigate([`/page${pageId}`], {

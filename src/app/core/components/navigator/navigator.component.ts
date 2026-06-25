@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {combineLatest} from 'rxjs';
 import {CommonModule} from '@angular/common';
 import {Menu, PageItem} from '../../../models/menu';
+import {GlobalService} from '../../../services/global.service';
 
 @Component({
   selector: 'app-navigator',
@@ -26,7 +27,8 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private menuService: MenuService,
-    private router: Router
+    private router: Router,
+    private globalService: GlobalService,
   ) {
   }
 
@@ -94,6 +96,7 @@ export class NavigatorComponent implements OnInit, OnDestroy {
 
           if (this.routeExistsInConfig(route)) {
             this.router.navigate([`/${route}`]);
+            this.globalService.setCurrentPageId(menu.page.pageId);
             this.componentLoaded = true;
           }
         }
