@@ -19,6 +19,12 @@
       <span class="breadcrumb-separator" *ngIf="!last">>></span>
 
     </ng-container>
+
+    <span class="breadcrumb-separator" *ngIf="recordBreadcrumb">>></span>
+    <span *ngIf="recordBreadcrumb" class="breadcrumb-current">
+      {{ recordBreadcrumb }}
+    </span>
+
   </nav>
 </div>
 

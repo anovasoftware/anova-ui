@@ -5,6 +5,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {BreadcrumbItem, GlobalService} from '../../../services/global.service';
+import {NavigationService} from '../../../services/navigation.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -16,11 +17,12 @@ import {BreadcrumbItem, GlobalService} from '../../../services/global.service';
 export class BreadcrumbComponent implements OnInit, OnDestroy {
 
   breadcrumbItems: BreadcrumbItem[] = [];
-
+  recordBreadcrumb = '';
   private destroy$ = new Subject<void>();
 
   constructor(
     private globalService: GlobalService,
+    protected navigationService: NavigationService,
     private router: Router
   ) {
   }
@@ -35,6 +37,12 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
       .subscribe(items => {
         this.breadcrumbItems = items;
       });
+    this.navigationService.recordBreadcrumb$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(label => {
+        this.recordBreadcrumb = label;
+      });
+
   }
 
   ngOnDestroy(): void {
@@ -47,6 +55,8 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 
     if (item.commands) {
       this.globalService.trimBreadcrumbsAt(index);
+      this.navigationService.clearRecordBreadcrumb();
+
       if (item.menuId) {
         this.globalService.setCurrentMenuId(item.menuId);
       }
