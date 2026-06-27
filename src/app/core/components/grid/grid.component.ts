@@ -7,7 +7,7 @@ import {FormDialogService} from '../../../services/form-dialog.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GlobalService} from '../../../services/global.service';
 import {GridService} from '../../../services/grid.service';
-import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 
 import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef} from '@angular/material/table';
 import {MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable} from '@angular/material/table';
@@ -20,6 +20,7 @@ import {NavigationService} from '../../../services/navigation.service';
 import {MenuService} from '../../../services/menu.service';
 import {MatButton} from '@angular/material/button';
 import {MenuConstants} from '../../../../constants/menu_constants';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 
 @Component({
@@ -43,6 +44,10 @@ import {MenuConstants} from '../../../../constants/menu_constants';
     MatPaginator,
     MatButton,
     NgClass,
+    NgSwitch,
+    MatCheckbox,
+    NgSwitchCase,
+    NgSwitchDefault,
   ],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
@@ -55,8 +60,8 @@ export class GridComponent implements OnChanges {
 
   protected readonly GridConstants = GridConstants;
   public dataSource = new MatTableDataSource<any>();
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  checkboxChanges = new Map<string, any>();
 
   constructor(
     private router: Router,
@@ -132,6 +137,15 @@ export class GridComponent implements OnChanges {
     }
   }
 
+  getColumnClass(column: any): string {
+    switch (column.format) {
+      case 'checkbox':
+        return 'grid-col-checkbox';
+      default:
+        return '';
+    }
+  }
+
   onAddClick(grid: any): void {
     this.openGridRecord(grid, 'new', 'create', null);
   }
@@ -204,56 +218,54 @@ export class GridComponent implements OnChanges {
     }
   }
 
-  // onRowClick(grid: any, row: any): void {
-  //   const pageId = grid?.pageId;
-  //   const formId = grid?.formId;
-  //   const pk: string = row?.pk;
-  //
-  //   let message = '';
-  //
-  //   if (!pk) {
-  //     message = 'No id associated with the record.';
-  //   } else if (pageId && pageId !== PageConstants.NOT_APPLICABLE) {
-  //     this.navigationService.setRecordBreadcrumb(
-  //       row.displayAs
-  //     );
-  //     const pageMenu = this.menuService.getMenuByPageId(pageId);
-  //
-  //     if (pageMenu) {
-  //       this.globalService.setCurrentMenuId(pageMenu.menuId);
-  //       this.menuService.setSelectedMenu(pageMenu);
-  //     }
-  //     void this.router.navigate([`/page${pageId}`], {
-  //       queryParams: {
-  //         pk,
-  //         action: 'update'
-  //       }
-  //     });
-  //   } else if (!formId || formId === FormConstants.NOT_APPLICABLE) {
-  //     message = 'No page or form associated with grid.';
-  //   } else {
-  //     const dialogRef = this.formDialog.openForm(
-  //       formId,
-  //       pk,
-  //       'update',
-  //       {}
-  //     );
-  //
-  //     dialogRef.afterClosed().subscribe(result => {
-  //       if (result?.success) {
-  //         this.gridService.loadGrid(this.gridId, true, this.params);
-  //
-  //         this.snackBar.open('Record updated', 'Close', {
-  //           duration: 20000
-  //         });
-  //       }
-  //     });
-  //   }
-  //
-  //   if (message) {
-  //     this.snackBar.open(message, 'Close', {
-  //       duration: 20000
-  //     });
-  //   }
-  // }
+  onCheckboxChange(row: any, column: any, checked: boolean): void {
+    row[column.field] = checked;
+
+    const rowId = row.id || row.pk || row[column.keyField || 'id'];
+
+    this.checkboxChanges.set(`${rowId}_${column.field}`, {
+      recordId: rowId,
+      field: column.field,
+      value: checked,
+      row
+    });
+  }
+
+  hasCheckboxChanges(): boolean {
+    return this.checkboxChanges.size > 0;
+  }
+
+  onSaveCheckboxChanges(grid: any): void {
+    const changes = Array.from(this.checkboxChanges.values()).map(change => ({
+      recordId: change.recordId,
+      field: change.field,
+      value: change.value
+    }));
+
+    const payload = {
+      gridId: grid.gridId,
+      changes
+    };
+
+    this.gridService.saveGrid(
+      grid.gridId,
+      payload,
+      this.params
+    ).subscribe({
+      next: (response: any) => {
+        this.checkboxChanges.clear();
+        const count = response.data.updatedCount;
+        this.snackBar.open(
+          response.message,
+          'Close',
+          {
+            duration: 7000,
+            // horizontalPosition: 'right',
+            // verticalPosition: 'top'
+          }
+        );
+      }
+    });
+
+  }
 }

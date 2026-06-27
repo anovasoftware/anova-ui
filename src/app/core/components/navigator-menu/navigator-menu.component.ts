@@ -5,7 +5,6 @@ import {MatIcon} from '@angular/material/icon';
 import {Menu} from '../../../models/menu';
 import {Router} from '@angular/router';
 import {FormDialogService} from '../../../services/form-dialog.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {ExchangeRateService} from '../../../services/financial.services';
 import {GlobalService} from '../../../services/global.service';
 import {MenuService} from '../../../services/menu.service';

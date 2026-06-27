@@ -4,7 +4,21 @@
 @use 'styles/themes' as theme;
 @use 'styles/toolbar' as *;
 
+
+.grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
 .grid-title {
+  margin: 0;
+}
+
+.grid-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .table-wrapper {
@@ -63,3 +77,13 @@
     border-bottom: none;
   }
 }
+
+.grid-table .mat-mdc-checkbox {
+  --mdc-checkbox-unselected-icon-color: #{map.get(theme.$neutral-palette, 60)};
+  --mdc-checkbox-selected-icon-color: #{map.get(theme.$primary-palette, 60)};
+  --mdc-checkbox-selected-checkmark-color: #{map.get(theme.$neutral-palette, 95)};
+}
+//grid-col-checkbox {
+//  width: 40px;
+//  border-color: #6aaeff;
+//}

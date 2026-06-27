@@ -53,30 +53,15 @@ export class GridService {
       });
   }
 
-  // loadGrid(gridId: string, forceRefresh = false, params: Record<string, any> = {}): void {
-  //   if (
-  //     !forceRefresh &&
-  //     (this.loadedGridId === gridId || this.loadingGridId === gridId)
-  //   ) {
-  //     return;
-  //   }
-  //
-  //   this.loadingGridId = gridId;
-  //   this.gridSubject.next(null);
-  //
-  //   this.api.get<ApiResponse<{ grid: Grid }>>(`grid/grid${gridId}`)
-  //     .subscribe({
-  //       next: (response) => {
-  //         const grid = response?.data?.grid || null;
-  //         this.gridSubject.next(grid);
-  //         this.loadedGridId = grid ? gridId : null;
-  //         this.loadingGridId = null;
-  //       },
-  //       error: () => {
-  //         this.gridSubject.next(null);
-  //         this.loadedGridId = null;
-  //         this.loadingGridId = null;
-  //       }
-  //     });
-  // }
+  saveGrid(
+    gridId: string,
+    payload: any,
+    params: Record<string, any> = {}
+  ) {
+    return this.api.post(
+      `grid/grid${gridId}`,
+      payload,
+      params
+    );
+  }
 }

@@ -36,11 +36,31 @@ export class ApiService {
     });
   }
 
-  post(endpoint: string, body: any, headers: any = {}): Observable<any> {
-    const url = `${this.baseApi}${endpoint}`;
+  post<T>(
+    urlExt: string,
+    body: any,
+    params: HttpParams | Record<string, any> = {},
+    headers: any = {}
+  ): Observable<T> {
+    const url = `${this.baseApi}${urlExt}`;
     const httpHeaders = new HttpHeaders(headers);
-    return this.http.post(url, body, {headers: httpHeaders});
+
+    const httpParams =
+      params instanceof HttpParams
+        ? params
+        : new HttpParams({fromObject: params});
+
+    return this.http.post<T>(url, body, {
+      headers: httpHeaders,
+      params: httpParams
+    });
   }
+
+  // post(endpoint: string, body: any, headers: any = {}): Observable<any> {
+  //   const url = `${this.baseApi}${endpoint}`;
+  //   const httpHeaders = new HttpHeaders(headers);
+  //   return this.http.post(url, body, {headers: httpHeaders});
+  // }
 
   patch(urlExt: string, body: any = {}, headers: any = {}): Observable<any> {
     const url = `${this.baseApi}${urlExt}`;

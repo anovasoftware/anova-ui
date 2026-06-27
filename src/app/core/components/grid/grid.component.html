@@ -1,42 +1,52 @@
 <div [ngClass]="{ 'printable-area': usePageContainer }">
   <section *ngIf="grid$ | async as grid">
-
     <ng-container *ngIf="setGridData(grid)">
-      <h3
-        [matTooltip]="gridId"
-        class="grid-title">
-        {{ grid.title }}
-      </h3>
-
-    <button
-      *ngIf="grid.canCreate"
-      mat-raised-button
-      color="primary"
-      type="button"
-      (click)="onAddClick(grid)">
-      Add
-    </button>
+      <div class="grid-header">
+        <h3 [matTooltip]="gridId" class="grid-title">{{ grid.title }}</h3>
+        <div class="grid-actions">
+          <button
+            *ngIf="grid.canCreate"
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="onAddClick(grid)">
+            Add
+          </button>
+          <button
+            *ngIf="hasCheckboxChanges()"
+            mat-raised-button
+            color="accent"
+            type="button"
+            (click)="onSaveCheckboxChanges(grid)">
+            Save
+          </button>
+        </div>
+      </div>
 
       <div class="table-wrapper">
-        <!--      <table mat-table [dataSource]="grid.rows" class="full-width-table grid-table">-->
         <table mat-table [dataSource]="dataSource" class="full-width-table grid-table">
           <ng-container *ngFor="let column of grid.columns" [matColumnDef]="column.field">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ column.label }}
-            </th>
-
-            <td mat-cell *matCellDef="let row">
-              {{ formatCellValue(getCellValue(row, column.dataPath || column.field), column.format) }}
+            <th mat-header-cell *matHeaderCellDef [ngClass]="getColumnClass(column)">{{ column.label }}</th>
+            <td mat-cell *matCellDef="let row" [ngClass]="getColumnClass(column)">
+              <ng-container [ngSwitch]="column.format">
+                <mat-checkbox
+                  *ngSwitchCase="'checkbox'"
+                  [checked]="getCellValue(row, column.dataPath || column.field)"
+                  (click)="$event.stopPropagation()"
+                  (change)="onCheckboxChange(row, column, $event.checked)">
+                </mat-checkbox>
+                <span *ngSwitchDefault>
+                {{ formatCellValue(getCellValue(row, column.dataPath || column.field), column.format) }}
+                </span>
+              </ng-container>
             </td>
           </ng-container>
-
           <tr mat-header-row *matHeaderRowDef="grid.displayedColumns"></tr>
-
           <tr
             mat-row
             *matRowDef="let row; columns: grid.displayedColumns;"
             class="clickable-row"
-            (click)="onRowClick(grid, row)">
+            (click)="onRowClick(grid, row)">e
           </tr>
         </table>
       </div>
