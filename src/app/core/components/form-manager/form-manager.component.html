@@ -54,6 +54,11 @@
               [field]="control"
               [formGroup]="formGroup">
             </app-widget-date1>
+            <app-widget-checkbox
+              *ngSwitchCase="TypeConstants.CONTROL_CHECKBOX"
+              [field]="control"
+              [formGroup]="formGroup">
+            </app-widget-checkbox>
 
 
             <input *ngSwitchCase="TypeConstants.CONTROL_HIDDEN"

@@ -254,18 +254,43 @@ export class GridComponent implements OnChanges {
     ).subscribe({
       next: (response: any) => {
         this.checkboxChanges.clear();
-        const count = response.data.updatedCount;
+
         this.snackBar.open(
-          response.message,
+          response?.message || 'Updated successfully.',
           'Close',
           {
-            duration: 7000,
-            // horizontalPosition: 'right',
-            // verticalPosition: 'top'
+            duration: 7000
+          }
+        );
+      },
+
+      error: (error) => {
+        const message =
+          error?.error?.message ||
+          error?.error?.detail ||
+          error?.message ||
+          'Unable to save changes.';
+
+        this.snackBar.open(
+          message,
+          'Close',
+          {
+            duration: 10000
           }
         );
       }
     });
+  }
 
+  get loading$() {
+    return this.gridService.loading$;
+  }
+
+  get error$() {
+    return this.gridService.error$;
+  }
+
+  reloadGrid(): void {
+    this.gridService.loadGrid(this.gridId, true, this.params);
   }
 }

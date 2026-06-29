@@ -1,4 +1,4 @@
 export class GridConstants {
 // AUTO GENERATED
-  static readonly NOT_APPLICABLE = '000';  static readonly TO_BE_ANNOUNCED = '999';  static readonly USER_ANOVA = '001';  static readonly POSITION = '005';  static readonly EVENT = '004';  static readonly FLOOR = '009';  static readonly ROOM = '003';  static readonly ROOM_CATEGORY = '002';  static readonly TRANSACTION_ITEM_STAGED = '006';  static readonly GRID_ROLE_MENU = '010';  static readonly ROLE = '007';  static readonly ROLE_PROCESS = '008';}
+  static readonly NOT_APPLICABLE = '000';  static readonly TO_BE_ANNOUNCED = '999';  static readonly USER_ANOVA = '001';  static readonly POSITION = '005';  static readonly EVENT = '004';  static readonly FLOOR = '009';  static readonly ROOM = '003';  static readonly ROOM_CATEGORY = '002';  static readonly TRANSACTION_ITEM_STAGED = '006';  static readonly ROLE = '007';  static readonly ROLE_MENU = '010';  static readonly ROLE_PROCESS_DETAIL = '011';  static readonly ROLE_PROCESS_PROCESS_DRIVEN = '008';}
 

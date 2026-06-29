@@ -9,7 +9,6 @@
       <mat-label>{{field.label}}</mat-label>
       <mat-select
         [formControlName]="field.name"
-        [disabled]="field.readonly"
         (selectionChange)="changed()"
         panelClass="wide-panel">
 

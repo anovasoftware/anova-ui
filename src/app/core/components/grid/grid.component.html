@@ -1,4 +1,23 @@
 <div [ngClass]="{ 'printable-area': usePageContainer }">
+  <div *ngIf="loading$ | async" class="grid-loading">
+    Loading grid...
+  </div>
+
+  <div *ngIf="error$ | async as errorMessage" class="grid-error">
+    <h3>Unable to load grid</h3>
+    <p>{{ errorMessage }}</p>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="reloadGrid()">
+      Retry
+    </button>
+  </div>
+
+  <ng-container *ngIf="!(loading$ | async) && !(error$ | async)">
+    <!-- your existing grid/table markup goes here -->
+  </ng-container>
   <section *ngIf="grid$ | async as grid">
     <ng-container *ngIf="setGridData(grid)">
       <div class="grid-header">

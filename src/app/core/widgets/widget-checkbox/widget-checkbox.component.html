@@ -1,0 +1,18 @@
+<div [formGroup]="formGroup" class="checkbox-wrapper">
+  <mat-checkbox
+    [formControlName]="field.name"
+    [id]="field.name"
+  >
+    {{ field.label }}
+  </mat-checkbox>
+
+  <div
+    class="checkbox-error"
+    *ngIf="formGroup.get(field.name)?.invalid &&
+           (formGroup.get(field.name)?.touched || formGroup.get(field.name)?.dirty)"
+  >
+    <ng-container *ngIf="hasError(field.name, 'required')">
+      This field is required.
+    </ng-container>
+  </div>
+</div>
