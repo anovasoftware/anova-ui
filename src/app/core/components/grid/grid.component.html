@@ -52,6 +52,7 @@
                   *ngSwitchCase="'checkbox'"
                   [checked]="getCellValue(row, column.dataPath || column.field)"
                   (click)="$event.stopPropagation()"
+                  [disabled]="row.selectedDisabled === true"
                   (change)="onCheckboxChange(row, column, $event.checked)">
                 </mat-checkbox>
                 <span *ngSwitchDefault>

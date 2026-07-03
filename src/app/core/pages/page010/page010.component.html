@@ -20,25 +20,6 @@
         </div>
       </ng-container>
     </mat-tab>
-    <mat-tab label="Processes">
-      <ng-container *ngIf="pk">
-        <app-grid-manager
-          [gridId]="GridConstants.ROLE_PROCESS_PROCESS_DRIVEN"
-          [usePageContainer]="false"
-          [params]="{ roleId: pk }">
-        </app-grid-manager>
-      </ng-container>
-    </mat-tab>
-    <mat-tab label="Process Details">
-      <ng-container *ngIf="pk">
-        <app-grid-manager
-          [gridId]="GridConstants.ROLE_PROCESS_DETAIL"
-          [usePageContainer]="false"
-          [params]="{ roleId: pk }">
-        </app-grid-manager>
-      </ng-container>
-    </mat-tab>
-
     <mat-tab label="Menus">
       <ng-container *ngIf="pk">
         <app-grid-manager
@@ -49,6 +30,24 @@
       </ng-container>
     </mat-tab>
 
+    <mat-tab label="Form Processes">
+      <ng-container *ngIf="pk">
+        <app-grid-manager
+          [gridId]="GridConstants.ROLE_PROCESS_FORM"
+          [usePageContainer]="false"
+          [params]="{ roleId: pk }">
+        </app-grid-manager>
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="Form Process Details">
+      <ng-container *ngIf="pk">
+        <app-grid-manager
+          [gridId]="GridConstants.ROLE_PROCESS_DETAIL"
+          [usePageContainer]="false"
+          [params]="{ roleId: pk }">
+        </app-grid-manager>
+      </ng-container>
+    </mat-tab>
   </mat-tab-group>
 </div>
 
