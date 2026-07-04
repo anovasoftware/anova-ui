@@ -4,6 +4,7 @@ import {GridConstants} from '../../../../constants/grid_constants';
 import {ApiService} from '../../../services/api.service';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {MenuConstants} from '../../../../constants/menu_constants';
+import {PageConstants} from '../../../../constants/page_constants';
 
 @Directive()
 export abstract class PageBaseComponent implements OnInit {
@@ -13,8 +14,9 @@ export abstract class PageBaseComponent implements OnInit {
   params: Record<string, string> = {};
   pk = '';
   componentLoaded = false;
-  selectedTabIndexes: { [key: string]: number } = {};
 
+  selectedTabIndex = 0;
+  protected tabIndexKey = '';
 
   protected constructor(
     protected route: ActivatedRoute
@@ -33,6 +35,8 @@ export abstract class PageBaseComponent implements OnInit {
       this.gridId = queryParams['gridId'] ?? GridConstants.NOT_APPLICABLE;
       this.menuId = params['menuId'] || MenuConstants.NOT_APPLICABLE;
       this.pk = queryParams['pk'] ?? '';
+
+      this.loadTabIndex();
 
       this.params = params;
       this.onParamsLoaded();
@@ -84,4 +88,19 @@ export abstract class PageBaseComponent implements OnInit {
     // optional override
   }
 
+  protected loadTabIndex(): void {
+    console.log('loadTabIndex');
+    if (this.tabIndexKey) {
+      const value = sessionStorage.getItem(this.tabIndexKey);
+      this.selectedTabIndex = value ? Number(value) : 0;
+    }
+  }
+
+  protected saveTabIndex(index: number): void {
+    this.selectedTabIndex = index;
+    console.log('saveTabIndex', index);
+    if (this.tabIndexKey) {
+      sessionStorage.setItem(this.tabIndexKey, index.toString());
+    }
+  }
 }

@@ -12,6 +12,7 @@ import {PageBaseComponent} from '../page-base/page-base.component';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {GridManagerComponent} from '../../components/grid-manager/grid-manager.component';
 import {GridConstants} from '../../../../constants/grid_constants';
+import {PageConstants} from '../../../../constants/page_constants';
 
 @Component({
   selector: 'app-page010',
@@ -30,6 +31,7 @@ export class Page010Component extends PageBaseComponent {
   protected readonly FormConstants = FormConstants;
   protected readonly TypeConstants = TypeConstants;
 
+  protected override tabIndexKey = 'tab-page010';
   record: Role | null = null;
 
   constructor(

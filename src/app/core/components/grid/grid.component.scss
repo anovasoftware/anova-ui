@@ -3,7 +3,7 @@
 @use 'styles/variables' as *;
 @use 'styles/themes' as theme;
 @use 'styles/toolbar' as *;
-
+@use 'styles/colors' as colors;
 
 .grid-header {
   display: flex;
@@ -87,3 +87,15 @@
 //  width: 40px;
 //  border-color: #6aaeff;
 //}
+.true-cell {
+  background-color: colors.$success-bg;
+  //color: #1b5e20;
+  font-weight: 500;
+   text-align: center;
+}
+
+.false-cell {
+  background-color: colors.$danger-bg;
+  //color: #b71c1c;
+  font-weight: 500;
+}

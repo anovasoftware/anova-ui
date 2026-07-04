@@ -146,6 +146,17 @@ export class GridComponent implements OnChanges {
     }
   }
 
+  getCellClass(row: any, column: any): string[] {
+    const classes = [this.getColumnClass(column)];
+
+    if (column.format === 'truefalse') {
+      const value = this.getCellValue(row, column.dataPath || column.field);
+      classes.push(value ? 'true-cell' : 'false-cell');
+    }
+
+    return classes;
+  }
+
   onAddClick(grid: any): void {
     this.openGridRecord(grid, 'new', 'create', null);
   }

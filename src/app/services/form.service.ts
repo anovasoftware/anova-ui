@@ -18,8 +18,9 @@ export class FormService {
     return this.api.get<FormResponse>(url);
   }
 
-  submitForm(formId: string, recordId: string, formData: any): Observable<any> {
-    const url = this.getUrl(formId, recordId)
+  submitForm(formId: string, recordId: string, action: string, formData: any): Observable<any> {
+    const url = this.getUrl(formId, recordId, action, formData);
+    console.log(formData);
     return this.api.post(url, formData);
   }
 

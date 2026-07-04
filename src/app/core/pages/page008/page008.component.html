@@ -1,9 +1,13 @@
 <div class="printable-area" *ngIf="componentLoaded">
   <!--  <h2>{{ user?.username }}</h2>-->
 
-  <mat-tab-group [mat-stretch-tabs]="false" class="mat-elevation-z4">
+  <mat-tab-group
+    [selectedIndex]="selectedTabIndex"
+    (selectedIndexChange)="saveTabIndex($event)"
+    [mat-stretch-tabs]="false"
+    class="mat-elevation-z4">
     <mat-tab label="Profile">
-      <ng-container *ngIf="user?.person as person">
+      <ng-container *ngIf="record?.person as person">
         <app-form-manager
           [formId]="FormConstants.PROFILE"
           [recordId]="person.personId"
@@ -16,7 +20,8 @@
             mat-raised-button
             color="primary"
             type="submit"
-            (click)="launchForm(FormConstants.PROFILE, person.personId, 'update')">
+            (click)="editRecord()">
+<!--            (click)="launchForm(FormConstants.PROFILE, person.personId, 'update')">-->
             Edit
           </button>
         </div>
@@ -25,7 +30,7 @@
     </mat-tab>
 
     <mat-tab label="Hotel Access">
-      <ng-container *ngIf="user as currentUser">
+      <ng-container *ngIf="record as currentUser">
         <app-form-manager
           [formId]="FormConstants.USER_HOTEL"
           [recordId]="currentUser.userId"
@@ -36,7 +41,7 @@
     </mat-tab>
 
     <mat-tab label="Anova Roles">
-      <ng-container *ngIf="user as currentUser">
+      <ng-container *ngIf="record as currentUser">
         <app-form-manager
           [formId]="FormConstants.USER_ROLE"
           [recordId]="currentUser.userId"
@@ -48,7 +53,7 @@
 
     </mat-tab>
     <mat-tab label="Hotel Roles">
-      <ng-container *ngIf="user as currentUser">
+      <ng-container *ngIf="record as currentUser">
         <app-form-manager
           [formId]="FormConstants.USER_ROLE"
           [recordId]="currentUser.userId"

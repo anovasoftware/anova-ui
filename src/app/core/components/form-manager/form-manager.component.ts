@@ -30,6 +30,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {WidgetSpinnerComponent} from '../../widgets/widget-spinner/widget-spinner.component';
 import {WidgetDate1Component} from '../../widgets/widget-date1/widget-date1.component';
 import {WidgetCheckboxComponent} from '../../widgets/widget-checkbox/widget-checkbox.component';
+import {log} from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 
 type DialogData = {
@@ -220,10 +221,12 @@ export class FormManagerComponent implements OnInit {
 
     const payload = {
       recordId: this.recordId,
+      ...this.params,
       ...this.formGroup.getRawValue()
     };
+    console.log('submitForm response:', payload);
+    this.service.submitForm(this.formId, this.recordId, 'save', payload).subscribe({
 
-    this.service.submitForm(this.formId, this.recordId, payload).subscribe({
       next: (response) => {
         const data = response.data;
         if (response.success) {
