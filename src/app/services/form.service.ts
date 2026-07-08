@@ -21,7 +21,14 @@ export class FormService {
   submitForm(formId: string, recordId: string, action: string, formData: any): Observable<any> {
     const url = this.getUrl(formId, recordId, action, formData);
     console.log(formData);
-    return this.api.post(url, formData);
+
+    let result = null;
+    if (recordId === 'new') {
+      result = this.api.post(url, formData);
+    } else {
+      result = this.api.patch(url, formData);
+    }
+    return result;
   }
 
   getUrl(formId: string, recordId?: string | null, action?: string | null, params?: any): string {

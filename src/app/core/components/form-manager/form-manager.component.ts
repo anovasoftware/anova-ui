@@ -216,7 +216,6 @@ export class FormManagerComponent implements OnInit {
       return;
     }
 
-
     this.error = null;
 
     const payload = {
@@ -224,9 +223,8 @@ export class FormManagerComponent implements OnInit {
       ...this.params,
       ...this.formGroup.getRawValue()
     };
-    console.log('submitForm response:', payload);
-    this.service.submitForm(this.formId, this.recordId, 'save', payload).subscribe({
 
+    this.service.submitForm(this.formId, this.recordId, 'save', payload).subscribe({
       next: (response) => {
         const data = response.data;
         if (response.success) {
