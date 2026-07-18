@@ -21,7 +21,6 @@
 //     req: HttpRequest<any>,
 //     next: HttpHandler
 //   ): Observable<HttpEvent<any>> {
-//     console.log('JwtInterceptor running');
 //     const token = this.authService.getAccessToken();
 //     const hotelId = this.globalService.currentHotelId;
 //     console.log('hotelId', hotelId);

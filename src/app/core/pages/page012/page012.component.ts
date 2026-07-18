@@ -13,7 +13,7 @@ import {FormDialogService} from '../../../services/form-dialog.service';
 import {GlobalService} from '../../../services/global.service';
 
 @Component({
-  selector: 'app-page011',
+  selector: 'app-page012',
   imports: [
     PageTabComponent,
     MatTabGroup,
@@ -23,10 +23,10 @@ import {GlobalService} from '../../../services/global.service';
     FormManagerComponent,
     MatButton
   ],
-  templateUrl: './page011.component.html',
-  styleUrl: './page011.component.scss'
+  templateUrl: './page012.component.html',
+  styleUrl: './page012.component.scss'
 })
-export class Page011Component extends PageBaseComponent {
+export class Page012Component extends PageBaseComponent {
   protected readonly GridConstants = GridConstants;
   protected readonly FormConstants = FormConstants;
 
@@ -38,14 +38,16 @@ export class Page011Component extends PageBaseComponent {
   ) {
     super(route);
   }
+
+  // i am using hotel id since from that, I can get the clientid
   get hotelId(): string {
     return this.globalService.currentHotelId;
   }
 
-  editHotelDetails(): void {
+  editClientDetails(): void {
     this.launchForm(
       this.formDialogService,
-      FormConstants.HOTEL,
+      FormConstants.CLIENT,
       this.hotelId,
       'update',
       'hotel_id'

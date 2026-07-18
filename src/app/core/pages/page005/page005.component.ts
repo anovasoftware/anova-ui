@@ -98,7 +98,6 @@ export class Page005Component {
     const rfidUid = (value || '').trim();
 
     this.rfidInput.nativeElement.value = '';
-    console.log(rfidUid);
 
     if (!rfidUid) {
       this.focusRfidInput();

@@ -75,10 +75,10 @@ export class NavigatorComponent implements OnInit, OnDestroy {
         this.menuId = menuId;
 
         if (!menus || menus.length === 0) {
-          if (!this.menuReloadRequested) {
-            this.menuReloadRequested = true;
-            this.menuService.loadMenus(); // or whatever your method is called
-          }
+          // if (!this.menuReloadRequested) {
+          //   this.menuReloadRequested = true;
+          //   this.menuService.loadMenus();
+          // }
           return;
         }
 

@@ -13,7 +13,6 @@ export function handleForm001Response(
   }
 
   if (data?.user) {
-    console.log(data.user);
     authService.storeUser(data.user, true); // 🔥 THIS triggers everything downstream
   }
 

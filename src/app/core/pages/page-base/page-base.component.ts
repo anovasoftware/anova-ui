@@ -24,12 +24,6 @@ export abstract class PageBaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.route.queryParamMap.subscribe(params => {
-    //   if (this.pk) {
-    //     // this.loadUser(this.pk);
-    //   }
-    // });
-
     this.route.queryParams.subscribe(queryParams => {
       const {gridId, ...params} = queryParams;
       this.gridId = queryParams['gridId'] ?? GridConstants.NOT_APPLICABLE;
@@ -89,7 +83,6 @@ export abstract class PageBaseComponent implements OnInit {
   }
 
   protected loadTabIndex(): void {
-    console.log('loadTabIndex');
     if (this.tabIndexKey) {
       const value = sessionStorage.getItem(this.tabIndexKey);
       this.selectedTabIndex = value ? Number(value) : 0;
@@ -98,7 +91,6 @@ export abstract class PageBaseComponent implements OnInit {
 
   protected saveTabIndex(index: number): void {
     this.selectedTabIndex = index;
-    console.log('saveTabIndex', index);
     if (this.tabIndexKey) {
       sessionStorage.setItem(this.tabIndexKey, index.toString());
     }

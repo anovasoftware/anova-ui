@@ -200,12 +200,12 @@ export class GlobalService {
       ...this.breadcrumbsSubject.value,
       item
     ]);
-    console.log(
-      this.breadcrumbsSubject.value
-        .map(x => x.label)
-        .join(' > ')
-    );
-
+    // console.log(
+    //   this.breadcrumbsSubject.value
+    //     .map(x => x.label)
+    //     .join(' > ')
+    // );
+    //
     // console.table(this.breadcrumbsSubject.value);
   }
 

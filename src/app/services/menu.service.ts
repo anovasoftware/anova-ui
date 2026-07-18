@@ -7,6 +7,7 @@ import {ApiData, ApiResponse} from '../models/api-response';
 import {MenuConstants} from '../../constants/menu_constants';
 import {TypeConstants} from '../../constants/type_constants';
 import {HotelConstants} from '../../constants/hotel_constants';
+import {tap} from 'rxjs/operators';
 
 
 @Injectable({providedIn: 'root'})
@@ -45,7 +46,6 @@ export class MenuService {
   }
 
   loadMenus(hotelTypeId: string | null = null): void {
-    console.log('loading menus');
     this.api.get<ApiResponse<ApiData<Menu>>>('public/table/static/menu/').subscribe({
       next: (response) => {
         let menus: Menu[] = response?.data.records || [];
@@ -142,7 +142,8 @@ export class MenuService {
     ]).pipe(
       map(([menus, currentMenuId, currentHotelId, user]) => {
         const allowedMenuIds = new Set(user?.menus?.map(m => m.menuId) ?? []);
-        const hotelSelected = this.globalService.currentHotelId != HotelConstants.NOT_APPLICABLE;
+        // const hotelSelected = this.globalService.currentHotelId != HotelConstants.NOT_APPLICABLE;
+        const hotelSelected = currentHotelId !== HotelConstants.NOT_APPLICABLE;
 
         return menus
           .filter(m => {

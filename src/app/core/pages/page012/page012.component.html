@@ -1,0 +1,24 @@
+<app-page-tab *ngIf="componentLoaded">
+  <mat-tab-group [mat-stretch-tabs]="false">
+    <mat-tab label="Setup and Configuration">
+      <ng-container *ngIf="hotelId">
+        <app-form-manager
+          [formId]="FormConstants.CLIENT"
+          [recordId]=hotelId
+          action="view"
+          [inline]="true"
+        >
+        </app-form-manager>
+        <div class="button-row">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="editClientDetails()">
+            Edit
+          </button>
+        </div>
+      </ng-container>
+    </mat-tab>
+  </mat-tab-group>
+</app-page-tab>

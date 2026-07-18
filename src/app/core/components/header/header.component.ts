@@ -167,7 +167,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             // utilities/base/user/profile
             this.authService.getUserProfile().subscribe({
               next: (profileResponse) => {
-                console.log('getUserProfile response:', profileResponse);
                 this.user = profileResponse.data.user || profileResponse.data;
                 this.authService.storeUser(this.user, true);
                 this.globalService.setCurrentMenuId(MenuConstants.HOME);

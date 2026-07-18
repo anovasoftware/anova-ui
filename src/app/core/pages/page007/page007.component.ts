@@ -22,7 +22,6 @@ export class Page007Component {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.gridId = params['gridId'];
-      console.log('gridId:', this.gridId);
     });
   }
 

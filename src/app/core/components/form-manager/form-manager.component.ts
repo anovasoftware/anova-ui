@@ -104,7 +104,6 @@ export class FormManagerComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(JSON.stringify(this.params));
     if (this.data) {
       this.formId = this.data.formId ?? this.formId;
       this.recordId = this.data.recordId ?? this.recordId;
@@ -134,7 +133,6 @@ export class FormManagerComponent implements OnInit {
             // this.debugFormValidity();
             this.header = this.form.header;
             this.componentLoaded = true;
-            console.log(this.form);
           }
         }
       },

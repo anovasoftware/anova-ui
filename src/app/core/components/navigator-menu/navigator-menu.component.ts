@@ -11,6 +11,7 @@ import {MenuService} from '../../../services/menu.service';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable} from 'rxjs';
 import {NavigationService} from '../../../services/navigation.service';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-navigator-menu',
@@ -41,7 +42,12 @@ export class NavigatorMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.navigationMenus$ = this.menuService.getCurrentNavigationMenus();
+  this.navigationMenus$ = this.menuService
+    .getCurrentNavigationMenus()
+    .pipe(
+      tap(menus => {
+      })
+    );
   }
 
   onCardClickOld(menu: Menu): void {

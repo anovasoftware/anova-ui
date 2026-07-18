@@ -19,7 +19,5 @@ export class Page009Component extends PageBaseComponent {
   }
 
   protected override onParamsLoaded(): void {
-    // console.log(this.gridId);
-    // console.log(this.params);
   }
 }
