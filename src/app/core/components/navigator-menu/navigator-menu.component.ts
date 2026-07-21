@@ -69,10 +69,9 @@ export class NavigatorMenuComponent implements OnInit {
     }
   }
   onCardClick(menu: Menu): void {
-    if (menu.disabled) {
-      return;
+    if (!menu.disabled) {
+      this.navigationService.navigateToMenu(menu);
     }
-
-    this.navigationService.navigateToMenu(menu);
+    return;
   }
 }

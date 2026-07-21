@@ -6,7 +6,7 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
 import {BreadcrumbComponent} from '../breadcrumb/breadcrumb.component';
 import {ApiService} from '../../../services/api.service';
 import {MenuService} from '../../../services/menu.service';
-import {map, observeOn, takeUntil} from 'rxjs/operators';
+import {map, observeOn, takeUntil, tap} from 'rxjs/operators';
 import {asyncScheduler, combineLatest, Observable, Subject} from 'rxjs';
 import {FooterComponent} from '../footer/footer.component';
 import {Menu} from '../../../models/menu';
@@ -50,6 +50,10 @@ export class MainComponent implements OnInit, OnDestroy {
       this.globalService.currentMenuId$,
       this.globalService.currentPageId$
     ]).pipe(
+      tap(([menuId, pageId]) => {
+        // console.log('menuId:', menuId);
+        // console.log('pageId:', pageId);
+      }),
       map(([menuId, pageId]) => {
         const menuPart = menuId ? menuId.padStart(3, '0') : '---';
         const pagePart = pageId ? pageId.padStart(3, '0') : '---';

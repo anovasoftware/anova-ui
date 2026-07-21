@@ -1,13 +1,17 @@
 import {ActivatedRoute} from '@angular/router';
-import {Directive, OnInit} from '@angular/core';
+import {Directive, inject, OnInit} from '@angular/core';
 import {GridConstants} from '../../../../constants/grid_constants';
 import {ApiService} from '../../../services/api.service';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {MenuConstants} from '../../../../constants/menu_constants';
 import {PageConstants} from '../../../../constants/page_constants';
+import {GlobalService} from '../../../services/global.service';
 
 @Directive()
 export abstract class PageBaseComponent implements OnInit {
+  protected readonly route = inject(ActivatedRoute);
+  protected readonly globalService = inject(GlobalService);
+
   gridId: string = GridConstants.NOT_APPLICABLE;
   menuId: string = MenuConstants.NOT_APPLICABLE;
 
@@ -19,7 +23,6 @@ export abstract class PageBaseComponent implements OnInit {
   protected tabIndexKey = '';
 
   protected constructor(
-    protected route: ActivatedRoute
   ) {
   }
 
@@ -95,4 +98,11 @@ export abstract class PageBaseComponent implements OnInit {
       sessionStorage.setItem(this.tabIndexKey, index.toString());
     }
   }
+  protected get hotelId(): string {
+    return this.globalService.currentHotelId;
+  }
+  protected get clientExtensionId(): string {
+    return <string>this.globalService.currentClient?.clientExtension?.clientExtensionId;
+  }
+
 }

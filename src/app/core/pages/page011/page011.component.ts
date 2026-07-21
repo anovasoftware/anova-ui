@@ -31,16 +31,13 @@ export class Page011Component extends PageBaseComponent {
   protected readonly FormConstants = FormConstants;
 
   constructor(
-    route: ActivatedRoute,
     private formDialogService: FormDialogService,
-    private globalService: GlobalService,
-
   ) {
-    super(route);
+    super();
   }
-  get hotelId(): string {
-    return this.globalService.currentHotelId;
-  }
+  // get hotelId(): string {
+  //   return this.globalService.currentHotelId;
+  // }
 
   editHotelDetails(): void {
     this.launchForm(

@@ -25,23 +25,15 @@ export class MenuService {
     private api: ApiService,
     private globalService: GlobalService
   ) {
-    // this.breadcrumbMenus$ = combineLatest([
-    //   this.menus$,
-    //   this.globalService.currentMenuId$
-    // ]).pipe(
-    //   map(([menus, currentMenuId]) =>
-    //     menus.length && currentMenuId
-    //       ? this.buildMenuPath(menus, currentMenuId)
-    //       : []
-    //   )
-    // );
+    this.loadMenus();
+
     this.globalService.currentHotel$.subscribe(hotel => {
-      if (hotel) {
+      // this.menusSubject.next([]);
+      // this.selectedMenuSubject.next(null);
+      if (hotel?.typeId) {
         this.loadMenus(hotel.typeId);
-      } else {
-        this.menusSubject.next([]);
-        this.selectedMenuSubject.next(null);
       }
+
     });
   }
 

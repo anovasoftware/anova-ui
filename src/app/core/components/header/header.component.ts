@@ -42,6 +42,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     MatDivider,
     MatFormFieldModule,
     MatSelectModule,
+    NgOptimizedImage,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
@@ -169,8 +170,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
               next: (profileResponse) => {
                 this.user = profileResponse.data.user || profileResponse.data;
                 this.authService.storeUser(this.user, true);
-                this.globalService.setCurrentMenuId(MenuConstants.HOME);
-                void this.router.navigateByUrl(`/navigator/${this.PageConstants.HOME}`);
+                this.navigateHomeAndReloadMenu();
+                // this.globalService.setCurrentMenuId(MenuConstants.HOME);
+                // void this.router.navigateByUrl(`/navigator/${this.PageConstants.HOME}`);
                 // this.router.navigate(['/menu', homeMenuId]);
               },
               error: (err) => {
@@ -199,5 +201,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   get currentHotel$() {
     return this.globalService.currentHotel$;
+  }
+
+  onLogoClick(event: MouseEvent): void {
+    event.preventDefault();
+    this.navigateHomeAndReloadMenu();
+  }
+
+  private navigateHomeAndReloadMenu(): void {
+    console.log('navigateHomeAndReloadMenu.1');
+    this.globalService.setCurrentMenuId(MenuConstants.HOME);
+
+    void this.router.navigateByUrl(
+      `/navigator/${this.PageConstants.HOME}`
+    );
   }
 }

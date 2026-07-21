@@ -32,36 +32,6 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  // ngOnInit(): void {
-  //   combineLatest([
-  //     this.route.paramMap,
-  //     this.menuService.menus$
-  //   ])
-  //   .pipe(takeUntil(this.destroy$))
-  //   .subscribe(([params, menus]) => {
-  //     const menuId = params.get('id') ?? '';
-  //     this.menuId = menuId;
-  //
-  //     if (menus.length > 0) {
-  //       const menu = menus.find(m => m.menuId === menuId) || null;
-  //       this.selectedMenu = menu;
-  //       this.page = menu?.page ?? null;
-  //
-  //       this.menuService.setSelectedMenu(menu);
-  //
-  //       if (menu?.page?.pageId) {
-  //         const route = `page${menu.page.pageId}`;
-  //         if (this.routeExistsInConfig(route)) {
-  //           this.router.navigate([`/${route}`]);
-  //           this.componentLoaded = true;
-  //         }
-  //       }
-  //     } else {
-  //       // console.warn('Menus not loaded yet');
-  //     }
-  //     // this.componentLoaded = true;
-  //   });
-  // }
   private menuReloadRequested = false;
 
   ngOnInit(): void {
@@ -75,10 +45,10 @@ export class NavigatorComponent implements OnInit, OnDestroy {
         this.menuId = menuId;
 
         if (!menus || menus.length === 0) {
-          // if (!this.menuReloadRequested) {
-          //   this.menuReloadRequested = true;
-          //   this.menuService.loadMenus();
-          // }
+          if (!this.menuReloadRequested) {
+            this.menuReloadRequested = true;
+            this.menuService.loadMenus(); // or whatever your method is called
+          }
           return;
         }
 
@@ -102,6 +72,69 @@ export class NavigatorComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  // ngOnInit(): void {
+  //   combineLatest([
+  //     this.route.paramMap,
+  //     this.menuService.menus$
+  //   ])
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe(([params, menus]) => {
+  //       const menuId = params.get('id') ?? '';
+  //
+  //       this.menuId = menuId;
+  //
+  //       if (!menus || menus.length === 0) {
+  //         return;
+  //       }
+  //
+  //       // if (!menus || menus.length === 0) {
+  //       //   if (!this.menuReloadRequested) {
+  //       //     this.menuReloadRequested = true;
+  //       //     this.menuService.loadMenus();
+  //       //   }
+  //       //
+  //       //   return;
+  //       // }
+  //
+  //       this.menuReloadRequested = false;
+  //       const menu =  menus.find(item => item.menuId === menuId) ?? null;
+  //
+  //       this.selectedMenu = menu;
+  //       this.page = menu?.page ?? null;
+  //
+  //       this.globalService.setCurrentMenuId(menuId);
+  //       this.menuService.setSelectedMenu(menu);
+  //
+  //       const pageId = menu?.page?.pageId;
+  //
+  //       if (!pageId) {
+  //         this.componentLoaded = true;
+  //         return;
+  //       }
+  //
+  //       const pageRoute = `page${pageId}`;
+  //
+  //       // console.log('Navigator menuId:', menuId);
+  //       // console.log('Navigator pageId:', pageId);
+  //       // console.log('Navigator pageRoute:', pageRoute);
+  //
+  //       if (!this.routeExistsInConfig(pageRoute)) {
+  //         console.warn(`Route does not exist: ${pageRoute}`);
+  //         this.componentLoaded = true;
+  //         return;
+  //       }
+  //
+  //       /*
+  //        * Set the page ID before navigating because navigation destroys
+  //        * the NavigatorComponent.
+  //        */
+  //       this.globalService.setCurrentPageId(pageId);
+  //       this.componentLoaded = true;
+  //
+  //       this.router.navigate([`/${pageRoute}`]);
+  //     });
+  // }
 
   ngOnDestroy() {
     this.destroy$.next();

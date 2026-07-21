@@ -11,11 +11,9 @@ import {ApiService} from '../../../services/api.service';
   styleUrl: './page009.component.scss'
 })
 export class Page009Component extends PageBaseComponent {
-
   constructor(
-    route: ActivatedRoute,
   ) {
-    super(route);
+    super();
   }
 
   protected override onParamsLoaded(): void {

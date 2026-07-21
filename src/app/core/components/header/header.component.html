@@ -1,24 +1,33 @@
 <div class="toolbar-bar" *ngIf="componentLoaded">
   <div class="printable-area-flex">
-    <a [routerLink]="'/navigator/001'" class="app-title logo-link" title="version: {{version}}">
-      <!--    <span class="app-title" title="version: {{version}}">-->
+    <a
+      href=""
+      class="app-title logo-link"
+      title="version: {{ version }}"
+      (click)="onLogoClick($event)"
+    >
       <span class="anova">anova</span>
+
       <span class="sea-wrapper">
-        <img src="assets/icons/seagull.svg" alt="Seagull" class="seagull-icon"/>
+        <img
+          ngSrc="assets/icons/seagull.svg"
+          alt="Seagull"
+          class="seagull-icon"
+          height="800"
+          width="800"
+        />
         <span class="sea">sea</span>
       </span>
-      <!--    </span>-->
     </a>
-
     <span class="flex-spacer"></span>
 
     <nav class="header-nav" *ngIf="headerMenus.length > 0">
       <ng-container *ngFor="let item of headerMenus">
 
         <a *ngIf="!menuService.hasChildren(item.menuId)"
-           [routerLink]="item.route"
-           routerLinkActive="active-link"
-           class="header-link">
+          [routerLink]="item.route"
+          routerLinkActive="active-link"
+          class="header-link">
           {{ item.description }}
         </a>
 
@@ -58,14 +67,14 @@
           (click)="$event.preventDefault()">
           {{ selectedHotel.description }}
         </a>
-        <span class="toolbar-separator" *ngIf="selectedHotel.currentEvent">|</span>
+        <span class="toolbar-separator" *ngIf="selectedHotel.hotelExtension?.currentEvent">|</span>
 
         <a
-          *ngIf="selectedHotel.currentEvent"
+          *ngIf="selectedHotel.hotelExtension?.currentEvent"
           class="header-link"
           href=""
           (click)="$event.preventDefault()">
-            {{ selectedHotel.currentEvent.code }}
+            {{ selectedHotel.hotelExtension?.currentEvent?.code }}
         </a>
         <mat-menu #hotelMenu="matMenu">
           <button
@@ -102,7 +111,7 @@
       <!--        </mat-form-field>-->
       <!--      </div>-->
 
-      <button mat-icon-button [matMenuTriggerFor]="accountMenu" title="{{user?.name}}">
+      <button mat-icon-button [matMenuTriggerFor]="accountMenu" title="{{user?.displayAs}}">
         <mat-icon>account_circle</mat-icon>
       </button>
 

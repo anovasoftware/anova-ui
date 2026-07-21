@@ -18,7 +18,6 @@ import {GlobalService} from '../../../services/global.service';
     PageTabComponent,
     MatTabGroup,
     MatTab,
-    GridManagerComponent,
     NgIf,
     FormManagerComponent,
     MatButton
@@ -31,24 +30,17 @@ export class Page012Component extends PageBaseComponent {
   protected readonly FormConstants = FormConstants;
 
   constructor(
-    route: ActivatedRoute,
     private formDialogService: FormDialogService,
-    private globalService: GlobalService,
-
   ) {
-    super(route);
+    super();
   }
 
-  // i am using hotel id since from that, I can get the clientid
-  get hotelId(): string {
-    return this.globalService.currentHotelId;
-  }
 
   editClientDetails(): void {
     this.launchForm(
       this.formDialogService,
       FormConstants.CLIENT,
-      this.hotelId,
+      this.clientExtensionId,
       'update',
       'hotel_id'
     );

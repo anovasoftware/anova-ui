@@ -34,11 +34,10 @@ export class Page008Component extends PageBaseComponent {
   record: User | null = null;
 
   constructor(
-    route: ActivatedRoute,
     private api: ApiService,
     private formDialogService: FormDialogService,
   ) {
-    super(route);
+    super();
   }
 
   protected override onParamsLoaded(): void {

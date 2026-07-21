@@ -18,8 +18,9 @@ export const appConfig: ApplicationConfig = {
           const globalService = inject(GlobalService);
 
           const token = authService.getAccessToken();
-          const hotelId = globalService.currentHotelId;
-
+          // const hotelId = globalService.currentHotelId;
+          // const hotelId = globalService.currentHotel?.hotelId;
+          const hotelId = 'A004';
           let modifiedReq = req;
 
           if (token) {
