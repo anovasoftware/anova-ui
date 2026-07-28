@@ -6,6 +6,7 @@ import {FormDialogService} from '../../../services/form-dialog.service';
 import {MenuConstants} from '../../../../constants/menu_constants';
 import {PageConstants} from '../../../../constants/page_constants';
 import {GlobalService} from '../../../services/global.service';
+import {User} from '../../../models/user';
 
 @Directive()
 export abstract class PageBaseComponent implements OnInit {
@@ -98,8 +99,14 @@ export abstract class PageBaseComponent implements OnInit {
       sessionStorage.setItem(this.tabIndexKey, index.toString());
     }
   }
+  protected get user(): User | null {
+    return this.globalService?.currentUser;
+  }
   protected get hotelId(): string {
     return this.globalService.currentHotelId;
+  }
+  protected get clientId(): string {
+    return <string>this.globalService.currentClient?.clientId;
   }
   protected get clientExtensionId(): string {
     return <string>this.globalService.currentClient?.clientExtension?.clientExtensionId;

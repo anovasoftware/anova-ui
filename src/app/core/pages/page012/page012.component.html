@@ -1,7 +1,11 @@
-<app-page-tab *ngIf="componentLoaded">
-  <mat-tab-group [mat-stretch-tabs]="false">
+<app-page-tab *ngIf="componentLoaded && user?.currentClient?.clientId as clientId">
+  <mat-tab-group
+    [selectedIndex]="selectedTabIndex"
+    (selectedIndexChange)="saveTabIndex($event)"
+    [mat-stretch-tabs]="false"
+    class="mat-elevation-z4">
     <mat-tab label="Setup and Configuration">
-      <ng-container *ngIf="hotelId">
+      <ng-container *ngIf="user?.currentClient?.clientId">
         <app-form-manager
           [formId]="FormConstants.CLIENT"
           [recordId]=clientExtensionId
@@ -20,18 +24,27 @@
         </div>
       </ng-container>
     </mat-tab>
-    <mat-tab label="Currencies">
-<!--      <ng-container *ngIf="record as currentUser">-->
+<!--    <mat-tab label="Currencies">-->
+<!--      <ng-container *ngIf="record as client">-->
 <!--        <app-form-manager-->
-<!--          [formId]="FormConstants.USER_HOTEL"-->
-<!--          [recordId]="currentUser.userId"-->
+<!--          [formId]="FormConstants.CLIENT_CURRENCY"-->
+<!--          [recordId]="client.clientId"-->
 <!--          action="update"-->
 <!--          [inline]="true">-->
 <!--        </app-form-manager>-->
 <!--      </ng-container>-->
+<!--    </mat-tab>-->
 
-
+    <mat-tab label="Currencies">
+      <ng-container *ngIf="pk">
+        <app-grid-manager
+          [gridId]="GridConstants.CLIENT_CURRENCY"
+          [usePageContainer]="false"
+          [params]="{ clientId: pk }">
+        </app-grid-manager>
+      </ng-container>
     </mat-tab>
+
 
   </mat-tab-group>
 </app-page-tab>

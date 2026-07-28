@@ -11,6 +11,10 @@ import {MatButton} from '@angular/material/button';
 import {FormConstants} from '../../../../constants/form_constants';
 import {FormDialogService} from '../../../services/form-dialog.service';
 import {GlobalService} from '../../../services/global.service';
+import {User} from '../../../models/user';
+import {ApiService} from '../../../services/api.service';
+import {Client} from '../../../models/client';
+import {TypeConstants} from '../../../../constants/type_constants';
 
 @Component({
   selector: 'app-page012',
@@ -20,7 +24,8 @@ import {GlobalService} from '../../../services/global.service';
     MatTab,
     NgIf,
     FormManagerComponent,
-    MatButton
+    MatButton,
+    GridManagerComponent
   ],
   templateUrl: './page012.component.html',
   styleUrl: './page012.component.scss'
@@ -29,10 +34,23 @@ export class Page012Component extends PageBaseComponent {
   protected readonly GridConstants = GridConstants;
   protected readonly FormConstants = FormConstants;
 
+  protected override tabIndexKey = 'tab-page012';
+  record: Client | null = null;
+
   constructor(
+    private api: ApiService,
     private formDialogService: FormDialogService,
   ) {
     super();
+  }
+
+  protected override onParamsLoaded(): void {
+    console.log('onParamsLoaded');
+    this.loadRecord<Client>(
+      this.api,
+      `base/client/${this.pk}/`,
+      record => this.record = record
+    );
   }
 
 
@@ -42,9 +60,10 @@ export class Page012Component extends PageBaseComponent {
       FormConstants.CLIENT,
       this.clientExtensionId,
       'update',
-      'hotel_id'
+      'clientId'
     );
   }
 
 
+  protected readonly TypeConstants = TypeConstants;
 }
