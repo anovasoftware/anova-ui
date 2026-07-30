@@ -1,6 +1,10 @@
 <app-page-tab *ngIf="componentLoaded">
-  <mat-tab-group [mat-stretch-tabs]="false">
-    <mat-tab label="Hotel/Ship Details">
+  <mat-tab-group
+    [selectedIndex]="selectedTabIndex"
+    (selectedIndexChange)="saveTabIndex($event)"
+    [mat-stretch-tabs]="false"
+    class="mat-elevation-z4">
+    <mat-tab label="General">
       <ng-container *ngIf="hotelId">
         <app-form-manager
           [formId]="FormConstants.HOTEL"
@@ -44,6 +48,15 @@
       <div class="placeholder">
         Visual cabin layout coming later.
       </div>
+    </mat-tab>
+    <mat-tab label="Active Currencies">
+      <ng-container *ngIf="hotelId">
+        <app-grid-manager
+          [gridId]="GridConstants.HOTEL_CURRENCY"
+          [usePageContainer]="false"
+          [params]="{ hotelId: hotelId }">
+        </app-grid-manager>
+      </ng-container>
     </mat-tab>
 
   </mat-tab-group>

@@ -29,6 +29,7 @@ import {GlobalService} from '../../../services/global.service';
 export class Page011Component extends PageBaseComponent {
   protected readonly GridConstants = GridConstants;
   protected readonly FormConstants = FormConstants;
+    protected override tabIndexKey = 'tab-page011';
 
   constructor(
     private formDialogService: FormDialogService,
