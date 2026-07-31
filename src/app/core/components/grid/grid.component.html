@@ -4,7 +4,7 @@
   </div>
 
   <div *ngIf="error$ | async as errorMessage" class="grid-error">
-    <h3>Unable to load grid</h3>
+    <h3>Unable to load grid {{gridId}}</h3>
     <p>{{ errorMessage }}</p>
 
     <button

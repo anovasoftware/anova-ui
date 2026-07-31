@@ -1,0 +1,19 @@
+<app-page-tab *ngIf="componentLoaded && user?.currentClient?.clientId as clientId">
+  <mat-tab-group
+    [selectedIndex]="selectedTabIndex"
+    (selectedIndexChange)="saveTabIndex($event)"
+    [mat-stretch-tabs]="false"
+    class="mat-elevation-z4">
+    <mat-tab label="Pricing">
+      <ng-container *ngIf="pk">
+        <app-grid-manager
+          [gridId]="GridConstants.EVENT_CATEGORY_PRICE"
+          [usePageContainer]="false"
+          [params]="{eventId: pk}">
+        </app-grid-manager>
+      </ng-container>
+    </mat-tab>
+
+
+  </mat-tab-group>
+</app-page-tab>

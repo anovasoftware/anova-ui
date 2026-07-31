@@ -17,6 +17,7 @@ import {Page009Component} from './core/pages/page009/page009.component';
 import {Page010Component} from './core/pages/page010/page010.component';
 import {Page011Component} from './core/pages/page011/page011.component';
 import {Page012Component} from './core/pages/page012/page012.component';
+import {Page013Component} from './core/pages/page013/page013.component';
 
 
 export const routes: Routes = [
@@ -40,6 +41,7 @@ export const routes: Routes = [
       { path: 'page010', component: Page010Component },
       { path: 'page011', component: Page011Component },
       { path: 'page012', component: Page012Component },
+      { path: 'page013', component: Page013Component },
 
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
