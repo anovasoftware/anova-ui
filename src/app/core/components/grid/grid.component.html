@@ -4,7 +4,7 @@
   </div>
 
   <div *ngIf="error$ | async as errorMessage" class="grid-error">
-    <h3>Unable to load grid {{gridId}}</h3>
+    <h3>Unable to load grid {{ gridId }}</h3>
     <p>{{ errorMessage }}</p>
 
     <button
@@ -42,6 +42,32 @@
         </div>
       </div>
 
+<div class="lookup-row">
+  <mat-form-field
+    *ngFor="let entry of grid.lookups | keyvalue"
+    class="lookup-field"
+    appearance="outline">
+
+    <mat-label>{{ entry.value.label }}</mat-label>
+
+    <mat-select
+      [(value)]="entry.value.selectedId"
+      [disabled]="!entry.value.enabled"
+      (selectionChange)="lookupChanged()"
+      panelClass="wide-panel">
+
+      <mat-option
+        *ngFor="let option of entry.value.options"
+        [value]="option.id">
+
+        <span class="mono">
+          {{ option.description }}
+        </span>
+
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
       <div class="table-wrapper">
         <table mat-table [dataSource]="dataSource" class="full-width-table grid-table">
           <ng-container *ngFor="let column of grid.columns" [matColumnDef]="column.field">

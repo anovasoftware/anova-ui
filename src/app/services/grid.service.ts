@@ -84,6 +84,7 @@ export class GridService {
     ).subscribe({
       next: (response) => {
         const grid = response?.data?.grid || null;
+        console.log(grid);
 
         this.gridSubject.next(grid);
         this.loadedGridId = grid ? gridId : null;

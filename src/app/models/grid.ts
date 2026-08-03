@@ -12,7 +12,21 @@ export interface Column {
 export interface Row {
 
 }
+export interface LookupOptions {
+  id: string;
+  description: string;
+}
 
+export interface Lookup {
+  label: string;
+  selectedId?: string;
+  enabled?: boolean;
+  options: LookupOptions[];
+}
+
+export interface Lookups {
+  [lookupName: string]: Lookup;
+}
 export interface Grid {
   gridId: string;
   description: string;
@@ -23,4 +37,5 @@ export interface Grid {
   columns: Column[];
   rows: Row[];
   canCreate: boolean;
+  lookups?: Lookups;
 }

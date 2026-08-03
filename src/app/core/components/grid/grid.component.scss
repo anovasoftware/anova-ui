@@ -83,6 +83,7 @@
   --mdc-checkbox-selected-icon-color: #{map.get(theme.$primary-palette, 60)};
   --mdc-checkbox-selected-checkmark-color: #{map.get(theme.$neutral-palette, 95)};
 }
+
 //grid-col-checkbox {
 //  width: 40px;
 //  border-color: #6aaeff;
@@ -91,11 +92,25 @@
   background-color: colors.$success-bg;
   //color: #1b5e20;
   font-weight: 500;
-   text-align: center;
+  text-align: center;
 }
 
 .false-cell {
   background-color: colors.$danger-bg;
   //color: #b71c1c;
   font-weight: 500;
+}
+
+
+.lookup-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.lookup-field {
+  width: 220px;
+  font-size: 13px;
 }

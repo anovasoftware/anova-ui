@@ -23,8 +23,6 @@ import {TypeConstants} from '../../../../constants/type_constants';
     MatTabGroup,
     MatTab,
     NgIf,
-    FormManagerComponent,
-    MatButton,
     GridManagerComponent
   ],
   templateUrl: './page013.component.html',

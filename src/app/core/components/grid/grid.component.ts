@@ -21,6 +21,9 @@ import {MenuService} from '../../../services/menu.service';
 import {MatButton} from '@angular/material/button';
 import {MenuConstants} from '../../../../constants/menu_constants';
 import {MatCheckbox} from '@angular/material/checkbox';
+import {CommonModule, KeyValuePipe} from '@angular/common';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @Component({
@@ -48,6 +51,9 @@ import {MatCheckbox} from '@angular/material/checkbox';
     MatCheckbox,
     NgSwitchCase,
     NgSwitchDefault,
+    CommonModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
@@ -303,5 +309,9 @@ export class GridComponent implements OnChanges {
 
   reloadGrid(): void {
     this.gridService.loadGrid(this.gridId, true, this.params);
+  }
+
+  lookupChanged(): void {
+    this.reloadGrid();
   }
 }
