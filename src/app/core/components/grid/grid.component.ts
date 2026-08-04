@@ -24,6 +24,8 @@ import {MatCheckbox} from '@angular/material/checkbox';
 import {CommonModule, KeyValuePipe} from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import {Column, Grid} from '../../../models/grid';
+import {MatInput} from '@angular/material/input';
 
 
 @Component({
@@ -53,7 +55,8 @@ import {MatSelectModule} from '@angular/material/select';
     NgSwitchDefault,
     CommonModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatInput
   ],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
@@ -68,6 +71,7 @@ export class GridComponent implements OnChanges {
   public dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   checkboxChanges = new Map<string, any>();
+  currentGrid: any;
 
   constructor(
     private router: Router,
@@ -95,6 +99,7 @@ export class GridComponent implements OnChanges {
   }
 
   setGridData(grid: any): boolean {
+    this.currentGrid = grid;
     const rows = grid?.rows || [];
 
     if (this.dataSource.data !== rows) {
@@ -103,7 +108,6 @@ export class GridComponent implements OnChanges {
 
     return true;
   }
-
 
   getCellValue(row: any, path: string): any {
     if (!row || !path) return '';
@@ -307,11 +311,60 @@ export class GridComponent implements OnChanges {
     return this.gridService.error$;
   }
 
+  // reloadGrid(): void {
+  //   console.log('reloading grid', this.params);
+  //   this.gridService.loadGrid(this.gridId, true, this.params);
+  // }
   reloadGrid(): void {
-    this.gridService.loadGrid(this.gridId, true, this.params);
+    const params = {
+      ...this.params,
+      ...this.getLookupParams(this.currentGrid)
+    };
+    console.log(params);
+    this.gridService.loadGrid(
+      this.gridId,
+      true,
+      params
+    );
+  }
+
+  private getLookupParams(grid: any): Record<string, string> {
+    const params: Record<string, string> = {};
+
+    const lookups = grid?.lookups ?? {};
+
+    for (const lookup of Object.values(lookups) as any[]) {
+      const paramField = lookup.paramName;
+      const selectedValue = lookup.selectedId;
+
+      if (
+        paramField &&
+        selectedValue !== null &&
+        selectedValue !== undefined &&
+        selectedValue !== ''
+      ) {
+        params[paramField] = String(selectedValue);
+      }
+    }
+
+    return params;
   }
 
   lookupChanged(): void {
     this.reloadGrid();
   }
+
+  onCellChange(row: any, column: Column, rawValue: string): void {
+    const field = column.dataPath || column.field;
+
+    const value =
+      column.format === 'currency' || column.format === 'number'
+        ? rawValue === ''
+          ? null
+          : Number(rawValue)
+        : rawValue;
+
+    row[field] = value;
+  }
+
 }

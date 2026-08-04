@@ -219,13 +219,11 @@ export class GlobalService {
   }
 
   setCurrentMenuId(menuId: string): void {
-    console.log('setCurrentMenuId called:', menuId);
     const value = menuId || MenuConstants.HOME;
 
     queueMicrotask(() => {
       if (this.currentMenuIdSubject.value !== value) {
         this.currentMenuIdSubject.next(value);
-        console.log('currentMenuIdSubject.next:', value);
         this.authService.setCurrentMenuId(value);
       }
 

@@ -209,7 +209,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private navigateHomeAndReloadMenu(): void {
-    console.log('navigateHomeAndReloadMenu.1');
     this.globalService.setCurrentMenuId(MenuConstants.HOME);
 
     void this.router.navigateByUrl(

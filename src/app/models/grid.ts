@@ -7,6 +7,7 @@ export interface Column {
   dataPath: string;
   label: string;
   format: string;
+  editable: boolean;
 }
 
 export interface Row {
@@ -19,6 +20,7 @@ export interface LookupOptions {
 
 export interface Lookup {
   label: string;
+  paramName: string;
   selectedId?: string;
   enabled?: boolean;
   options: LookupOptions[];
@@ -37,5 +39,6 @@ export interface Grid {
   columns: Column[];
   rows: Row[];
   canCreate: boolean;
+  displayPk: boolean;
   lookups?: Lookups;
 }
