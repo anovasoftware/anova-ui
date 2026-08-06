@@ -5,6 +5,9 @@
 @use 'styles/toolbar' as *;
 @use 'styles/colors' as colors;
 
+
+/* Grid header */
+
 .grid-header {
   display: flex;
   align-items: center;
@@ -13,7 +16,7 @@
 }
 
 .grid-title {
-  margin: 8px 0 8px 0;
+  margin: 8px 0;
 }
 
 .grid-actions {
@@ -21,62 +24,143 @@
   gap: 8px;
 }
 
+
+/* Table container */
+
 .table-wrapper {
   overflow-x: auto;
-  border-radius: 10px;
+  background-color: white;
   border: 1px solid map.get(theme.$neutral-palette, 90);
-  background: white;
+  border-radius: 10px;
 }
 
 .full-width-table {
   width: 100%;
-  border-collapse: collapse;
   min-width: 700px;
+  border-collapse: collapse;
 }
+
+
+/* Grid table */
 
 .grid-table {
   .mat-mdc-header-cell,
   .mat-mdc-cell {
-    text-align: left !important;
-    justify-content: flex-start !important;
-    align-items: center;
+    text-align: left;
+    vertical-align: middle;
   }
 
   .mat-mdc-header-row {
-    background-color: map.get(theme.$neutral-palette, 95);
     height: 48px;
+    background-color: map.get(theme.$neutral-palette, 95);
   }
 
   .mat-mdc-header-cell {
-    //font-weight: 600;
-    //font-size: 0.9rem;
-    color: map.get(theme.$neutral-palette, 30);
-    border-bottom: 1px solid #dcdcdc;
     padding: 0.75rem 1rem;
+    color: map.get(theme.$neutral-palette, 30);
+    border-bottom: 1px solid map.get(theme.$neutral-palette, 85);
     white-space: nowrap;
   }
 
   .mat-mdc-row {
     height: 46px;
     transition: background-color 0.15s ease;
-  }
 
-  .mat-mdc-row:hover {
-    background-color: #fafafa;
+    &:hover {
+      background-color: map.get(theme.$neutral-palette, 98);
+    }
+
+    &:last-child .mat-mdc-cell {
+      border-bottom: none;
+    }
   }
 
   .mat-mdc-cell {
     padding: 0.75rem 1rem;
+    color: map.get(theme.$neutral-palette, 20);
     font-size: 0.92rem;
-    color: #222;
-    border-bottom: 1px solid #f0f0f0;
-    vertical-align: middle;
+    border-bottom: 1px solid map.get(theme.$neutral-palette, 95);
   }
 
-  .mat-mdc-row:last-child .mat-mdc-cell {
-    border-bottom: none;
+  .numeric-column {
+    width: 135px;
+    min-width: 135px;
+    max-width: 135px;
+  }
+
+  .mat-mdc-header-cell.numeric-column {
+    text-align: right;
+  }
+
+  .mat-mdc-cell.numeric-column {
+    text-align: right;
   }
 }
+
+
+/* Editable cells */
+
+//.grid-input {
+//  box-sizing: border-box;
+//  width: 110px;
+//  height: 30px;
+//  padding: 3px 8px;
+//  font: inherit;
+//  text-align: left;
+//  background-color: white;
+//  border: 1px solid map.get(theme.$neutral-palette, 70);
+//  border-radius: 4px;
+//
+//  &:focus {
+//    outline: none;
+//    border-color: map.get(theme.$primary-palette, 60);
+//  }
+//
+//  &:disabled {
+//    background-color: map.get(theme.$neutral-palette, 95);
+//    cursor: not-allowed;
+//  }
+//}
+.grid-input {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 110px;
+  min-width: 0;
+  height: 30px;
+  padding: 3px 8px;
+  font: inherit;
+  text-align: left;
+  background-color: white;
+  border: 1px solid map.get(theme.$neutral-palette, 70);
+  border-radius: 4px;
+
+  &:focus {
+    outline: none;
+    border-color: map.get(theme.$primary-palette, 60);
+  }
+
+  &:disabled {
+    background-color: map.get(theme.$neutral-palette, 95);
+    cursor: not-allowed;
+  }
+}
+.grid-input-number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+/* Hide number spinners in Chrome, Edge, Safari */
+.grid-input::-webkit-outer-spin-button,
+.grid-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide number spinners in Firefox */
+.grid-input[type='number'] {
+  appearance: textfield;
+}
+
+/* Checkbox */
 
 .grid-table .mat-mdc-checkbox {
   --mdc-checkbox-unselected-icon-color: #{map.get(theme.$neutral-palette, 60)};
@@ -84,29 +168,29 @@
   --mdc-checkbox-selected-checkmark-color: #{map.get(theme.$neutral-palette, 95)};
 }
 
-//grid-col-checkbox {
-//  width: 40px;
-//  border-color: #6aaeff;
-//}
+
+/* Boolean cells */
+
 .true-cell {
   background-color: colors.$success-bg;
-  //color: #1b5e20;
   font-weight: 500;
   text-align: center;
 }
 
 .false-cell {
   background-color: colors.$danger-bg;
-  //color: #b71c1c;
   font-weight: 500;
+  text-align: center;
 }
 
 
+/* Lookup controls */
+
 .lookup-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 16px;
-  flex-wrap: wrap;
   margin-bottom: 10px;
 }
 
@@ -114,3 +198,121 @@
   width: 220px;
   font-size: 13px;
 }
+
+
+
+
+//@use '@angular/material' as mat;
+//@use 'sass:map';
+//@use 'styles/variables' as *;
+//@use 'styles/themes' as theme;
+//@use 'styles/toolbar' as *;
+//@use 'styles/colors' as colors;
+//
+//.grid-header {
+//  display: flex;
+//  align-items: center;
+//  justify-content: space-between;
+//  margin-bottom: 12px;
+//}
+//
+//.grid-title {
+//  margin: 8px 0 8px 0;
+//}
+//
+//.grid-actions {
+//  display: flex;
+//  gap: 8px;
+//}
+//
+//.table-wrapper {
+//  overflow-x: auto;
+//  border-radius: 10px;
+//  border: 1px solid map.get(theme.$neutral-palette, 90);
+//  background: white;
+//}
+//
+//.full-width-table {
+//  width: 100%;
+//  border-collapse: collapse;
+//  min-width: 700px;
+//}
+//
+//.grid-table {
+//  .mat-mdc-header-cell,
+//  .mat-mdc-cell {
+//    text-align: left !important;
+//    justify-content: flex-start !important;
+//    align-items: center;
+//  }
+//
+//  .mat-mdc-header-row {
+//    background-color: map.get(theme.$neutral-palette, 95);
+//    height: 48px;
+//  }
+//
+//  .mat-mdc-header-cell {
+//    //font-weight: 600;
+//    //font-size: 0.9rem;
+//    color: map.get(theme.$neutral-palette, 30);
+//    border-bottom: 1px solid #dcdcdc;
+//    padding: 0.75rem 1rem;
+//    white-space: nowrap;
+//  }
+//
+//  .mat-mdc-row {
+//    height: 46px;
+//    transition: background-color 0.15s ease;
+//  }
+//
+//  .mat-mdc-row:hover {
+//    background-color: #fafafa;
+//  }
+//
+//  .mat-mdc-cell {
+//    padding: 0.75rem 1rem;
+//    font-size: 0.92rem;
+//    color: #222;
+//    border-bottom: 1px solid #f0f0f0;
+//    vertical-align: middle;
+//  }
+//
+//  .mat-mdc-row:last-child .mat-mdc-cell {
+//    border-bottom: none;
+//  }
+//}
+//
+//.grid-table .mat-mdc-checkbox {
+//  --mdc-checkbox-unselected-icon-color: #{map.get(theme.$neutral-palette, 60)};
+//  --mdc-checkbox-selected-icon-color: #{map.get(theme.$primary-palette, 60)};
+//  --mdc-checkbox-selected-checkmark-color: #{map.get(theme.$neutral-palette, 95)};
+//}
+//
+//.true-cell {
+//  background-color: colors.$success-bg;
+//  //color: #1b5e20;
+//  font-weight: 500;
+//  text-align: center;
+//}
+//
+//.false-cell {
+//  background-color: colors.$danger-bg;
+//  //color: #b71c1c;
+//  font-weight: 500;
+//}
+//
+//
+//.lookup-row {
+//  display: flex;
+//  align-items: flex-start;
+//  gap: 16px;
+//  flex-wrap: wrap;
+//  margin-bottom: 10px;
+//}
+//
+//.lookup-field {
+//  width: 220px;
+//  font-size: 13px;
+//}
+//
+//

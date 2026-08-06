@@ -27,6 +27,11 @@ import {MatSelectModule} from '@angular/material/select';
 import {Column, Grid} from '../../../models/grid';
 import {MatInput} from '@angular/material/input';
 
+interface GridCellChange {
+  recordId: string;
+  field: string;
+  value: number | string | null;
+}
 
 @Component({
   selector: 'app-grid',
@@ -72,6 +77,7 @@ export class GridComponent implements OnChanges {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   checkboxChanges = new Map<string, any>();
   currentGrid: any;
+  private changedCells = new Map<string, GridCellChange>();
 
   constructor(
     private router: Router,
@@ -147,10 +153,23 @@ export class GridComponent implements OnChanges {
     }
   }
 
+  // getColumnClass(column: Column): string {
+  //   switch (column.format) {
+  //     case 'checkbox':
+  //       return 'grid-col-checkbox';
+  //     default:
+  //       return '';
+  //   }
+  // }
   getColumnClass(column: any): string {
     switch (column.format) {
       case 'checkbox':
         return 'grid-col-checkbox';
+
+      case 'currency':
+      case 'number':
+        return 'numeric-column';
+
       default:
         return '';
     }
@@ -256,25 +275,88 @@ export class GridComponent implements OnChanges {
     return this.checkboxChanges.size > 0;
   }
 
-  onSaveCheckboxChanges(grid: any): void {
-    const changes = Array.from(this.checkboxChanges.values()).map(change => ({
+  // onSaveCheckboxChanges(grid: any): void {
+  //   const changes = Array.from(this.checkboxChanges.values()).map(change => ({
+  //     recordId: change.recordId,
+  //     field: change.field,
+  //     value: change.value
+  //   }));
+  //
+  //   const payload = {
+  //     gridId: grid.gridId,
+  //     changes
+  //   };
+  //
+  //   this.gridService.saveGrid(
+  //     grid.gridId,
+  //     payload,
+  //     this.params
+  //   ).subscribe({
+  //     next: (response: any) => {
+  //       this.checkboxChanges.clear();
+  //
+  //       this.snackBar.open(
+  //         response?.message || 'Updated successfully.',
+  //         'Close',
+  //         {
+  //           duration: 7000
+  //         }
+  //       );
+  //     },
+  //
+  //     error: (error) => {
+  //       const message =
+  //         error?.error?.message ||
+  //         error?.error?.detail ||
+  //         error?.message ||
+  //         'Unable to save changes.';
+  //
+  //       this.snackBar.open(
+  //         message,
+  //         'Close',
+  //         {
+  //           duration: 10000
+  //         }
+  //       );
+  //     }
+  //   });
+  // }
+  onSaveChanges(grid: any): void {
+    const checkboxChanges = Array.from(
+      this.checkboxChanges.values()
+    ).map(change => ({
       recordId: change.recordId,
       field: change.field,
       value: change.value
     }));
+
+    const cellChanges = Array.from(
+      this.changedCells.values()
+    ).map(change => ({
+      recordId: change.recordId,
+      field: change.field,
+      value: change.value
+    }));
+
+    const changes = [
+      ...checkboxChanges,
+      ...cellChanges
+    ];
+
+    const params = {
+      ...this.params,
+      ...this.getLookupParams(this.currentGrid)
+    };
 
     const payload = {
       gridId: grid.gridId,
       changes
     };
 
-    this.gridService.saveGrid(
-      grid.gridId,
-      payload,
-      this.params
-    ).subscribe({
+    this.gridService.saveGrid(grid.gridId, payload, params).subscribe({
       next: (response: any) => {
         this.checkboxChanges.clear();
+        this.changedCells.clear();
 
         this.snackBar.open(
           response?.message || 'Updated successfully.',
@@ -284,7 +366,6 @@ export class GridComponent implements OnChanges {
           }
         );
       },
-
       error: (error) => {
         const message =
           error?.error?.message ||
@@ -292,13 +373,7 @@ export class GridComponent implements OnChanges {
           error?.message ||
           'Unable to save changes.';
 
-        this.snackBar.open(
-          message,
-          'Close',
-          {
-            duration: 10000
-          }
-        );
+        this.snackBar.open(message, 'Close', {duration: 10000});
       }
     });
   }
@@ -354,17 +429,62 @@ export class GridComponent implements OnChanges {
     this.reloadGrid();
   }
 
+  // onCellChange(row: any, column: Column, rawValue: string): void {
+  //   const field = column.dataPath || column.field;
+  //
+  //   const value =
+  //     column.format === 'currency' || column.format === 'number'
+  //       ? rawValue === ''
+  //         ? null
+  //         : Number(rawValue)
+  //       : rawValue;
+  //
+  //   row[field] = value;
+  // }
   onCellChange(row: any, column: Column, rawValue: string): void {
     const field = column.dataPath || column.field;
 
     const value =
       column.format === 'currency' || column.format === 'number'
-        ? rawValue === ''
+        ? rawValue.trim() === ''
           ? null
-          : Number(rawValue)
+          : Number(rawValue.replace(/,/g, ''))
         : rawValue;
 
+    if (typeof value === 'number' && Number.isNaN(value)) {
+      return;
+    }
+
     row[field] = value;
+
+    const recordId = row.pk;
+    const key = `${recordId}|${field}`;
+
+    this.changedCells.set(key, {
+      recordId,
+      field,
+      value
+    });
   }
 
+  getInputValue(row: any, column: Column): string {
+    const value = this.getCellValue(row, column.dataPath || column.field);
+
+    if (column.format === 'currency') {
+      return Number(value ?? 0).toFixed(2);
+    }
+
+    return value;
+  }
+
+  // get hasChanges(): boolean {
+  //   return this.changedCells.size > 0;
+  // }
+
+  hasPendingChanges(): boolean {
+    return (
+      this.hasCheckboxChanges() ||
+      this.changedCells.size > 0
+    );
+  }
 }
