@@ -1,0 +1,36 @@
+<app-page-tab *ngIf="componentLoaded && user?.currentClient?.clientId as clientId">
+  <mat-tab-group
+    [selectedIndex]="selectedTabIndex"
+    (selectedIndexChange)="saveTabIndex($event)"
+    [mat-stretch-tabs]="false"
+    class="mat-elevation-z4">
+    <mat-tab label="Profile">
+      <ng-container *ngIf="pk">
+        <app-form-manager
+          [formId]="FormConstants.COMPANY_TRAVEL_AGENCY"
+          [recordId]=pk
+          action="view"
+          [inline]="true"
+        >
+        </app-form-manager>
+        <div class="button-row">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="editAgencyProfile()">
+            Edit
+          </button>
+        </div>
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="Travel Agents">
+      <app-grid-manager
+        [gridId]="GridConstants.COMPANY_USER_AGENT"
+        [usePageContainer]="false">
+      </app-grid-manager>
+    </mat-tab>
+
+
+  </mat-tab-group>
+</app-page-tab>
