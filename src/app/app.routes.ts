@@ -18,6 +18,8 @@ import {Page010Component} from './core/pages/page010/page010.component';
 import {Page011Component} from './core/pages/page011/page011.component';
 import {Page012Component} from './core/pages/page012/page012.component';
 import {Page013Component} from './core/pages/page013/page013.component';
+import {NotFoundComponent} from './core/components/not-found/not-found.component';
+import {Page014Component} from './core/pages/page014/page014.component';
 
 
 export const routes: Routes = [
@@ -27,7 +29,9 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'navigator/001', pathMatch: 'full' },  // ✅ Redirect to home page
       { path: 'home', component: Page001Component},
+      { path: 'navigator', component: Page001Component },
       { path: 'navigator/:id', component: NavigatorComponent },
+
       // pages
       { path: 'page001', component: Page001Component },
       { path: 'page002', component: Page002Component },
@@ -42,11 +46,12 @@ export const routes: Routes = [
       { path: 'page011', component: Page011Component },
       { path: 'page012', component: Page012Component },
       { path: 'page013', component: Page013Component },
+      { path: 'page014', component: Page014Component },
 
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-
+      { path: 'not-found', component: NotFoundComponent },
+      { path: '**', component: NotFoundComponent }
     ],
   },
   { path: 'login', component: LoginComponent },  // ✅ Ensure login route exists
-  { path: '**', redirectTo: '/navigator/001' },  // ✅ Catch-all for invalid routes
 ];
