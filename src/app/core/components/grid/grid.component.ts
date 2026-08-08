@@ -396,7 +396,6 @@ export class GridComponent implements OnChanges {
       ...this.params,
       ...this.getLookupParams(this.currentGrid)
     };
-    console.log(params);
     this.gridService.loadGrid(
       this.gridId,
       true,
