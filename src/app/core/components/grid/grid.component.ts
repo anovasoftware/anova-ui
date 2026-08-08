@@ -229,13 +229,14 @@ export class GridComponent implements OnChanges {
         }
       });
     } else if (!formId || formId === FormConstants.NOT_APPLICABLE) {
-      message = 'No page or form associated with grid.';
+      message = 'No page or form associated with grid: ' + this.gridId;
     } else {
+      console.log(this.params);
       const dialogRef = this.formDialog.openForm(
         formId,
         pk,
         action,
-        {}
+        this.params,
       );
 
       dialogRef.afterClosed().subscribe(result => {

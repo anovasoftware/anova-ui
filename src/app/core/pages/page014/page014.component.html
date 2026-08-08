@@ -27,6 +27,7 @@
     <mat-tab label="Travel Agents">
       <app-grid-manager
         [gridId]="GridConstants.COMPANY_USER_AGENT"
+        [params]="{companyId: pk}"
         [usePageContainer]="false">
       </app-grid-manager>
     </mat-tab>
