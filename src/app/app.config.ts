@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
           const token = authService.getAccessToken();
           // const hotelId = globalService.currentHotelId;
           // const hotelId = globalService.currentHotel?.hotelId;
-          const hotelId = 'A004';
+          const hotelId = globalService.currentHotelId;
           let modifiedReq = req;
 
           if (token) {

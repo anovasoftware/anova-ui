@@ -5,6 +5,8 @@ import {HomeComponent} from './core/components/home/home.component';
 import {DashboardComponent} from './core/components/dashboard/dashboard.component';
 import {LoginComponent} from './core/components/login/login.component';
 import {NavigatorComponent} from './core/components/navigator/navigator.component';
+import {NotFoundComponent} from './core/components/not-found/not-found.component';
+
 import {Page001Component} from './core/pages/page001/page001.component';
 import {Page002Component} from './core/pages/page002/page002.component';
 import {Page003Component} from './core/pages/page003/page003.component';
@@ -18,8 +20,8 @@ import {Page010Component} from './core/pages/page010/page010.component';
 import {Page011Component} from './core/pages/page011/page011.component';
 import {Page012Component} from './core/pages/page012/page012.component';
 import {Page013Component} from './core/pages/page013/page013.component';
-import {NotFoundComponent} from './core/components/not-found/not-found.component';
 import {Page014Component} from './core/pages/page014/page014.component';
+import {Page015Component} from './core/pages/page015/page015.component';
 
 
 export const routes: Routes = [
@@ -47,6 +49,7 @@ export const routes: Routes = [
       { path: 'page012', component: Page012Component },
       { path: 'page013', component: Page013Component },
       { path: 'page014', component: Page014Component },
+      { path: 'page015', component: Page015Component },
 
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'not-found', component: NotFoundComponent },
