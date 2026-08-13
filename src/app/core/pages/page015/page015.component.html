@@ -17,9 +17,11 @@
 
     <mat-tab label="Summary">
       <ng-container *ngIf="pk">
-        <div class="placeholder">
-          Coming soon...
-        </div>
+        <app-grid-manager
+          [gridId]="GridConstants.EVENT_ROOM_INVENTORY_SUMMARY"
+          [usePageContainer]="false"
+          [params]="{eventId: pk}">
+        </app-grid-manager>
       </ng-container>
     </mat-tab>
     <mat-tab label="Cabin/Room Status">
