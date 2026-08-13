@@ -1,0 +1,20 @@
+<app-page-tab *ngIf="componentLoaded">
+  <mat-tab-group
+    [selectedIndex]="selectedTabIndex"
+    (selectedIndexChange)="saveTabIndex($event)"
+    [mat-stretch-tabs]="false"
+    class="mat-elevation-z4">
+
+    <mat-tab label="Bookings">
+      <ng-container>
+        <app-grid-manager
+          [gridId]="GridConstants.BOOKINGS"
+          [usePageContainer]="false"
+          [params]="{eventId: pk}">
+        </app-grid-manager>
+
+      </ng-container>
+    </mat-tab>
+
+  </mat-tab-group>
+</app-page-tab>
