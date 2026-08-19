@@ -1,0 +1,62 @@
+@use 'sass:map';
+@use 'styles/variables';
+@use 'styles/themes' as theme;
+
+
+.booking-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 24px;
+  align-items: start;
+}
+
+.booking-main {
+  min-width: 0;
+}
+
+.booking-summary {
+  margin-top: 60px;
+  padding: 10px;
+  //background-color:  map.get(theme.$neutral-palette, 80);
+  position: sticky;
+  top: 70px;
+}
+
+.booking-summary h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.summary-section {
+  padding: 12px 0;
+  border-bottom: 1px solid map.get(theme.$neutral-palette, 95);
+}
+
+.summary-section:last-child {
+  border-bottom: none;
+}
+
+.summary-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.summary-value {
+  font-weight: 500;
+}
+
+.summary-detail {
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.summary-empty {
+  font-size: 13px;
+  font-style: italic;
+}
+
+.step-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}

@@ -41,4 +41,6 @@ export interface Grid {
   canCreate: boolean;
   displayPk: boolean;
   lookups?: Lookups;
+  createButtonLabel?:string;
+  rowAction?:string;
 }

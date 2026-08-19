@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {GridComponent} from '../grid/grid.component';
 import {GridConstants} from '../../../../constants/grid_constants';
 import {GridService} from '../../../services/grid.service';
@@ -21,7 +21,14 @@ export class GridManagerComponent {
   @Input() params: Record<string, string> = {};
   @Input() usePageContainer = true;
 
+  @Output() recordSelected = new EventEmitter<any>();
+
   protected readonly GridConstants= GridConstants;
 
+  onRecordSelected(event: any): void {
+    console.log('GridManager received:', event);
+
+    this.recordSelected.emit(event);
+  }
 
 }

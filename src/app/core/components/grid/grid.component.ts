@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {GridConstants} from '../../../../constants/grid_constants';
 import {PageConstants} from '../../../../constants/page_constants';
 import {FormConstants} from '../../../../constants/form_constants';
@@ -71,6 +71,8 @@ export class GridComponent implements OnChanges {
   @Input() menuId: string = MenuConstants.NOT_APPLICABLE;
   @Input() usePageContainer = true;
   @Input() params: Record<string, string> = {};
+
+  @Output() recordSelected = new EventEmitter<any>();
 
   protected readonly GridConstants = GridConstants;
   public dataSource = new MatTableDataSource<any>();
@@ -191,13 +193,14 @@ export class GridComponent implements OnChanges {
   }
 
   onRowClick(grid: any, row: any): void {
-    this.openGridRecord(grid, row?.pk, 'update', row);
+    const action = grid?.rowAction ?? 'update;'
+    this.openGridRecord(grid, row?.pk, action, row);
   }
 
   private openGridRecord(
     grid: any,
     pk: string,
-    action: 'create' | 'update',
+    action: 'create' | 'update' | 'select',
     row: any
   ): void {
     const pageId = grid?.pageId;
@@ -207,7 +210,9 @@ export class GridComponent implements OnChanges {
 
     if (!pk) {
       message = 'No id associated with the record.';
-    } else if (pageId && pageId !== PageConstants.NOT_APPLICABLE && action === 'update') {
+    } else if (action == 'select') {
+        this.recordSelected.emit({pk, row});
+    } else if (pageId && pageId !== PageConstants.NOT_APPLICABLE && ['create', 'update'].includes(action)) {
       this.navigationService.setRecordBreadcrumb(row?.displayAs);
 
       if (this.menuId !== MenuConstants.NOT_APPLICABLE) {

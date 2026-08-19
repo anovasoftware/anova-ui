@@ -29,7 +29,7 @@
             color="primary"
             type="button"
             (click)="onAddClick(grid)">
-            Add
+            {{ grid.createButtonLabel }}
           </button>
 
           <button
@@ -136,11 +136,10 @@
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="grid.displayedColumns"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: grid.displayedColumns;"
-            class="clickable-row"
-            (click)="onRowClick(grid, row)">
+          <tr mat-row
+             *matRowDef="let row; columns: grid.displayedColumns;"
+             class="clickable-row"
+             (click)="onRowClick(grid, row)">
           </tr>
         </table>
       </div>

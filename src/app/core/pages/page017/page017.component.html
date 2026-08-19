@@ -1,0 +1,134 @@
+<div class="printable-area" *ngIf="componentLoaded">
+  <div class="booking-layout">
+
+    <div class="booking-main">
+      <mat-stepper #stepper>
+        <mat-step label="Cruise">
+          <app-grid-manager
+            [gridId]="GridConstants.SELECT_EVENT_FOR_BOOKING"
+            (recordSelected)="onEventSelected($event)"
+            [usePageContainer]="false"
+            [params]="{eventId: pk}">
+          </app-grid-manager>
+
+          <div class="step-actions">
+            <button mat-raised-button matStepperNext>
+              Continue
+            </button>
+          </div>
+        </mat-step>
+
+        <mat-step label="Guests">
+          <h2>Guests</h2>
+
+          <div class="step-actions">
+            <button mat-raised-button matStepperNext>
+              Back
+            </button>
+
+            <button mat-raised-button matStepperNext>
+              Continue
+            </button>
+          </div>
+        </mat-step>
+
+        <mat-step label="Accommodation">
+          <h2>Accommodation</h2>
+
+          <div class="step-actions">
+            <button mat-raised-button matStepperNext>
+              Back
+            </button>
+
+            <button mat-raised-button matStepperNext>
+              Continue
+            </button>
+          </div>
+        </mat-step>
+
+        <mat-step label="Pricing">
+          <h2>Pricing</h2>
+
+          <div class="step-actions">
+            <button mat-raised-button matStepperNext>
+              Back
+            </button>
+
+            <button mat-raised-button matStepperNext>
+              Continue
+            </button>
+          </div>
+        </mat-step>
+
+        <mat-step label="Review">
+          <h2>Review Booking</h2>
+
+          <div class="step-actions">
+            <button mat-raised-button matStepperNext>
+              Back
+            </button>
+
+            <button mat-button="filled">
+              Create Booking
+            </button>
+          </div>
+        </mat-step>
+
+      </mat-stepper>
+    </div>
+    <div class="booking-summary">
+
+      <h3>Booking Summary</h3>
+
+      <div class="summary-section">
+        <div class="summary-title">Cruise</div>
+
+        <ng-container *ngIf="selectedEvent; else noCruiseSelected">
+
+          <div class="summary-value">
+            {{ selectedEvent.description }}
+          </div>
+
+          <div class="summary-detail">
+            {{ selectedEvent.code }} - {{ selectedEvent.description }}
+          </div>
+
+          <div class="summary-detail">
+            {{ selectedEvent.eventId }}
+          </div>
+
+        </ng-container>
+
+        <ng-template #noCruiseSelected>
+          <div class="summary-empty">
+            No cruise selected
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="summary-section">
+        <div class="summary-title">Guests</div>
+        <div class="summary-empty">
+          Not selected
+        </div>
+      </div>
+
+      <div class="summary-section">
+        <div class="summary-title">Accommodation</div>
+        <div class="summary-empty">
+          Not selected
+        </div>
+      </div>
+
+      <div class="summary-section">
+        <div class="summary-title">Pricing</div>
+        <div class="summary-empty">
+          Not calculated
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

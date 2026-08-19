@@ -18,6 +18,7 @@ export abstract class PageBaseComponent implements OnInit {
 
   params: Record<string, string> = {};
   pk = '';
+  action = '';
   componentLoaded = false;
 
   selectedTabIndex = 0;
@@ -33,6 +34,7 @@ export abstract class PageBaseComponent implements OnInit {
       this.gridId = queryParams['gridId'] ?? GridConstants.NOT_APPLICABLE;
       this.menuId = params['menuId'] || MenuConstants.NOT_APPLICABLE;
       this.pk = queryParams['pk'] ?? '';
+      this.action = queryParams['action'] ?? '';
 
       this.loadTabIndex();
 
