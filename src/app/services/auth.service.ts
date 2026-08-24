@@ -10,7 +10,6 @@ import {MenuConstants} from '../../constants/menu_constants';
 import {HotelConstants} from '../../constants/hotel_constants';
 import {ApiService} from './api.service';
 import {ApiResponse} from '../models/api-response';
-import {GlobalService} from './global.service';
 
 
 @Injectable({
@@ -109,10 +108,10 @@ export class AuthService {
 
     if (resetContext) {
       localStorage.setItem('currentMenuId', this.MenuConstants.HOME);
-      localStorage.setItem(
-        'currentHotelId',
-        normalized?.lastHotelId || this.HotelConstants.NOT_APPLICABLE
-      );
+      // localStorage.setItem(
+      //   'currentHotelId',
+      //   normalized?.lastHotelId || this.HotelConstants.NOT_APPLICABLE
+      // );
     }
 
     this.userSubject.next(normalized);

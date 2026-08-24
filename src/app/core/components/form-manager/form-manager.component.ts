@@ -31,6 +31,7 @@ import {WidgetSpinnerComponent} from '../../widgets/widget-spinner/widget-spinne
 import {WidgetDate1Component} from '../../widgets/widget-date1/widget-date1.component';
 import {WidgetCheckboxComponent} from '../../widgets/widget-checkbox/widget-checkbox.component';
 import {log} from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
+import {GlobalService} from '../../../services/global.service';
 
 
 type DialogData = {
@@ -89,6 +90,7 @@ export class FormManagerComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
+    private globalService: GlobalService,
     private location: Location,
     private dialog: MatDialog,
     private formDialog: FormDialogService,
@@ -98,7 +100,7 @@ export class FormManagerComponent implements OnInit {
   ) {
     this.formGroup = this.fb.group({});
     this.formHandlers = {
-      '001': (response) => handleForm001Response(response, this.router, this.authService)
+      '001': (response) => handleForm001Response(response, this.router, this.authService, this.globalService)
       // add more special handlers here
     };
   }

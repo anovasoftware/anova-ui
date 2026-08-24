@@ -2,8 +2,8 @@
   <div class="booking-layout">
 
     <div class="booking-main">
-      <mat-stepper #stepper>
-        <mat-step label="Cruise">
+      <mat-stepper #stepper linear>
+        <mat-step label="Cruise" [completed]="!!selectedEvent">
           <app-grid-manager
             [gridId]="GridConstants.SELECT_EVENT_FOR_BOOKING"
             (recordSelected)="onEventSelected($event)"
@@ -12,7 +12,7 @@
           </app-grid-manager>
 
           <div class="step-actions">
-            <button mat-raised-button matStepperNext>
+            <button mat-raised-button matStepperNext [disabled]="!selectedEvent" class="continue-button">
               Continue
             </button>
           </div>
@@ -22,11 +22,11 @@
           <h2>Guests</h2>
 
           <div class="step-actions">
-            <button mat-raised-button matStepperNext>
+            <button mat-raised-button matStepperNext class="back-button">
               Back
             </button>
 
-            <button mat-raised-button matStepperNext>
+            <button mat-raised-button matStepperNext class="continue-button">
               Continue
             </button>
           </div>
@@ -54,7 +54,7 @@
               Back
             </button>
 
-            <button mat-raised-button matStepperNext>
+            <button mat-raised-button matStepperNext [disabled]="!selectedEvent">
               Continue
             </button>
           </div>

@@ -90,7 +90,12 @@ export class GlobalService {
     const initialMenuId = this.authService.getCurrentMenuId() || MenuConstants.HOME;
     const initialHotelId = this.authService.getCurrentHotelId() ||  HotelConstants.NOT_APPLICABLE;
     this.currentMenuIdSubject = new BehaviorSubject<string>(initialMenuId);
-    this.currentHotelIdSubject = new BehaviorSubject<string>(initialHotelId);
+    // this.currentHotelIdSubject = new BehaviorSubject<string>(initialHotelId);
+    this.currentHotelIdSubject = new BehaviorSubject<string>(
+      this.authService.getCurrentHotelId()
+    );
+
+
     this.currentMenuId$ = this.currentMenuIdSubject.asObservable();
     this.currentHotelId$ = this.currentHotelIdSubject.asObservable();
     this.currentPageIdSubject = new BehaviorSubject<string>(PageConstants.NOT_APPLICABLE);
@@ -178,16 +183,18 @@ export class GlobalService {
     return this.currentUser?.currentHotel ?? null;
   }
 
+  // get currentHotelId(): string {
+  //   const hotelId = (
+  //     this.currentHotelIdSubject.value ||
+  //     this.currentHotel?.hotelId ||
+  //     HotelConstants.NOT_APPLICABLE
+  //   );
+  //   console.log('currentHotelId', hotelId);
+  //   return hotelId;
+  // }
   get currentHotelId(): string {
-    const hotelId = (
-      this.currentHotelIdSubject.value ||
-      this.currentHotel?.hotelId ||
-      HotelConstants.NOT_APPLICABLE
-    );
-    console.log('currentHotelId', hotelId);
-    return hotelId;
+    return this.currentHotelIdSubject.value;
   }
-
   get currentClient(): Client | null {
     return this.currentUser?.currentClient ?? null;
   }
@@ -207,15 +214,18 @@ export class GlobalService {
   }
 
   setCurrentHotelId(hotelId: string): void {
-    const value =
-      hotelId || HotelConstants.NOT_APPLICABLE;
+    const value = hotelId || HotelConstants.NOT_APPLICABLE;
+
+    console.log('setting hotelId to', hotelId)
 
     if (this.currentHotelIdSubject.value === value) {
       return;
     }
-
-    this.currentHotelIdSubject.next(value);
     this.authService.setCurrentHotelId(value);
+
+    if (this.currentHotelIdSubject.value !== value) {
+      this.currentHotelIdSubject.next(value);
+    }
   }
 
   setCurrentMenuId(menuId: string): void {
