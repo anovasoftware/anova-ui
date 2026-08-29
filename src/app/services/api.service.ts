@@ -25,10 +25,7 @@ export class ApiService {
     const url = `${this.baseApi}${urlExt}`;
     const httpHeaders = new HttpHeaders(headers);
 
-    const httpParams =
-      params instanceof HttpParams
-        ? params
-        : new HttpParams({fromObject: params});
+    const httpParams = params instanceof HttpParams ? params: new HttpParams({fromObject: params});
 
     return this.http.get<T>(url, {
       headers: httpHeaders,

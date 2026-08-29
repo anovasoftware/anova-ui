@@ -10,7 +10,8 @@
         <app-grid-manager
           [gridId]="GridConstants.BOOKINGS"
           [usePageContainer]="false"
-          [params]="{eventId: pk}">
+          [params]="{eventId: pk}"
+          (addRequested)="onAddRequested($event)">
         </app-grid-manager>
 
       </ng-container>

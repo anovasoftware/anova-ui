@@ -5,16 +5,13 @@ import {GridManagerComponent} from '../../components/grid-manager/grid-manager.c
 import {GridConstants} from '../../../../constants/grid_constants';
 import {NgIf} from '@angular/common';
 import {PageBaseComponent} from '../page-base/page-base.component';
-import {ActivatedRoute} from '@angular/router';
-import {FormManagerComponent} from '../../components/form-manager/form-manager.component';
-import {MatButton} from '@angular/material/button';
 import {FormConstants} from '../../../../constants/form_constants';
 import {FormDialogService} from '../../../services/form-dialog.service';
-import {GlobalService} from '../../../services/global.service';
-import {User} from '../../../models/user';
 import {ApiService} from '../../../services/api.service';
 import {Client} from '../../../models/client';
 import {TypeConstants} from '../../../../constants/type_constants';
+import {GridAddEvent} from '../../components/grid/grid.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-page016',
@@ -31,7 +28,7 @@ import {TypeConstants} from '../../../../constants/type_constants';
 export class Page016Component extends PageBaseComponent {
   protected readonly GridConstants = GridConstants;
   protected readonly FormConstants = FormConstants;
-    protected readonly TypeConstants = TypeConstants;
+  protected readonly TypeConstants = TypeConstants;
 
   protected override tabIndexKey = 'tab-page016';
   record: Client | null = null;
@@ -39,10 +36,32 @@ export class Page016Component extends PageBaseComponent {
   constructor(
     private api: ApiService,
     private formDialogService: FormDialogService,
+    private snackBar: MatSnackBar,
   ) {
     super();
   }
 
   protected override onParamsLoaded(): void {
+  }
+
+  onAddRequested(event: GridAddEvent): void {
+    const user = this.user;
+
+    console.log(user);
+    if (!user?.agency) {
+      event.cancel = true;
+      const message = 'Access denied. Must be a travel agent to create a new booking.'
+      this.snackBar.open(message, 'OK', {
+        duration: 5000
+      });
+    }
+
+    // if (!this.currentUser?.agencyId) {
+    //   event.cancel = true;
+    //
+    //   this.notificationService.warning(
+    //     'You must belong to an agency to create a booking.'
+    //   );
+    // }
   }
 }

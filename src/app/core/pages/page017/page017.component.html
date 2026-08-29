@@ -1,3 +1,5 @@
+{{header}}
+{{message}}
 <div class="printable-area" *ngIf="componentLoaded">
   <div class="booking-layout">
 
@@ -12,7 +14,7 @@
           </app-grid-manager>
 
           <div class="step-actions">
-            <button mat-raised-button matStepperNext [disabled]="!selectedEvent" class="continue-button">
+            <button mat-raised-button matStepperNext [disabled]="!eventSelected" class="continue-button">
               Continue
             </button>
           </div>
@@ -20,12 +22,10 @@
 
         <mat-step label="Guests">
           <h2>Guests</h2>
-
           <div class="step-actions">
-            <button mat-raised-button matStepperNext class="back-button">
+            <button mat-raised-button matStepperPrevious class="back-button">
               Back
             </button>
-
             <button mat-raised-button matStepperNext class="continue-button">
               Continue
             </button>
@@ -81,29 +81,52 @@
       <h3>Booking Summary</h3>
 
       <div class="summary-section">
+        <div class="summary-title">Agency</div>
+        <div class="summary-detail">
+          {{ getFormFieldValue('travel_agency_company_id') }}
+        </div>
+      </div>
+
+      <div class="summary-section">
         <div class="summary-title">Cruise</div>
 
-        <ng-container *ngIf="selectedEvent; else noCruiseSelected">
-
-          <div class="summary-value">
-            {{ selectedEvent.description }}
-          </div>
-
-          <div class="summary-detail">
-            {{ selectedEvent.code }} - {{ selectedEvent.description }}
-          </div>
-
-          <div class="summary-detail">
-            {{ selectedEvent.eventId }}
-          </div>
-
-        </ng-container>
-
-        <ng-template #noCruiseSelected>
-          <div class="summary-empty">
+        <ng-container>
+          <div class="summary-empty" *ngIf="!eventSelected">
             No cruise selected
           </div>
-        </ng-template>
+        </ng-container>
+
+        <ng-container *ngIf="eventSelected">
+          <div class="summary-value">
+             {{ getSelectedDisplayValue('event_id') }}
+          </div>
+          <div class="summary-detail">
+            {{ selectedEvent?.eventStartDate | date:'ddMMMyy' | uppercase  }} to
+            {{ selectedEvent?.eventEndDate | date:'ddMMMyy' | uppercase }}
+          </div>
+          <div class="summary-detail">
+
+          </div>
+        </ng-container>
+
+
+<!--        <ng-container *ngIf="selectedEvent; else noCruiseSelected">-->
+<!--          <div class="summary-value">-->
+<!--            {{ selectedEvent.description }}-->
+<!--          </div>-->
+<!--          <div class="summary-detail">-->
+<!--            {{ selectedEvent.code }} - {{ selectedEvent.description }}-->
+<!--          </div>-->
+<!--          <div class="summary-detail">-->
+<!--            {{ selectedEvent.eventId }}-->
+<!--          </div>-->
+<!--        </ng-container>-->
+
+<!--        <ng-template #noCruiseSelected>-->
+<!--          <div class="summary-empty">-->
+<!--            No cruise selected-->
+<!--          </div>-->
+<!--        </ng-template>-->
       </div>
 
       <div class="summary-section">

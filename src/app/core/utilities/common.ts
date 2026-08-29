@@ -2,6 +2,7 @@ import {Role, User} from '../../models/user';
 import {Client} from '../../models/client';
 import {Hotel} from '../../models/hotel';
 import {Menu} from '../../models/menu';
+import {Company} from '../../models/company';
 
 export function normalizeUser(u: any): User | null {
   if (!u) {
@@ -10,10 +11,10 @@ export function normalizeUser(u: any): User | null {
 
   const person = u.person
     ? {
-        ...u.person,
-        personId: u.person.personId,
-        displayName: u.person.displayName ?? '',
-      }
+      ...u.person,
+      personId: u.person.personId,
+      displayName: u.person.displayName ?? '',
+    }
     : null;
 
   const displayAs =
@@ -27,84 +28,90 @@ export function normalizeUser(u: any): User | null {
 
   const roles: Role[] = Array.isArray(u.roles)
     ? u.roles.map((r: any) => ({
-        roleId: r.roleId,
-        description: r.description,
-        hotelId: r.hotelId,
-      }))
+      roleId: r.roleId,
+      description: r.description,
+      hotelId: r.hotelId,
+    }))
     : [];
 
   const menus: Menu[] = Array.isArray(u.menus)
     ? u.menus.map((m: any) => ({
-        menuId: m.menuId,
-        description: m.description,
-        hotelRequired: m.hotelRequired ?? false,
-        hotelTypeIds: m.hotelTypeIds ?? [],
-        orderBy: m.orderBy,
-      }))
+      menuId: m.menuId,
+      description: m.description,
+      hotelRequired: m.hotelRequired ?? false,
+      hotelTypeIds: m.hotelTypeIds ?? [],
+      orderBy: m.orderBy,
+    }))
     : [];
 
   const clients: Client[] = Array.isArray(u.clients)
     ? u.clients.map((c: any) => ({
-        clientId: c.clientId,
-        code: c.code,
-        description: c.description,
-      }))
+      clientId: c.clientId,
+      code: c.code,
+      description: c.description,
+    }))
     : [];
 
   const hotels: Hotel[] = Array.isArray(u.hotels)
     ? u.hotels.map((h: any) => ({
-        hotelId: h.hotelId,
-        typeId: h.typeId,
-        code: h.code,
-        description: h.description,
-      }))
+      hotelId: h.hotelId,
+      typeId: h.typeId,
+      code: h.code,
+      description: h.description,
+    }))
     : [];
 
   const currentHotel: Hotel | null = u.currentHotel
     ? {
-        hotelId: u.currentHotel.hotelId,
-        typeId: u.currentHotel.typeId,
-        clientId: u.currentHotel.clientId,
-        code: u.currentHotel.code,
-        description: u.currentHotel.description,
+      hotelId: u.currentHotel.hotelId,
+      typeId: u.currentHotel.typeId,
+      clientId: u.currentHotel.clientId,
+      code: u.currentHotel.code,
+      description: u.currentHotel.description,
 
-        hotelExtension: u.currentHotel.hotelExtension
-          ? {
-              hotelExtensionId:
-                u.currentHotel.hotelExtension.hotelExtensionId,
+      hotelExtension: u.currentHotel.hotelExtension
+        ? {
+          hotelExtensionId:
+          u.currentHotel.hotelExtension.hotelExtensionId,
 
-              currencyId:
-                u.currentHotel.hotelExtension.currencyId,
+          currencyId:
+          u.currentHotel.hotelExtension.currencyId,
 
-              currentEvent:
-                u.currentHotel.hotelExtension.currentEvent
-                  ? {
-                      ...u.currentHotel.hotelExtension.currentEvent,
-                    }
-                  : null,
-            }
-          : null,
-      }
+          currentEvent:
+            u.currentHotel.hotelExtension.currentEvent
+              ? {
+                ...u.currentHotel.hotelExtension.currentEvent,
+              }
+              : null,
+        }
+        : null,
+    }
     : null;
 
   const currentClient: Client | null = u.currentClient
     ? {
-        clientId: u.currentClient.clientId,
-        code: u.currentClient.code,
-        description: u.currentClient.description,
+      clientId: u.currentClient.clientId,
+      code: u.currentClient.code,
+      description: u.currentClient.description,
 
-        clientExtension: u.currentClient.clientExtension
-          ? {
-              clientExtensionId:
-                u.currentClient.clientExtension.clientExtensionId,
+      clientExtension: u.currentClient.clientExtension
+        ? {
+          clientExtensionId:
+          u.currentClient.clientExtension.clientExtensionId,
 
-              currencyId:
-                u.currentClient.clientExtension.currencyId,
-            }
-          : null,
-      }
+          currencyId:
+          u.currentClient.clientExtension.currencyId,
+        }
+        : null,
+    }
     : null;
-
+  const agency: Company | null = u.agency
+    ? {
+      companyId: u.agency.companyId,
+      code: u.agency.code,
+      description: u.agency.description,
+    }
+    : null;
   return {
     userId: u.userId,
     username: u.username,
@@ -128,72 +135,7 @@ export function normalizeUser(u: any): User | null {
     menus,
     clients,
     hotels,
+    agency
   };
 }
-// import {Role, User} from '../../models/user';
-// import {Client} from '../../models/client';
-// import {Hotel} from '../../models/hotel';
-// import {Menu} from '../../models/menu';
-//
-// export function normalizeUser(u: any): User | null {
-//   if (!u) return null;
-//
-//   const person = u.person ? {...u.person, personId: u.person.personId,}: null;
-//   const displayAs = u.displayAs || [person?.firstName, person?.lastName].filter(Boolean).join(' ') ||
-//     u.username ||
-//     '';
-//   // Normalize roles safely
-//   const roles: Role[] = Array.isArray(u.roles)
-//     ? u.roles.map((r: any) => ({
-//         roleId: r.roleId,
-//         description: r.description,
-//       }))
-//     : [];
-//
-//     // Normalize menus safely
-//   const menus: Menu[] = Array.isArray(u.menus)
-//     ? u.menus.map((m: any) => ({
-//         menuId: m.menuId,
-//         description: m.description,
-//         hotelRequired: m.hotelRequired,
-//         hotelTypeIds: m.hotelTypeIds,
-//       }))
-//     : [];
-//
-//     // Normalize clients safely
-//   const clients: Client[] = Array.isArray(u.clients)
-//     ? u.clients.map((c: any) => ({
-//         clientId: c.clientId,
-//         code: c.code,
-//         description: c.description,
-//       }))
-//     : [];
-//
-//     // Normalize hotels safely
-//   const hotels: Hotel[] = Array.isArray(u.hotels)
-//     ? u.hotels.map((h: any) => ({
-//       hotelId: h.hotelId,
-//       typeId: h.typeId,
-//       code: h.code,
-//       description: h.description,
-//       currentEvent: h.currentEvent,
-//     }))
-//     : [];
-//
-//   return {
-//     userId: u.userId,
-//     username: u.username,
-//     name: u.name  ?? 'Guest',
-//     loggedIn: u.loggedIn ?? false,
-//     lastHotelId: u.lastHotelId ?? null,
-//     isSuperuser: u.isSuperuser ?? false,
-//     displayAs,
-//     person,
-//     roles,
-//     menus,
-//     clients,
-//     hotels
-//   } as User;
-// }
-//
-//
+

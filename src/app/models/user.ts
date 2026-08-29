@@ -2,6 +2,7 @@ import {Person} from './person';
 import {Hotel} from './hotel';
 import {Client} from './client';
 import {Menu} from './menu';
+import {Company} from './company';
 
 export interface Role {
   roleId: string;
@@ -54,4 +55,5 @@ export interface User {
   clients: ClientList[];
   roles: Role[];
   menus: Menu[];
+  agency: Company | null;
 }

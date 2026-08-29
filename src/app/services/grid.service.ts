@@ -73,7 +73,6 @@ export class GridService {
     let httpParams = new HttpParams();
 
     Object.entries(params).forEach(([key, value]) => {
-      console.log(key, value);
       if (value != null) {
         httpParams = httpParams.set(key, String(value));
       }

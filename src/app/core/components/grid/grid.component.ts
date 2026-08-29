@@ -33,6 +33,11 @@ interface GridCellChange {
   value: number | string | null;
 }
 
+export interface GridAddEvent {
+  grid: any;
+  cancel: boolean;
+}
+
 @Component({
   selector: 'app-grid',
   standalone: true,
@@ -73,6 +78,7 @@ export class GridComponent implements OnChanges {
   @Input() params: Record<string, string> = {};
 
   @Output() recordSelected = new EventEmitter<any>();
+  @Output() addRequested = new EventEmitter<GridAddEvent>();
 
   protected readonly GridConstants = GridConstants;
   public dataSource = new MatTableDataSource<any>();
@@ -188,8 +194,20 @@ export class GridComponent implements OnChanges {
     return classes;
   }
 
+//   onAddClick(grid: any): void {
+//     this.openGridRecord(grid, 'new', 'create', null);
+//   }
   onAddClick(grid: any): void {
-    this.openGridRecord(grid, 'new', 'create', null);
+    const event: GridAddEvent = {
+      grid,
+      cancel: false
+    };
+
+    this.addRequested.emit(event);
+
+    if (!event.cancel) {
+      this.openGridRecord(grid, 'new', 'create', null);
+    }
   }
 
   onRowClick(grid: any, row: any): void {
@@ -211,7 +229,7 @@ export class GridComponent implements OnChanges {
     if (!pk) {
       message = 'No id associated with the record.';
     } else if (action == 'select') {
-        this.recordSelected.emit({pk, row});
+      this.recordSelected.emit({pk, row});
     } else if (pageId && pageId !== PageConstants.NOT_APPLICABLE && ['create', 'update'].includes(action)) {
       this.navigationService.setRecordBreadcrumb(row?.displayAs);
 
@@ -236,7 +254,6 @@ export class GridComponent implements OnChanges {
     } else if (!formId || formId === FormConstants.NOT_APPLICABLE) {
       message = 'No page or form associated with grid: ' + this.gridId;
     } else {
-      console.log(this.params);
       const dialogRef = this.formDialog.openForm(
         formId,
         pk,

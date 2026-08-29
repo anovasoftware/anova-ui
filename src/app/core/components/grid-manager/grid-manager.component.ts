@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {GridComponent} from '../grid/grid.component';
+import {GridAddEvent, GridComponent} from '../grid/grid.component';
 import {GridConstants} from '../../../../constants/grid_constants';
 import {GridService} from '../../../services/grid.service';
 import {MenuConstants} from '../../../../constants/menu_constants';
@@ -13,7 +13,7 @@ import {MenuConstants} from '../../../../constants/menu_constants';
   ],
   templateUrl: './grid-manager.component.html',
   styleUrl: './grid-manager.component.scss',
-    providers: [GridService]
+  providers: [GridService]
 })
 export class GridManagerComponent {
   @Input() gridId: string = GridConstants.TO_BE_ANNOUNCED;
@@ -22,8 +22,9 @@ export class GridManagerComponent {
   @Input() usePageContainer = true;
 
   @Output() recordSelected = new EventEmitter<any>();
+  @Output() addRequested = new EventEmitter<GridAddEvent>();
 
-  protected readonly GridConstants= GridConstants;
+  protected readonly GridConstants = GridConstants;
 
   onRecordSelected(event: any): void {
     console.log('GridManager received:', event);
@@ -31,4 +32,7 @@ export class GridManagerComponent {
     this.recordSelected.emit(event);
   }
 
+  onAddRequested(event: GridAddEvent): void {
+    this.addRequested.emit(event);
+  }
 }

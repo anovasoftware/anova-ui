@@ -77,4 +77,17 @@ export class NavigationService {
       void this.router.navigate([route], {queryParams});
     }
   }
+  navigateToMenuId(menuId: string) {
+    const menu = this.menuService.getMenuById(menuId);
+
+    if (!menu) {
+      console.error(`Menu not found: ${menuId}`);
+    } else {
+      this.navigateToMenu(menu);
+    }
+
+  }
+  navigateToPage(pageId: string) {
+
+  }
 }
