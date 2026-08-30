@@ -1,0 +1,29 @@
+<div [formGroup]="formGroup" class="counter-field">
+
+  <div class="counter-label">
+    {{ field.label }}
+  </div>
+
+  <div class="counter-control">
+    <button
+      mat-icon-button
+      type="button"
+      (click)="decrement()"
+      [disabled]="field.readonly || atMinimum">
+      <mat-icon>remove</mat-icon>
+    </button>
+
+    <div class="counter-value">
+      {{ value }}
+    </div>
+
+    <button
+      mat-icon-button
+      type="button"
+      (click)="increment()"
+      [disabled]="field.readonly || atMaximum">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+</div>

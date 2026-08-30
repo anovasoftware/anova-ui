@@ -22,6 +22,22 @@
 
         <mat-step label="Guests">
           <h2>Guests</h2>
+            <div class="guest-counts">
+              <app-widget-counter
+                [field]="getFormField('adult_count')"
+                [formGroup]="formGroup">
+              </app-widget-counter>
+
+              <app-widget-counter
+                [field]="getFormField('child_count')"
+                [formGroup]="formGroup">
+              </app-widget-counter>
+
+              <app-widget-counter
+                [field]="getFormField('infant_count')"
+                [formGroup]="formGroup">
+              </app-widget-counter>
+            </div>
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious class="back-button">
               Back
@@ -83,7 +99,7 @@
       <div class="summary-section">
         <div class="summary-title">Agency</div>
         <div class="summary-detail">
-          {{ getFormFieldValue('travel_agency_company_id') }}
+          {{ getSelectedDisplayValue('travel_agency_company_id') }}
         </div>
       </div>
 
@@ -130,7 +146,7 @@
       </div>
 
       <div class="summary-section">
-        <div class="summary-title">Guests</div>
+        <div class="summary-title">Guests [{{totalGuestCount}}]</div>
         <div class="summary-empty">
           Not selected
         </div>

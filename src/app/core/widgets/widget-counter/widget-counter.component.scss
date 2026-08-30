@@ -1,0 +1,43 @@
+.counter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 115px;
+}
+
+.counter-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.counter-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.counter-control button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.counter-control mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
+
+.counter-value {
+  min-width: 24px;
+  text-align: center;
+  font-size: 21px;
+  font-weight: 600;
+}

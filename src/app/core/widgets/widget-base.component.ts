@@ -16,7 +16,7 @@ export abstract class WidgetBaseComponent implements OnInit, OnDestroy {
     const control = this.formGroup.controls[this.field.name];
 
     this.currentLength = this.getLength(control?.value);
-
+    console.log('field', this.field);
     this.valueSub = control?.valueChanges.subscribe((value) => {
       this.currentLength = this.getLength(value);
     });

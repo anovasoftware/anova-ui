@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {GridManagerComponent} from '../../components/grid-manager/grid-manager.component';
 import {GridConstants} from '../../../../constants/grid_constants';
-import {DatePipe, NgIf, UpperCasePipe} from '@angular/common';
+import {DatePipe, NgIf, NgSwitchCase, UpperCasePipe} from '@angular/common';
 import {PageBaseComponent} from '../page-base/page-base.component';
 import {MatButton} from '@angular/material/button';
 import {FormConstants} from '../../../../constants/form_constants';
@@ -18,6 +18,9 @@ import {MenuConstants} from '../../../../constants/menu_constants';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Form, FormField} from '../../../models/form';
 import {EventConstants} from '../../../../constants/event_constants';
+import {WidgetSpinnerComponent} from '../../widgets/widget-spinner/widget-spinner.component';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {WidgetCounterComponent} from '../../widgets/widget-counter/widget-counter.component';
 
 @Component({
   selector: 'app-page017',
@@ -30,7 +33,9 @@ import {EventConstants} from '../../../../constants/event_constants';
     MatButton,
     MatStepperPrevious,
     DatePipe,
-    UpperCasePipe
+    UpperCasePipe,
+    WidgetSpinnerComponent,
+    WidgetCounterComponent
   ],
   templateUrl: './page017.component.html',
   styleUrl: './page017.component.scss'
@@ -53,15 +58,18 @@ export class Page017Component extends PageBaseComponent {
 
   header: string = '';
   message: string = '';
+  formGroup: FormGroup;
 
-  constructor(
+    constructor(
     private api: ApiService,
     private formDialogService: FormDialogService,
     private service: FormService,
     private navigationService: NavigationService,
     private snackBar: MatSnackBar,
+    private fb: FormBuilder,
   ) {
     super();
+    this.formGroup = this.fb.group({});
   }
 
   override ngOnInit(): void {
@@ -71,6 +79,23 @@ export class Page017Component extends PageBaseComponent {
   }
 
   protected override onParamsLoaded(): void {
+  }
+
+  private buildFormGroup(): void {
+    if (this.form?.formFields) {
+      for (const control of this.form.formFields) {
+        const fc = this.fb.nonNullable.control(
+          {
+            value: control.value ?? '',
+            disabled: control.readonly,
+          },
+          {
+            updateOn: 'change',
+          });
+
+        this.formGroup.addControl(control.name, fc);
+      }
+    }
   }
 
   loadReservation(): void {
@@ -87,8 +112,9 @@ export class Page017Component extends PageBaseComponent {
         }
 
         this.form = response.data?.form;
-
+        this,this.buildFormGroup();
         if (this.form) {
+          console.log(this.form);
           this.componentLoaded = true;
         }
       },
@@ -112,6 +138,12 @@ export class Page017Component extends PageBaseComponent {
     });
   }
 
+  getFormField(fieldName: string): any {
+    return this.form?.formFields?.find(
+      field => field.name === fieldName
+    );
+  }
+
   getFormFieldValue(fieldName: string): any {
     return this.form?.formFields?.find(
       field => field.name === fieldName
@@ -127,6 +159,7 @@ export class Page017Component extends PageBaseComponent {
       field.value = value;
     }
   }
+
   getSelectedDisplayValue(fieldName: string): string {
     const field = this.form?.formFields?.find(
       field => field.name === fieldName
@@ -150,6 +183,11 @@ export class Page017Component extends PageBaseComponent {
   }
 
   get eventSelected(): boolean {
-    return this.getFormFieldValue('event_id')!==EventConstants.CRUISE_NOT_SELECTED;
+    return this.getFormFieldValue('event_id') !== EventConstants.CRUISE_NOT_SELECTED;
+  }
+  get totalGuestCount(): number {
+    return Number(this.formGroup.get('adult_count')?.value ?? 0)
+         + Number(this.formGroup.get('child_count')?.value ?? 0)
+         + Number(this.formGroup.get('infant_count')?.value ?? 0);
   }
 }

@@ -61,3 +61,12 @@
   gap: 10px;
 }
 
+.guest-counts {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.guest-count {
+  width: 180px;
+}
