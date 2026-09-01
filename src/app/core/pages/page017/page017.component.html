@@ -1,5 +1,5 @@
-{{header}}
-{{message}}
+{{ header }}
+{{ message }}
 <div class="printable-area" *ngIf="componentLoaded">
   <div class="booking-layout">
 
@@ -21,23 +21,39 @@
         </mat-step>
 
         <mat-step label="Guests">
+
           <h2>Guests</h2>
-            <div class="guest-counts">
-              <app-widget-counter
-                [field]="getFormField('adult_count')"
-                [formGroup]="formGroup">
-              </app-widget-counter>
+          <div class="primary-contact">
+            <app-widget-autocomplete
+              [field]="getFormField('contact_person_id')"
+              [formGroup]="formGroup">
+            </app-widget-autocomplete>
+          </div>
 
-              <app-widget-counter
-                [field]="getFormField('child_count')"
-                [formGroup]="formGroup">
-              </app-widget-counter>
+          <div class="guest-counts">
+            <app-widget-counter
+              [field]="getFormField('adult_count')"
+              [formGroup]="formGroup">
+            </app-widget-counter>
+            <app-widget-counter
+              [field]="getFormField('child_count')"
+              [formGroup]="formGroup">
+            </app-widget-counter>
+            <app-widget-counter
+              [field]="getFormField('infant_count')"
+              [formGroup]="formGroup">
+            </app-widget-counter>
+            <app-widget-counter
+              [field]="getFormField('room_count')"
+              [formGroup]="formGroup">
+            </app-widget-counter>
+          </div>
+          <div class="guest-collection-container">
+            <app-widget-guest-collection
+              [guests]="guests">
+            </app-widget-guest-collection>
+          </div>
 
-              <app-widget-counter
-                [field]="getFormField('infant_count')"
-                [formGroup]="formGroup">
-              </app-widget-counter>
-            </div>
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious class="back-button">
               Back
@@ -52,7 +68,7 @@
           <h2>Accommodation</h2>
 
           <div class="step-actions">
-            <button mat-raised-button matStepperNext>
+            <button mat-raised-button matStepperPrevious>
               Back
             </button>
 
@@ -114,10 +130,10 @@
 
         <ng-container *ngIf="eventSelected">
           <div class="summary-value">
-             {{ getSelectedDisplayValue('event_id') }}
+            {{ getSelectedDisplayValue('event_id') }}
           </div>
           <div class="summary-detail">
-            {{ selectedEvent?.eventStartDate | date:'ddMMMyy' | uppercase  }} to
+            {{ selectedEvent?.eventStartDate | date:'ddMMMyy' | uppercase }} to
             {{ selectedEvent?.eventEndDate | date:'ddMMMyy' | uppercase }}
           </div>
           <div class="summary-detail">
@@ -126,27 +142,29 @@
         </ng-container>
 
 
-<!--        <ng-container *ngIf="selectedEvent; else noCruiseSelected">-->
-<!--          <div class="summary-value">-->
-<!--            {{ selectedEvent.description }}-->
-<!--          </div>-->
-<!--          <div class="summary-detail">-->
-<!--            {{ selectedEvent.code }} - {{ selectedEvent.description }}-->
-<!--          </div>-->
-<!--          <div class="summary-detail">-->
-<!--            {{ selectedEvent.eventId }}-->
-<!--          </div>-->
-<!--        </ng-container>-->
+        <!--        <ng-container *ngIf="selectedEvent; else noCruiseSelected">-->
+        <!--          <div class="summary-value">-->
+        <!--            {{ selectedEvent.description }}-->
+        <!--          </div>-->
+        <!--          <div class="summary-detail">-->
+        <!--            {{ selectedEvent.code }} - {{ selectedEvent.description }}-->
+        <!--          </div>-->
+        <!--          <div class="summary-detail">-->
+        <!--            {{ selectedEvent.eventId }}-->
+        <!--          </div>-->
+        <!--        </ng-container>-->
 
-<!--        <ng-template #noCruiseSelected>-->
-<!--          <div class="summary-empty">-->
-<!--            No cruise selected-->
-<!--          </div>-->
-<!--        </ng-template>-->
+        <!--        <ng-template #noCruiseSelected>-->
+        <!--          <div class="summary-empty">-->
+        <!--            No cruise selected-->
+        <!--          </div>-->
+        <!--        </ng-template>-->
       </div>
 
       <div class="summary-section">
-        <div class="summary-title">Guests [{{totalGuestCount}}]</div>
+        <div class="summary-title">
+          Guests [{{ totalGuestCount }}] Rooms [{{ this.formGroup.get('room_count')?.value }}]
+        </div>
         <div class="summary-empty">
           Not selected
         </div>

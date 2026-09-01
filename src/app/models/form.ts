@@ -1,11 +1,13 @@
 import {Type} from './type';
 
+
 export interface DataOption {
   id: string;
   description: string;
   displayValue: string;
 }
-export interface FormField {
+
+export interface FormField<T=any> {
   formFieldId: string;
   typeId: string;
   controlType: string;
@@ -21,6 +23,7 @@ export interface FormField {
   maxLength: number;
   dataOptions: DataOption[];
   dataOptionsSelected: String[];
+  collection: T[];
 }
 
 export interface FormExtra {

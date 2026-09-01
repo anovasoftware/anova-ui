@@ -12,15 +12,19 @@ import {TypeConstants} from '../../../../constants/type_constants';
 import {MatStep, MatStepper, MatStepperNext, MatStepperPrevious} from '@angular/material/stepper';
 import {Event} from '../../../models/event';
 import {FormService} from '../../../services/form.service';
-import {PageConstants} from '../../../../constants/page_constants';
 import {NavigationService} from '../../../services/navigation.service';
 import {MenuConstants} from '../../../../constants/menu_constants';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Form, FormField} from '../../../models/form';
 import {EventConstants} from '../../../../constants/event_constants';
-import {WidgetSpinnerComponent} from '../../widgets/widget-spinner/widget-spinner.component';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {WidgetCounterComponent} from '../../widgets/widget-counter/widget-counter.component';
+import {WidgetCollectionComponent} from '../../widgets/widget-collection/widget-collection.component';
+import {Guest} from '../../../models/guest';
+import {StatusConstants} from '../../../../constants/status_constants';
+import {WidgetGuestCollectionComponent} from '../../widgets/widget-guest-collection/widget-guest-collection.component';
+import {WidgetAutocompleteComponent} from '../../widgets/widget-autocomplete/widget-autocomplete.component';
+
 
 @Component({
   selector: 'app-page017',
@@ -34,8 +38,9 @@ import {WidgetCounterComponent} from '../../widgets/widget-counter/widget-counte
     MatStepperPrevious,
     DatePipe,
     UpperCasePipe,
-    WidgetSpinnerComponent,
-    WidgetCounterComponent
+    WidgetCounterComponent,
+    WidgetGuestCollectionComponent,
+    WidgetAutocompleteComponent,
   ],
   templateUrl: './page017.component.html',
   styleUrl: './page017.component.scss'
@@ -55,12 +60,14 @@ export class Page017Component extends PageBaseComponent {
   selectedEvent: Event | null = null;
   formId = FormConstants.BOOKING;
   form?: Form;
+  guests: Guest[] = [];
 
   header: string = '';
   message: string = '';
   formGroup: FormGroup;
 
-    constructor(
+
+  constructor(
     private api: ApiService,
     private formDialogService: FormDialogService,
     private service: FormService,
@@ -108,14 +115,20 @@ export class Page017Component extends PageBaseComponent {
             response.message,
             response.errors
           );
-          return;
-        }
+        } else {
+          this.form = response.data?.form;
+          this.buildFormGroup();
 
-        this.form = response.data?.form;
-        this,this.buildFormGroup();
-        if (this.form) {
-          console.log(this.form);
-          this.componentLoaded = true;
+          if (this.form) {
+            console.log(this.form);
+
+            // this.guests = this.getFormFieldValue('guests').get('collection');
+            const guestField = this.getFormField('guests');
+            this.guests = guestField?.collection ?? [];
+            this.syncGuestCollection();
+            console.log(this.guests);
+            this.componentLoaded = true;
+          }
         }
       },
       error: (err) => {
@@ -185,9 +198,55 @@ export class Page017Component extends PageBaseComponent {
   get eventSelected(): boolean {
     return this.getFormFieldValue('event_id') !== EventConstants.CRUISE_NOT_SELECTED;
   }
+
   get totalGuestCount(): number {
     return Number(this.formGroup.get('adult_count')?.value ?? 0)
-         + Number(this.formGroup.get('child_count')?.value ?? 0)
-         + Number(this.formGroup.get('infant_count')?.value ?? 0);
+      + Number(this.formGroup.get('child_count')?.value ?? 0)
+      + Number(this.formGroup.get('infant_count')?.value ?? 0);
+  }
+
+
+  private syncGuestCollection(): void {
+    const adultCount = Number(this.formGroup.get('adult_count')?.value ?? 0);
+    const childCount = Number(this.formGroup.get('child_count')?.value ?? 0);
+    const infantCount = Number(this.formGroup.get('infant_count')?.value ?? 0);
+
+    const requiredTypes = [
+      ...Array(adultCount).fill('adult'),
+      ...Array(childCount).fill('child'),
+      ...Array(infantCount).fill('infant')
+    ];
+
+    while (this.guests.length < requiredTypes.length) {
+      this.guests.push(
+        this.createEmptyGuest(
+          requiredTypes[this.guests.length]
+        )
+      );
+    }
+
+    while (this.guests.length > requiredTypes.length) {
+      this.guests.pop();
+    }
+
+    this.guests.forEach((guest, index) => {
+      if (!guest.guestId) {
+        guest.guestTypeId = requiredTypes[index];
+      }
+    });
+  }
+
+  private createEmptyGuest(guestTypeId: string): Guest {
+    return {
+      guestId: '',
+      statusId: StatusConstants.ACTIVE,
+      guestTypeId,
+      bookingFirstName: '',
+      bookingMiddleName: '',
+      bookingLastName: '',
+      bookingSuffix: '',
+      birthDate: '',
+      genderTypeId: ''
+    };
   }
 }

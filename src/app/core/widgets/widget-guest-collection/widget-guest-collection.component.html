@@ -1,0 +1,32 @@
+<form [formGroup]="guestForm">
+  <div formArrayName="guests">
+    <div
+      *ngFor="let guestGroup of guestArray.controls; let i = index"
+      [formGroupName]="i"
+      class="guest-row">
+
+      <div class="guest-heading">
+        Guest {{ i + 1 }}
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+
+        <input
+          matInput
+          formControlName="bookingFirstName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+
+        <input
+          matInput
+          formControlName="bookingLastName">
+      </mat-form-field>
+
+    </div>
+
+  </div>
+
+</form>
