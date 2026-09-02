@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -6,6 +6,8 @@ import {MatInputModule} from '@angular/material/input';
 import {WidgetBaseComponent} from '../widget-base.component';
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
 import {DataOption} from '../../../models/form';
+import {MatIcon} from '@angular/material/icon';
+import {FormDialogService} from '../../../services/form-dialog.service';
 
 @Component({
   selector: 'app-widget-autocomplete',
@@ -17,14 +19,17 @@ import {DataOption} from '../../../models/form';
     MatInputModule,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    MatOption
+    MatOption,
+    MatIcon
   ],
   templateUrl: './widget-autocomplete.component.html',
   styleUrl: './widget-autocomplete.component.scss'
 })
 export class WidgetAutocompleteComponent extends WidgetBaseComponent {
+  readonly CREATE_NEW = '__CREATE_NEW__';
   filteredOptions: DataOption[] = [];
   searchControl = new FormControl('');
+  private formDialogService = inject(FormDialogService);
 
   override ngOnInit(): void {
     super.ngOnInit();
@@ -32,12 +37,11 @@ export class WidgetAutocompleteComponent extends WidgetBaseComponent {
     this.filteredOptions = this.field.dataOptions ?? [];
 
     this.searchControl.valueChanges.subscribe(value => {
-      const search = typeof value === 'string' ? value.trim().toLowerCase(): '';
+      const search = typeof value === 'string' ? value.trim().toLowerCase() : '';
 
       if (search.length < 3) {
         this.filteredOptions = [];
-      }
-      else {
+      } else {
         this.filteredOptions = (this.field.dataOptions ?? []).filter(
           option => option.displayValue.toLowerCase().includes(search)
         );
@@ -45,12 +49,32 @@ export class WidgetAutocompleteComponent extends WidgetBaseComponent {
     });
   }
 
-  optionSelected(option: DataOption): void {
-    this.formGroup.get(this.field.name)?.setValue(option.id);
+  optionSelected(option: DataOption | string): void {
+    if (option === this.CREATE_NEW) {
+      this.createNewRecord();
+      return;
+    }
+
+    const dataOption = option as DataOption;
+
+    this.formGroup.get(this.field.name)?.setValue(dataOption.id);
 
     this.searchControl.setValue(
-      option.displayValue,
+      dataOption.displayValue,
       {emitEvent: false}
+    );
+  }
+
+  createNewRecord(): void {
+    if (!this.field.dataSourceFormId) {
+      return;
+    }
+
+    this.formDialogService.openForm(
+      this.field.dataSourceFormId,
+      'new',
+      'create',
+      null
     );
   }
 }

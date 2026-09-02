@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {GridManagerComponent} from '../../components/grid-manager/grid-manager.component';
 import {GridConstants} from '../../../../constants/grid_constants';
-import {DatePipe, NgIf, NgSwitchCase, UpperCasePipe} from '@angular/common';
+import {DatePipe, NgForOf, NgIf, NgSwitchCase, UpperCasePipe} from '@angular/common';
 import {PageBaseComponent} from '../page-base/page-base.component';
 import {MatButton} from '@angular/material/button';
 import {FormConstants} from '../../../../constants/form_constants';
@@ -41,6 +41,7 @@ import {WidgetAutocompleteComponent} from '../../widgets/widget-autocomplete/wid
     WidgetCounterComponent,
     WidgetGuestCollectionComponent,
     WidgetAutocompleteComponent,
+    NgForOf,
   ],
   templateUrl: './page017.component.html',
   styleUrl: './page017.component.scss'
@@ -70,7 +71,7 @@ export class Page017Component extends PageBaseComponent {
   constructor(
     private api: ApiService,
     private formDialogService: FormDialogService,
-    private service: FormService,
+    private formService: FormService,
     private navigationService: NavigationService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
@@ -107,7 +108,7 @@ export class Page017Component extends PageBaseComponent {
 
   loadReservation(): void {
     this.componentLoaded = false;
-    this.service.loadForm(this.formId, this.formAction, this.recordId, this.formParams).subscribe({
+    this.formService.loadForm(this.formId, this.formAction, this.recordId, this.formParams).subscribe({
       next: response => {
         if (!response.success) {
           console.error(
@@ -126,7 +127,7 @@ export class Page017Component extends PageBaseComponent {
             const guestField = this.getFormField('guests');
             this.guests = guestField?.collection ?? [];
             this.syncGuestCollection();
-            console.log(this.guests);
+            this.subscribeToGuestCounts();
             this.componentLoaded = true;
           }
         }
@@ -234,6 +235,8 @@ export class Page017Component extends PageBaseComponent {
         guest.guestTypeId = requiredTypes[index];
       }
     });
+    // Important: give the child component a new array reference
+    this.guests = [...this.guests];
   }
 
   private createEmptyGuest(guestTypeId: string): Guest {
@@ -248,5 +251,33 @@ export class Page017Component extends PageBaseComponent {
       birthDate: '',
       genderTypeId: ''
     };
+  }
+
+  get roomCount(): number {
+    return Number(
+      this.formGroup.get('room_count')?.value ?? 0
+    );
+  }
+
+
+  get roomNumbers(): number[] {
+    return Array.from(
+      {length: this.roomCount},
+      (_, index) => index + 1
+    );
+  }
+
+  private subscribeToGuestCounts(): void {
+    const fields = [
+      'adult_count',
+      'child_count',
+      'infant_count'
+    ];
+
+    for (const fieldName of fields) {
+      this.formGroup.get(fieldName)?.valueChanges.subscribe(() => {
+          this.syncGuestCollection();
+        });
+    }
   }
 }

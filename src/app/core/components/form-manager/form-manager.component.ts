@@ -85,7 +85,7 @@ export class FormManagerComponent implements OnInit {
   message: string | null = null;
 
   constructor(
-    private service: FormService,
+    private formService: FormService,
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
@@ -118,7 +118,7 @@ export class FormManagerComponent implements OnInit {
   loadForm(): void {
     this.error = null;
 
-    this.service.loadForm(this.formId, this.action, this.recordId, this.params).subscribe({
+    this.formService.loadForm(this.formId, this.action, this.recordId, this.params).subscribe({
       next: (response) => {
         if (!response.success) {
           console.error('loadForm failed:', response.message, response.errors);
@@ -224,7 +224,7 @@ export class FormManagerComponent implements OnInit {
       ...this.formGroup.getRawValue()
     };
 
-    this.service.submitForm(this.formId, this.recordId, 'save', payload).subscribe({
+    this.formService.submitForm(this.formId, this.recordId, 'save', payload).subscribe({
       next: (response) => {
         const data = response.data;
         if (response.success) {

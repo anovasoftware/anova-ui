@@ -22,7 +22,7 @@
 
         <mat-step label="Guests">
 
-          <h2>Guests</h2>
+          <h3>Guests</h3>
           <div class="primary-contact">
             <app-widget-autocomplete
               [field]="getFormField('contact_person_id')"
@@ -65,13 +65,20 @@
         </mat-step>
 
         <mat-step label="Accommodation">
-          <h2>Accommodation</h2>
+          <h3>Accommodation</h3>
+          <div
+            *ngFor="let roomNumber of roomNumbers"
+            class="room-section">
+
+            <h4>Room {{ roomNumber }}</h4>
+
+          </div>
+
 
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious>
               Back
             </button>
-
             <button mat-raised-button matStepperNext>
               Continue
             </button>
@@ -79,7 +86,7 @@
         </mat-step>
 
         <mat-step label="Pricing">
-          <h2>Pricing</h2>
+          <h3>Pricing</h3>
 
           <div class="step-actions">
             <button mat-raised-button matStepperNext>
@@ -93,7 +100,7 @@
         </mat-step>
 
         <mat-step label="Review">
-          <h2>Review Booking</h2>
+          <h3>Review Booking</h3>
 
           <div class="step-actions">
             <button mat-raised-button matStepperNext>

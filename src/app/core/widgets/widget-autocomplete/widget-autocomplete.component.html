@@ -26,6 +26,12 @@
         [value]="option">
         {{ option.displayValue }}
       </mat-option>
+      <mat-option
+        *ngIf="field.dataSourceAllowCreateFlag === 'Y'"
+        [value]="CREATE_NEW">
+        <mat-icon>add</mat-icon>
+        Add New
+      </mat-option>
     </mat-autocomplete>
 
     <mat-error

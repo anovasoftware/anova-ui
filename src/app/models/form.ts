@@ -21,6 +21,8 @@ export interface FormField<T=any> {
   rows: number;
   minLength: number;
   maxLength: number;
+  dataSourceAllowCreateFlag: string,
+  dataSourceFormId: string,
   dataOptions: DataOption[];
   dataOptionsSelected: String[];
   collection: T[];
