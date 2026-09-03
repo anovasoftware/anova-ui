@@ -34,7 +34,8 @@ export class WidgetAutocompleteComponent extends WidgetBaseComponent {
   override ngOnInit(): void {
     super.ngOnInit();
 
-    this.filteredOptions = this.field.dataOptions ?? [];
+    // this.filteredOptions = this.field.dataOptions ?? [];
+    this.filteredOptions = [];
 
     this.searchControl.valueChanges.subscribe(value => {
       const search = typeof value === 'string' ? value.trim().toLowerCase() : '';
@@ -75,6 +76,35 @@ export class WidgetAutocompleteComponent extends WidgetBaseComponent {
       'new',
       'create',
       null
+    ).afterClosed().subscribe(result => {
+
+      if (!result) {
+        return;
+      }
+
+      this.refreshOptionsAndSelect(result);
+    });
+  }
+
+  private refreshOptionsAndSelect(recordId: string): void {
+    // reload this.field.dataOptions from API
+
+    // once loaded:
+    const option = this.field.dataOptions?.find(
+      item => item.id === recordId
+    );
+
+    if (!option) {
+      return;
+    }
+
+    this.formGroup
+      .get(this.field.name)
+      ?.setValue(option.id);
+
+    this.searchControl.setValue(
+      option.displayValue,
+      {emitEvent: false}
     );
   }
 }
