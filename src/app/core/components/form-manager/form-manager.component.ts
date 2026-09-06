@@ -185,10 +185,9 @@ export class FormManagerComponent implements OnInit {
       validators.push(Validators.required);
     }
 
-    if (control.controlType === 'email') {
+    if (['email', 'email1p'].includes(control.controlType)) {
       validators.push(Validators.email);
     }
-
     if (control.minLength > 0) {
       validators.push(Validators.minLength(control.minLength));
     }

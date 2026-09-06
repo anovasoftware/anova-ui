@@ -26,6 +26,7 @@ export interface FormField<T=any> {
   dataOptions: DataOption[];
   dataOptionsSelected: String[];
   collection: T[];
+  data1pFlag: string;
 }
 
 export interface FormExtra {

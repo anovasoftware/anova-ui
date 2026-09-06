@@ -20,7 +20,19 @@ import {WidgetBaseComponent} from '../widget-base.component';
   styleUrl: './widget-textbox.component.scss'
 })
 export class WidgetTextboxComponent extends WidgetBaseComponent{
+  // get inputType(): string {
+  //   return this.field?.controlType?.toLowerCase() || 'text';
+  // }
   get inputType(): string {
-    return this.field?.controlType?.toLowerCase() || 'text';
+    switch (this.field.controlType) {
+      case 'email1p':
+        return 'email';
+
+      case 'password1p':
+        return 'password';
+
+      default:
+        return this.field.controlType || 'text';
+    }
   }
 }

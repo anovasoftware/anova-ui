@@ -17,13 +17,16 @@ import {MenuConstants} from '../../../../constants/menu_constants';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Form, FormField} from '../../../models/form';
 import {EventConstants} from '../../../../constants/event_constants';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {WidgetCounterComponent} from '../../widgets/widget-counter/widget-counter.component';
 import {WidgetCollectionComponent} from '../../widgets/widget-collection/widget-collection.component';
 import {Guest} from '../../../models/guest';
 import {StatusConstants} from '../../../../constants/status_constants';
 import {WidgetGuestCollectionComponent} from '../../widgets/widget-guest-collection/widget-guest-collection.component';
 import {WidgetAutocompleteComponent} from '../../widgets/widget-autocomplete/widget-autocomplete.component';
+import {ReservationRoom} from '../../../models/reservation-room';
+import {ReservationRoomService} from '../../../services/res/reservation-room.service';
+import {WidgetReservationRoomComponent} from '../../widgets/widget-reservation-room/widget-reservation-room.component';
 
 
 @Component({
@@ -42,6 +45,7 @@ import {WidgetAutocompleteComponent} from '../../widgets/widget-autocomplete/wid
     WidgetGuestCollectionComponent,
     WidgetAutocompleteComponent,
     NgForOf,
+    WidgetReservationRoomComponent,
   ],
   templateUrl: './page017.component.html',
   styleUrl: './page017.component.scss'
@@ -62,6 +66,7 @@ export class Page017Component extends PageBaseComponent {
   formId = FormConstants.BOOKING;
   form?: Form;
   guests: Guest[] = [];
+  reservationRooms: ReservationRoom[] = [];
 
   header: string = '';
   message: string = '';
@@ -75,6 +80,7 @@ export class Page017Component extends PageBaseComponent {
     private navigationService: NavigationService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
+    private reservationRoomService: ReservationRoomService,
   ) {
     super();
     this.formGroup = this.fb.group({});
@@ -106,49 +112,117 @@ export class Page017Component extends PageBaseComponent {
     }
   }
 
+  // loadReservation(): void {
+  //   this.componentLoaded = false;
+  //   this.formService.loadForm(this.formId, this.formAction, this.recordId, this.formParams).subscribe({
+  //     next: response => {
+  //       if (!response.success) {
+  //         console.error(
+  //           'loadReservationForm failed:',
+  //           response.message,
+  //           response.errors
+  //         );
+  //       } else {
+  //         this.form = response.data?.form;
+  //         this.buildFormGroup();
+  //
+  //         if (this.form) {
+  //           console.log(this.form);
+  //
+  //           // this.guests = this.getFormFieldValue('guests').get('collection');
+  //           const guestField = this.getFormField('guests');
+  //           this.guests = guestField?.collection ?? [];
+  //           this.syncGuestCollection();
+  //           this.subscribeToGuestCounts();
+  //           this.componentLoaded = true;
+  //         }
+  //       }
+  //     },
+  //     error: (err) => {
+  //       let message = 'Failed to load form.';
+  //
+  //       if (err?.error?.message) {
+  //         message = err.error.message;
+  //       } else if (err.status === 0) {
+  //         message = 'Network error. Please check your connection.';
+  //       }
+  //       this.message = message;
+  //       this.header = 'Error loading form';
+  //       this.componentLoaded = false;
+  //       this.snackBar.open(message, 'OK', {
+  //         duration: 7000
+  //       });
+  //
+  //       this.exitPage();
+  //     }
+  //   });
+  // }
   loadReservation(): void {
     this.componentLoaded = false;
+
     this.formService.loadForm(this.formId, this.formAction, this.recordId, this.formParams).subscribe({
       next: response => {
         if (!response.success) {
-          console.error(
-            'loadReservationForm failed:',
-            response.message,
-            response.errors
+          console.error('loadReservationForm failed:', response.message, response.errors);
+          return;
+        }
+
+        this.form = response.data?.form;
+        this.buildFormGroup();
+
+        if (this.form) {
+          console.log(this.form);
+
+          const reservationRoomField = this.getFormField('reservation_rooms');
+          this.reservationRooms = reservationRoomField?.collection ?? [];
+
+          this.reservationRoomService.syncRooms(
+            this.formGroup,
+            this.reservationRooms
           );
-        } else {
-          this.form = response.data?.form;
-          this.buildFormGroup();
-
-          if (this.form) {
-            console.log(this.form);
-
-            // this.guests = this.getFormFieldValue('guests').get('collection');
-            const guestField = this.getFormField('guests');
-            this.guests = guestField?.collection ?? [];
-            this.syncGuestCollection();
-            this.subscribeToGuestCounts();
-            this.componentLoaded = true;
-          }
+          this.subscribeToRoomCount();
+          this.componentLoaded = true;
         }
       },
-      error: (err) => {
+      error: err => {
         let message = 'Failed to load form.';
 
         if (err?.error?.message) {
           message = err.error.message;
         } else if (err.status === 0) {
-          message = 'Network error. Please check your connection.';
+          message =
+            'Network error. Please check your connection.';
         }
+
         this.message = message;
         this.header = 'Error loading form';
         this.componentLoaded = false;
-        this.snackBar.open(message, 'OK', {
-          duration: 7000
-        });
+
+        this.snackBar.open(message, 'OK', {duration: 7000});
 
         this.exitPage();
       }
+    });
+  }
+
+  get reservationRoomForms(): FormGroup[] {
+    const rooms = this.formGroup.get('reservation_rooms') as FormArray;
+
+    return rooms.controls as FormGroup[];
+  }
+
+  subscribeToRoomCount(): void {
+    const roomCountControl = this.formGroup.get('room_count');
+
+    if (!roomCountControl) {
+      return;
+    }
+
+    roomCountControl.valueChanges.subscribe(() => {
+      this.reservationRoomService.syncRooms(
+        this.formGroup,
+        this.reservationRooms
+      );
     });
   }
 
@@ -207,51 +281,51 @@ export class Page017Component extends PageBaseComponent {
   }
 
 
-  private syncGuestCollection(): void {
-    const adultCount = Number(this.formGroup.get('adult_count')?.value ?? 0);
-    const childCount = Number(this.formGroup.get('child_count')?.value ?? 0);
-    const infantCount = Number(this.formGroup.get('infant_count')?.value ?? 0);
-
-    const requiredTypes = [
-      ...Array(adultCount).fill('adult'),
-      ...Array(childCount).fill('child'),
-      ...Array(infantCount).fill('infant')
-    ];
-
-    while (this.guests.length < requiredTypes.length) {
-      this.guests.push(
-        this.createEmptyGuest(
-          requiredTypes[this.guests.length]
-        )
-      );
-    }
-
-    while (this.guests.length > requiredTypes.length) {
-      this.guests.pop();
-    }
-
-    this.guests.forEach((guest, index) => {
-      if (!guest.guestId) {
-        guest.guestTypeId = requiredTypes[index];
-      }
-    });
-    // Important: give the child component a new array reference
-    this.guests = [...this.guests];
-  }
-
-  private createEmptyGuest(guestTypeId: string): Guest {
-    return {
-      guestId: '',
-      statusId: StatusConstants.ACTIVE,
-      guestTypeId,
-      bookingFirstName: '',
-      bookingMiddleName: '',
-      bookingLastName: '',
-      bookingSuffix: '',
-      birthDate: '',
-      genderTypeId: ''
-    };
-  }
+  // private syncGuestCollection(): void {
+  //   const adultCount = Number(this.formGroup.get('adult_count')?.value ?? 0);
+  //   const childCount = Number(this.formGroup.get('child_count')?.value ?? 0);
+  //   const infantCount = Number(this.formGroup.get('infant_count')?.value ?? 0);
+  //
+  //   const requiredTypes = [
+  //     ...Array(adultCount).fill('adult'),
+  //     ...Array(childCount).fill('child'),
+  //     ...Array(infantCount).fill('infant')
+  //   ];
+  //
+  //   while (this.guests.length < requiredTypes.length) {
+  //     this.guests.push(
+  //       this.createEmptyGuest(
+  //         requiredTypes[this.guests.length]
+  //       )
+  //     );
+  //   }
+  //
+  //   while (this.guests.length > requiredTypes.length) {
+  //     this.guests.pop();
+  //   }
+  //
+  //   this.guests.forEach((guest, index) => {
+  //     if (!guest.guestId) {
+  //       guest.guestTypeId = requiredTypes[index];
+  //     }
+  //   });
+  //   // Important: give the child component a new array reference
+  //   this.guests = [...this.guests];
+  // }
+  //
+  // private createEmptyGuest(guestTypeId: string): Guest {
+  //   return {
+  //     guestId: '',
+  //     statusId: StatusConstants.ACTIVE,
+  //     guestTypeId,
+  //     bookingFirstName: '',
+  //     bookingMiddleName: '',
+  //     bookingLastName: '',
+  //     bookingSuffix: '',
+  //     birthDate: '',
+  //     genderTypeId: ''
+  //   };
+  // }
 
   get roomCount(): number {
     return Number(
@@ -267,17 +341,17 @@ export class Page017Component extends PageBaseComponent {
     );
   }
 
-  private subscribeToGuestCounts(): void {
-    const fields = [
-      'adult_count',
-      'child_count',
-      'infant_count'
-    ];
-
-    for (const fieldName of fields) {
-      this.formGroup.get(fieldName)?.valueChanges.subscribe(() => {
-          this.syncGuestCollection();
-        });
-    }
-  }
+  // private subscribeToGuestCounts(): void {
+  //   const fields = [
+  //     'adult_count',
+  //     'child_count',
+  //     'infant_count'
+  //   ];
+  //
+  //   for (const fieldName of fields) {
+  //     this.formGroup.get(fieldName)?.valueChanges.subscribe(() => {
+  //       this.syncGuestCollection();
+  //     });
+  //   }
+  // }
 }

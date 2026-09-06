@@ -31,28 +31,35 @@
           </div>
 
           <div class="guest-counts">
-            <app-widget-counter
-              [field]="getFormField('adult_count')"
-              [formGroup]="formGroup">
-            </app-widget-counter>
-            <app-widget-counter
-              [field]="getFormField('child_count')"
-              [formGroup]="formGroup">
-            </app-widget-counter>
-            <app-widget-counter
-              [field]="getFormField('infant_count')"
-              [formGroup]="formGroup">
-            </app-widget-counter>
+<!--            <app-widget-counter-->
+<!--              [field]="getFormField('adult_count')"-->
+<!--              [formGroup]="formGroup">-->
+<!--            </app-widget-counter>-->
+<!--            <app-widget-counter-->
+<!--              [field]="getFormField('child_count')"-->
+<!--              [formGroup]="formGroup">-->
+<!--            </app-widget-counter>-->
+<!--            <app-widget-counter-->
+<!--              [field]="getFormField('infant_count')"-->
+<!--              [formGroup]="formGroup">-->
+<!--            </app-widget-counter>-->
             <app-widget-counter
               [field]="getFormField('room_count')"
               [formGroup]="formGroup">
             </app-widget-counter>
           </div>
-          <div class="guest-collection-container">
-            <app-widget-guest-collection
-              [guests]="guests">
-            </app-widget-guest-collection>
-          </div>
+
+          <app-widget-reservation-room
+            *ngFor="let roomForm of reservationRoomForms; let i = index"
+            [roomForm]="roomForm"
+            [roomNumber]="i + 1">
+          </app-widget-reservation-room>
+
+<!--          <div class="guest-collection-container">-->
+<!--            <app-widget-guest-collection-->
+<!--              [guests]="guests">-->
+<!--            </app-widget-guest-collection>-->
+<!--          </div>-->
 
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious class="back-button">

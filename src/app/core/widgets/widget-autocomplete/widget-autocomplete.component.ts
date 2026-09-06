@@ -77,34 +77,30 @@ export class WidgetAutocompleteComponent extends WidgetBaseComponent {
       'create',
       null
     ).afterClosed().subscribe(result => {
+      if (result.data.newDataOption) {
+        const dataOption = result.data.newDataOption;
 
-      if (!result) {
-        return;
+        this.field.dataOptions ??=[];
+        this.field.dataOptions.push(dataOption);
+        this.filteredOptions = [dataOption];
+
+        this.formGroup.get(this.field.name)?.setValue(dataOption.id);
+        this.searchControl.setValue(dataOption.displayValue, {emitEvent: false});
+
+        // this.refreshOptionsAndSelect(result.data.newDataOption);
       }
-
-      this.refreshOptionsAndSelect(result);
     });
   }
 
-  private refreshOptionsAndSelect(recordId: string): void {
-    // reload this.field.dataOptions from API
-
-    // once loaded:
-    const option = this.field.dataOptions?.find(
-      item => item.id === recordId
-    );
-
-    if (!option) {
-      return;
-    }
-
-    this.formGroup
-      .get(this.field.name)
-      ?.setValue(option.id);
-
-    this.searchControl.setValue(
-      option.displayValue,
-      {emitEvent: false}
-    );
-  }
+  // private refreshOptionsAndSelect(newDataOption: DataOption): void {
+  //   const id = newDataOption.id;
+  //   const option = this.field.dataOptions?.find(
+  //     item => item.id === id
+  //   );
+  //
+  //   if (option) {
+  //     this.formGroup.get(this.field.name)?.setValue(option.id);
+  //     this.searchControl.setValue(option.displayValue, {emitEvent: false});
+  //   }
+  // }
 }
