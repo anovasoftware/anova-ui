@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {Observable} from 'rxjs';
-import {Form} from '../models/form';
+import {Form, FormField} from '../models/form';
 import {ApiResponse, FormResponse} from '../models/api-response';
 
 @Injectable({
@@ -51,6 +51,36 @@ export class FormService {
     }
     return `${this.baseUrl}${formId}?${searchParams.toString()}`;
   }
+
+  createFormField(
+    name: string,
+    label: string,
+    overrides: Partial<FormField> = {}
+  ): FormField {
+    return {
+      formFieldId: '',
+      typeId: '',
+      controlType: 'text',
+      label,
+      name,
+      placeholder: '',
+      type: {} as any,
+      value: null,
+      readonly: false,
+      customFlag: '',
+      rows: 0,
+      minLength: 0,
+      maxLength: 0,
+      dataSourceAllowCreateFlag: 'N',
+      dataSourceFormId: '',
+      dataOptions: [],
+      dataOptionsSelected: [],
+      collection: [],
+      data1pFlag: 'N',
+      ...overrides
+    };
+  }
+
 }
 
 

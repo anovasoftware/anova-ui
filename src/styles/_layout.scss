@@ -104,3 +104,22 @@
   color: variables.$highlight;
 
 }
+
+.layout-width-sm {
+  width: 100%;
+  max-width: 300px;
+}
+
+.layout-width-md {
+  width: 100%;
+  max-width: 600px;
+}
+
+.layout-width-lg {
+  width: 100%;
+  max-width: 900px;
+}
+
+.layout-width-full {
+  width: 100%;
+}

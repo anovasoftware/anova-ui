@@ -119,7 +119,7 @@ mat-card.form-card-inline {
   --mdc-protected-button-container-color: #{map.get(theme.$neutral-palette, 70)};
   --mdc-protected-button-label-text-color: #{map.get(theme.$neutral-palette, 98)};
 }
-.continue-button {
+.continue-button, .action-button {
   --mdc-protected-button-container-color: #{map.get(theme.$primary-palette, 50)};
   --mdc-protected-button-label-text-color: #{map.get(theme.$primary-palette, 98)};
 }

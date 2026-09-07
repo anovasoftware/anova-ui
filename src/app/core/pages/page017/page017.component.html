@@ -20,55 +20,91 @@
           </div>
         </mat-step>
 
-        <mat-step label="Guests">
+        <mat-step label="Rooms and Guests">
 
-          <h3>Guests</h3>
-          <div class="primary-contact">
+          <h3>Rooms and Guests</h3>
+          <div class="layout-width-md">
             <app-widget-autocomplete
               [field]="getFormField('contact_person_id')"
               [formGroup]="formGroup">
             </app-widget-autocomplete>
+
+            <!--          <div class="guest-counts">-->
+            <!--            <app-widget-counter-->
+            <!--              [field]="getFormField('adult_count')"-->
+            <!--              [formGroup]="formGroup">-->
+            <!--            </app-widget-counter>-->
+            <!--            <app-widget-counter-->
+            <!--              [field]="getFormField('child_count')"-->
+            <!--              [formGroup]="formGroup">-->
+            <!--            </app-widget-counter>-->
+            <!--            <app-widget-counter-->
+            <!--              [field]="getFormField('infant_count')"-->
+            <!--              [formGroup]="formGroup">-->
+            <!--            </app-widget-counter>-->
+            <!--            <app-widget-counter-->
+            <!--              [field]="getFormField('room_count')"-->
+            <!--              [formGroup]="formGroup">-->
+            <!--            </app-widget-counter>-->
+            <!--          </div>-->
+
+            <app-widget-reservation-room
+              *ngFor="let roomForm of reservationRoomForms; let i = index"
+              [roomForm]="roomForm"
+              [roomNumber]="i + 1"
+              (removeRoom)="removeRoom(i)">
+            </app-widget-reservation-room>
+
+            <!--          <div class="guest-collection-container">-->
+            <!--            <app-widget-guest-collection-->
+            <!--              [guests]="guests">-->
+            <!--            </app-widget-guest-collection>-->
+            <!--          </div>-->
+
+            <div class="step-footer">
+              <div class="step-actions">
+                <button
+                  mat-raised-button
+                  matStepperPrevious
+                  type="button">
+                  Back
+                </button>
+
+                <button
+                  mat-raised-button
+                  matStepperNext
+                  color="primary"
+                  type="button">
+                  Continue
+                </button>
+              </div>
+
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="addRoom()">
+                <mat-icon>add</mat-icon>
+                Add Room
+              </button>
+            </div>
           </div>
+          <!--          <div class="room-actions layout-width-md">-->
+          <!--            <button-->
+          <!--              mat-stroked-button-->
+          <!--              type="button"-->
+          <!--              (click)="addRoom()">-->
+          <!--            Add Room-->
+          <!--            </button>-->
+          <!--          </div>-->
 
-          <div class="guest-counts">
-<!--            <app-widget-counter-->
-<!--              [field]="getFormField('adult_count')"-->
-<!--              [formGroup]="formGroup">-->
-<!--            </app-widget-counter>-->
-<!--            <app-widget-counter-->
-<!--              [field]="getFormField('child_count')"-->
-<!--              [formGroup]="formGroup">-->
-<!--            </app-widget-counter>-->
-<!--            <app-widget-counter-->
-<!--              [field]="getFormField('infant_count')"-->
-<!--              [formGroup]="formGroup">-->
-<!--            </app-widget-counter>-->
-            <app-widget-counter
-              [field]="getFormField('room_count')"
-              [formGroup]="formGroup">
-            </app-widget-counter>
-          </div>
-
-          <app-widget-reservation-room
-            *ngFor="let roomForm of reservationRoomForms; let i = index"
-            [roomForm]="roomForm"
-            [roomNumber]="i + 1">
-          </app-widget-reservation-room>
-
-<!--          <div class="guest-collection-container">-->
-<!--            <app-widget-guest-collection-->
-<!--              [guests]="guests">-->
-<!--            </app-widget-guest-collection>-->
-<!--          </div>-->
-
-          <div class="step-actions">
-            <button mat-raised-button matStepperPrevious class="back-button">
-              Back
-            </button>
-            <button mat-raised-button matStepperNext class="continue-button">
-              Continue
-            </button>
-          </div>
+          <!--          <div class="step-actions">-->
+          <!--            <button mat-raised-button matStepperPrevious class="back-button">-->
+          <!--              Back-->
+          <!--            </button>-->
+          <!--            <button mat-raised-button matStepperNext class="continue-button">-->
+          <!--              Continue-->
+          <!--            </button>-->
+          <!--          </div>-->
         </mat-step>
 
         <mat-step label="Accommodation">

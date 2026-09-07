@@ -1,8 +1,40 @@
 <div class="reservation-room">
 
   <div class="room-header">
-    Room {{ roomNumber }}
+    <span>Room {{ roomNumber }}</span>
+
+<!--    <button-->
+<!--      *ngIf="roomNumber > 1"-->
+<!--      mat-button-->
+<!--      type="button"-->
+<!--      class="remove-room"-->
+<!--      (click)="onRemoveRoom()">-->
+<!--      Remove Room-->
+<!--    </button>-->
+    <button *ngIf="roomNumber > 1"
+      mat-button
+      type="button"
+      class="remove-room"
+      (click)="onRemoveRoom()">
+      <mat-icon>delete_outline</mat-icon>
+      Remove Room
+    </button>
   </div>
 
+  <div class="room-counts">
+    <app-widget-counter
+      [field]="adultCountField"
+      [formGroup]="roomForm">
+    </app-widget-counter>
 
+    <app-widget-counter
+      [field]="childCountField"
+      [formGroup]="roomForm">
+    </app-widget-counter>
+
+    <app-widget-counter
+      [field]="infantCountField"
+      [formGroup]="roomForm">
+    </app-widget-counter>
+  </div>
 </div>

@@ -27,6 +27,7 @@ import {WidgetAutocompleteComponent} from '../../widgets/widget-autocomplete/wid
 import {ReservationRoom} from '../../../models/reservation-room';
 import {ReservationRoomService} from '../../../services/res/reservation-room.service';
 import {WidgetReservationRoomComponent} from '../../widgets/widget-reservation-room/widget-reservation-room.component';
+import {MatIcon} from '@angular/material/icon';
 
 
 @Component({
@@ -46,6 +47,7 @@ import {WidgetReservationRoomComponent} from '../../widgets/widget-reservation-r
     WidgetAutocompleteComponent,
     NgForOf,
     WidgetReservationRoomComponent,
+    MatIcon,
   ],
   templateUrl: './page017.component.html',
   styleUrl: './page017.component.scss'
@@ -214,16 +216,14 @@ export class Page017Component extends PageBaseComponent {
   subscribeToRoomCount(): void {
     const roomCountControl = this.formGroup.get('room_count');
 
-    if (!roomCountControl) {
-      return;
+    if (roomCountControl) {
+      roomCountControl.valueChanges.subscribe(() => {
+        this.reservationRoomService.syncRooms(
+          this.formGroup,
+          this.reservationRooms
+        );
+      });
     }
-
-    roomCountControl.valueChanges.subscribe(() => {
-      this.reservationRoomService.syncRooms(
-        this.formGroup,
-        this.reservationRooms
-      );
-    });
   }
 
   getFormField(fieldName: string): any {
@@ -354,4 +354,10 @@ export class Page017Component extends PageBaseComponent {
   //     });
   //   }
   // }
+  addRoom() {
+    this.reservationRoomService.addRoom(this.formGroup);
+  }
+  removeRoom(index: number) {
+    this.reservationRoomService.removeRoom(this.formGroup, index)
+  }
 }
