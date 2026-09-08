@@ -109,22 +109,30 @@
 
         <mat-step label="Accommodation">
           <h3>Accommodation</h3>
-          <div
-            *ngFor="let roomNumber of roomNumbers"
-            class="room-section">
+          <div class="layout-width-md">
+            <div *ngFor="let roomForm of reservationRoomForms; let i = index" class="room-section">
+              <h4>Room {{ i + 1 }}</h4>
+              <app-widget-select1
+                [field]="categoryField"
+                [formGroup]="roomForm">
+              </app-widget-select1>
+            </div>
+            <div class="step-actions">
+              <button
+                mat-raised-button
+                matStepperPrevious
+                type="button">
+                Back
+              </button>
 
-            <h4>Room {{ roomNumber }}</h4>
-
-          </div>
-
-
-          <div class="step-actions">
-            <button mat-raised-button matStepperPrevious>
-              Back
-            </button>
-            <button mat-raised-button matStepperNext>
-              Continue
-            </button>
+              <button
+                mat-raised-button
+                matStepperNext
+                color="primary"
+                type="button">
+                Continue
+              </button>
+            </div>
           </div>
         </mat-step>
 
@@ -159,7 +167,6 @@
       </mat-stepper>
     </div>
     <div class="booking-summary">
-
       <h3>Booking Summary</h3>
 
       <div class="summary-section">
@@ -213,17 +220,21 @@
 
       <div class="summary-section">
         <div class="summary-title">
-          Guests [{{ totalGuestCount }}] Rooms [{{ this.formGroup.get('room_count')?.value }}]
+          Rooms ( {{ this.formGroup.get('room_count')?.value }} ) Guests ( {{ totalGuestCount }} )
         </div>
-        <div class="summary-empty">
-          Not selected
-        </div>
+<!--        <div class="summary-empty">-->
+<!--          Not selected-->
+<!--        </div>-->
       </div>
 
       <div class="summary-section">
         <div class="summary-title">Accommodation</div>
-        <div class="summary-empty">
-          Not selected
+        <div
+          *ngFor="let roomForm of reservationRoomForms; let i = index" class="summary-room">
+
+          <strong *ngIf="reservationRoomForms.length > 1">Room {{ i + 1 }}: </strong>
+
+          <span>{{ getCategoryDescription(roomForm) }}</span>
         </div>
       </div>
 

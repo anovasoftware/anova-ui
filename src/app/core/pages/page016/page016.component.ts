@@ -47,7 +47,6 @@ export class Page016Component extends PageBaseComponent {
   onAddRequested(event: GridAddEvent): void {
     const user = this.user;
 
-    console.log(user);
     if (!user?.agency) {
       event.cancel = true;
       const message = 'Access denied. Must be a travel agent to create a new booking.'

@@ -45,7 +45,6 @@ export class Page012Component extends PageBaseComponent {
   }
 
   protected override onParamsLoaded(): void {
-    console.log('onParamsLoaded');
     this.loadRecord<Client>(
       this.api,
       `base/client/${this.pk}/`,

@@ -13,7 +13,6 @@ import {MatIcon} from '@angular/material/icon';
   imports: [
     ReactiveFormsModule,
     WidgetCounterComponent,
-    JsonPipe,
     MatButton,
     NgIf,
     MatIcon

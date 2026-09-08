@@ -18,16 +18,13 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Form, FormField} from '../../../models/form';
 import {EventConstants} from '../../../../constants/event_constants';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {WidgetCounterComponent} from '../../widgets/widget-counter/widget-counter.component';
-import {WidgetCollectionComponent} from '../../widgets/widget-collection/widget-collection.component';
 import {Guest} from '../../../models/guest';
-import {StatusConstants} from '../../../../constants/status_constants';
-import {WidgetGuestCollectionComponent} from '../../widgets/widget-guest-collection/widget-guest-collection.component';
 import {WidgetAutocompleteComponent} from '../../widgets/widget-autocomplete/widget-autocomplete.component';
 import {ReservationRoom} from '../../../models/reservation-room';
 import {ReservationRoomService} from '../../../services/res/reservation-room.service';
 import {WidgetReservationRoomComponent} from '../../widgets/widget-reservation-room/widget-reservation-room.component';
 import {MatIcon} from '@angular/material/icon';
+import {WidgetSelect1Component} from '../../widgets/widget-select1/widget-select1.component';
 
 
 @Component({
@@ -42,12 +39,11 @@ import {MatIcon} from '@angular/material/icon';
     MatStepperPrevious,
     DatePipe,
     UpperCasePipe,
-    WidgetCounterComponent,
-    WidgetGuestCollectionComponent,
     WidgetAutocompleteComponent,
     NgForOf,
     WidgetReservationRoomComponent,
     MatIcon,
+    WidgetSelect1Component,
   ],
   templateUrl: './page017.component.html',
   styleUrl: './page017.component.scss'
@@ -73,6 +69,7 @@ export class Page017Component extends PageBaseComponent {
   header: string = '';
   message: string = '';
   formGroup: FormGroup;
+  categoryField!: FormField;
 
 
   constructor(
@@ -173,10 +170,9 @@ export class Page017Component extends PageBaseComponent {
         this.buildFormGroup();
 
         if (this.form) {
-          console.log(this.form);
-
           const reservationRoomField = this.getFormField('reservation_rooms');
           this.reservationRooms = reservationRoomField?.collection ?? [];
+          this.categoryField = this.getFormField('category_id');
 
           this.reservationRoomService.syncRooms(
             this.formGroup,
@@ -217,10 +213,10 @@ export class Page017Component extends PageBaseComponent {
     const roomCountControl = this.formGroup.get('room_count');
 
     if (roomCountControl) {
-      roomCountControl.valueChanges.subscribe(() => {
-        this.reservationRoomService.syncRooms(
+      roomCountControl.valueChanges.subscribe(value => {
+        this.reservationRoomService.syncRoomCount(
           this.formGroup,
-          this.reservationRooms
+          Number(value || 1)
         );
       });
     }
@@ -274,10 +270,21 @@ export class Page017Component extends PageBaseComponent {
     return this.getFormFieldValue('event_id') !== EventConstants.CRUISE_NOT_SELECTED;
   }
 
+  // get totalGuestCount(): number {
+  //   return Number(this.formGroup.get('adult_count')?.value ?? 0)
+  //     + Number(this.formGroup.get('child_count')?.value ?? 0)
+  //     + Number(this.formGroup.get('infant_count')?.value ?? 0);
+  // }
+
   get totalGuestCount(): number {
-    return Number(this.formGroup.get('adult_count')?.value ?? 0)
-      + Number(this.formGroup.get('child_count')?.value ?? 0)
-      + Number(this.formGroup.get('infant_count')?.value ?? 0);
+    return this.reservationRoomForms.reduce(
+      (total, roomForm) =>
+        total
+        + Number(roomForm.get('adult_count')?.value ?? 0)
+        + Number(roomForm.get('child_count')?.value ?? 0)
+        + Number(roomForm.get('infant_count')?.value ?? 0),
+      0
+    );
   }
 
 
@@ -357,7 +364,21 @@ export class Page017Component extends PageBaseComponent {
   addRoom() {
     this.reservationRoomService.addRoom(this.formGroup);
   }
+
   removeRoom(index: number) {
     this.reservationRoomService.removeRoom(this.formGroup, index)
+  }
+
+  getCategoryDescription(roomForm: FormGroup): string {
+    const categoryId = roomForm.get('category_id')?.value;
+
+    if (!categoryId) {
+      return 'Not selected';
+    }
+
+    const option = this.categoryField.dataOptions?.find(
+      option => option.id === categoryId
+    );
+    return option?.displayValue ?? categoryId;
   }
 }

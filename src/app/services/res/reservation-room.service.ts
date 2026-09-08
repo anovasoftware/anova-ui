@@ -25,11 +25,43 @@ export class ReservationRoomService {
     });
   }
 
+  // syncRooms(formGroup: FormGroup, reservationRooms: ReservationRoom[] = []): void {
+  //   let rooms = formGroup.get('reservation_rooms');
+  //
+  //   if (!(rooms instanceof FormArray)) {
+  //     rooms = new FormArray([]);
+  //     formGroup.setControl('reservation_rooms', rooms);
+  //   }
+  //
+  //   const roomArray = rooms as FormArray;
+  //
+  //   roomArray.clear();
+  //
+  //   for (const reservationRoom of reservationRooms) {
+  //     roomArray.push(
+  //       this.createFormGroupFromRoom(reservationRoom)
+  //     );
+  //   }
+  //
+  //   const roomCount = Number(
+  //     formGroup.get('room_count')?.value || 1
+  //   );
+  //
+  //   while (roomArray.length < roomCount) {
+  //     roomArray.push(
+  //       this.createFormGroup(roomArray.length + 1)
+  //     );
+  //   }
+  //
+  //   while (roomArray.length > roomCount) {
+  //     roomArray.removeAt(roomArray.length - 1);
+  //   }
+  // }
+
   syncRooms(
     formGroup: FormGroup,
     reservationRooms: ReservationRoom[] = []
   ): void {
-
     let rooms = formGroup.get('reservation_rooms');
 
     if (!(rooms instanceof FormArray)) {
@@ -41,26 +73,38 @@ export class ReservationRoomService {
 
     roomArray.clear();
 
+    // Load existing rooms from API
     for (const reservationRoom of reservationRooms) {
       roomArray.push(
         this.createFormGroupFromRoom(reservationRoom)
       );
     }
 
+    // Make sure we have the requested number of rooms
     const roomCount = Number(
       formGroup.get('room_count')?.value || 1
     );
 
-    while (roomArray.length < roomCount) {
-      roomArray.push(
-        this.createFormGroup(roomArray.length + 1)
+    this.syncRoomCount(formGroup, roomCount);
+  }
+
+  syncRoomCount(
+    formGroup: FormGroup,
+    roomCount: number
+  ): void {
+    const rooms = formGroup.get('reservation_rooms') as FormArray;
+
+    while (rooms.length < roomCount) {
+      rooms.push(
+        this.createFormGroup(rooms.length + 1)
       );
     }
 
-    while (roomArray.length > roomCount) {
-      roomArray.removeAt(roomArray.length - 1);
+    while (rooms.length > roomCount) {
+      rooms.removeAt(rooms.length - 1);
     }
   }
+
 
   createFormGroupFromRoom(room: ReservationRoom): FormGroup {
     return this.fb.group({
@@ -78,9 +122,7 @@ export class ReservationRoomService {
   addRoom(formGroup: FormGroup): void {
     const rooms = formGroup.get('reservation_rooms') as FormArray;
 
-    rooms.push(
-      this.createFormGroup(rooms.length + 1)
-    );
+    rooms.push(this.createFormGroup(rooms.length + 1));
 
     formGroup.get('room_count')?.setValue(rooms.length);
   }
