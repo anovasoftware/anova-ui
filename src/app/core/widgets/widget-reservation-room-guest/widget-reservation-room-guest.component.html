@@ -1,0 +1,19 @@
+<div *ngIf="reservationRoomGuests.length" class="room-guests">
+  <div *ngFor="let guestForm of reservationRoomGuests.controls; let i = index"
+       [formGroup]="asFormGroup(guestForm)"
+       class="guest-section"
+  >
+    <h4>{{ getGuestLabel(i) }}</h4>
+    <div class="guest-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="booking_first_name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="booking_last_name">
+      </mat-form-field>
+    </div>
+  </div>
+</div>

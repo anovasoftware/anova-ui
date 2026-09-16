@@ -29,37 +29,12 @@
               [formGroup]="formGroup">
             </app-widget-autocomplete>
 
-            <!--          <div class="guest-counts">-->
-            <!--            <app-widget-counter-->
-            <!--              [field]="getFormField('adult_count')"-->
-            <!--              [formGroup]="formGroup">-->
-            <!--            </app-widget-counter>-->
-            <!--            <app-widget-counter-->
-            <!--              [field]="getFormField('child_count')"-->
-            <!--              [formGroup]="formGroup">-->
-            <!--            </app-widget-counter>-->
-            <!--            <app-widget-counter-->
-            <!--              [field]="getFormField('infant_count')"-->
-            <!--              [formGroup]="formGroup">-->
-            <!--            </app-widget-counter>-->
-            <!--            <app-widget-counter-->
-            <!--              [field]="getFormField('room_count')"-->
-            <!--              [formGroup]="formGroup">-->
-            <!--            </app-widget-counter>-->
-            <!--          </div>-->
-
             <app-widget-reservation-room
               *ngFor="let roomForm of reservationRoomForms; let i = index"
               [roomForm]="roomForm"
               [roomNumber]="i + 1"
               (removeRoom)="removeRoom(i)">
             </app-widget-reservation-room>
-
-            <!--          <div class="guest-collection-container">-->
-            <!--            <app-widget-guest-collection-->
-            <!--              [guests]="guests">-->
-            <!--            </app-widget-guest-collection>-->
-            <!--          </div>-->
 
             <div class="step-footer">
               <div class="step-actions">
@@ -84,52 +59,30 @@
                 type="button"
                 (click)="addRoom()">
                 <mat-icon>add</mat-icon>
-                Add Room
+                Add Another Room
               </button>
             </div>
           </div>
-          <!--          <div class="room-actions layout-width-md">-->
-          <!--            <button-->
-          <!--              mat-stroked-button-->
-          <!--              type="button"-->
-          <!--              (click)="addRoom()">-->
-          <!--            Add Room-->
-          <!--            </button>-->
-          <!--          </div>-->
-
-          <!--          <div class="step-actions">-->
-          <!--            <button mat-raised-button matStepperPrevious class="back-button">-->
-          <!--              Back-->
-          <!--            </button>-->
-          <!--            <button mat-raised-button matStepperNext class="continue-button">-->
-          <!--              Continue-->
-          <!--            </button>-->
-          <!--          </div>-->
         </mat-step>
 
         <mat-step label="Accommodation">
           <h3>Accommodation</h3>
           <div class="layout-width-md">
             <div *ngFor="let roomForm of reservationRoomForms; let i = index" class="room-section">
-              <h4>Room {{ i + 1 }}</h4>
+              <h3 *ngIf="reservationRoomForms.length > 1">Room {{ i + 1 }}</h3>
               <app-widget-select1
                 [field]="categoryField"
                 [formGroup]="roomForm">
               </app-widget-select1>
+              <app-widget-reservation-room-guest [roomForm]="roomForm" [roomNumber]="i + 1">
+              </app-widget-reservation-room-guest>
             </div>
+
             <div class="step-actions">
-              <button
-                mat-raised-button
-                matStepperPrevious
-                type="button">
+              <button mat-raised-button matStepperPrevious type="button">
                 Back
               </button>
-
-              <button
-                mat-raised-button
-                matStepperNext
-                color="primary"
-                type="button">
+              <button mat-raised-button matStepperNext color="primary" type="button">
                 Continue
               </button>
             </div>
@@ -197,34 +150,12 @@
 
           </div>
         </ng-container>
-
-
-        <!--        <ng-container *ngIf="selectedEvent; else noCruiseSelected">-->
-        <!--          <div class="summary-value">-->
-        <!--            {{ selectedEvent.description }}-->
-        <!--          </div>-->
-        <!--          <div class="summary-detail">-->
-        <!--            {{ selectedEvent.code }} - {{ selectedEvent.description }}-->
-        <!--          </div>-->
-        <!--          <div class="summary-detail">-->
-        <!--            {{ selectedEvent.eventId }}-->
-        <!--          </div>-->
-        <!--        </ng-container>-->
-
-        <!--        <ng-template #noCruiseSelected>-->
-        <!--          <div class="summary-empty">-->
-        <!--            No cruise selected-->
-        <!--          </div>-->
-        <!--        </ng-template>-->
       </div>
 
       <div class="summary-section">
         <div class="summary-title">
           Rooms ( {{ this.formGroup.get('room_count')?.value }} ) Guests ( {{ totalGuestCount }} )
         </div>
-<!--        <div class="summary-empty">-->
-<!--          Not selected-->
-<!--        </div>-->
       </div>
 
       <div class="summary-section">
@@ -244,9 +175,10 @@
           Not calculated
         </div>
       </div>
-
     </div>
+    <small class="footer-text" *ngIf="form">
+      Form. {{ form.formId }}
+    </small>
 
   </div>
-
 </div>

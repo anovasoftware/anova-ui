@@ -48,6 +48,9 @@ h1 {
 h3 {
   color: map.get(theme.$neutral-palette, 50);
 }
+h4 {
+  margin-bottom: 8px;
+}
 //body, p, span, div, h1, h2, h3, h4, h5, h6, mat-card, mat-toolbar {
 //  color: variables.$fg-main;
 //}

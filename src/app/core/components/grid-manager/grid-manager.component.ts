@@ -27,8 +27,6 @@ export class GridManagerComponent {
   protected readonly GridConstants = GridConstants;
 
   onRecordSelected(event: any): void {
-    console.log('GridManager received:', event);
-
     this.recordSelected.emit(event);
   }
 

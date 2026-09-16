@@ -124,7 +124,6 @@ export class GlobalService {
       this.updateUserState(user);
 
       if (!user) {
-        console.log('navigating to home menu');
         this.setCurrentMenuId(MenuConstants.HOME);
         this.setCurrentHotelId(
           HotelConstants.NOT_APPLICABLE

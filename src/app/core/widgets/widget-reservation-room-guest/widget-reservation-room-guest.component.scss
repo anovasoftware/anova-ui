@@ -1,0 +1,21 @@
+.room-guests {
+  margin-top: 20px;
+}
+
+.guest-section {
+  margin-bottom: 12px;
+}
+
+.guest-heading {
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.guest-fields {
+  display: flex;
+  gap: 8px;
+}
+
+.guest-fields mat-form-field {
+  width: 212px;
+}

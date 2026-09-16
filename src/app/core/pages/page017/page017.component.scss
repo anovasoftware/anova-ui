@@ -79,3 +79,16 @@
   margin-top: 28px;
 }
 
+.room-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.room-section:last-of-type {
+  border-bottom: none;
+}
+
+.room-section h4 {
+  margin-bottom: 8px;
+}

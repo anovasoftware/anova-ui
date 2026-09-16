@@ -1,12 +1,6 @@
-export interface ReservationRoom {
-  reservationRoomId: string | null;
-  statusId: string;
-  orderBy: string;
+import {ReservationRoomAuto} from '../models-auto/res/reservation-room.model';
+import {ReservationRoomGuest} from './reservation-room-guest.model';
 
-  adultCount: number;
-  childCount: number;
-  infantCount: number;
-
-  categoryId: string | null;
-  roomId: string | null;
+export interface ReservationRoom extends ReservationRoomAuto {
+  reservationRoomGuests?: ReservationRoomGuest[];
 }
