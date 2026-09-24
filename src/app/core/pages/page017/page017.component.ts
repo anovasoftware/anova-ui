@@ -5,8 +5,6 @@ import {DatePipe, NgForOf, NgIf, UpperCasePipe} from '@angular/common';
 import {PageBaseComponent} from '../page-base/page-base.component';
 import {MatButton} from '@angular/material/button';
 import {FormConstants} from '../../../../constants/form_constants';
-// import {FormDialogService} from '../../../services/form-dialog.service';
-// import {ApiService} from '../../../services/api.service';
 import {Client} from '../../../models/client';
 import {TypeConstants} from '../../../../constants/type_constants';
 import {MatStep, MatStepper, MatStepperNext, MatStepperPrevious} from '@angular/material/stepper';
@@ -24,7 +22,12 @@ import {ReservationRoomService} from '../../../services/res/reservation-room.ser
 import {WidgetReservationRoomComponent} from '../../widgets/widget-reservation-room/widget-reservation-room.component';
 import {MatIcon} from '@angular/material/icon';
 import {WidgetSelect1Component} from '../../widgets/widget-select1/widget-select1.component';
-import {WidgetReservationRoomGuestComponent} from '../../widgets/widget-reservation-room-guest/widget-reservation-room-guest.component';
+import {
+  WidgetReservationRoomGuestComponent
+} from '../../widgets/widget-reservation-room-guest/widget-reservation-room-guest.component';
+import {CategoryConstants} from '../../../../constants/category_constants';
+import {ReservationService} from '../../../services/res/reservation.service';
+import {HttpParams} from '@angular/common/http';
 
 
 @Component({
@@ -79,6 +82,7 @@ export class Page017Component extends PageBaseComponent {
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private reservationRoomService: ReservationRoomService,
+    private reservationService: ReservationService,
   ) {
     super();
     this.formGroup = this.fb.group({});
@@ -208,22 +212,28 @@ export class Page017Component extends PageBaseComponent {
     )?.displayValue ?? '';
   }
 
+  // onEventSelected(event: any): void {
+  //   this.selectedEvent = event.row;
+  //   this.setFormFieldValue(
+  //     'event_id',
+  //     event.row.pk
+  //   );
+  // }
   onEventSelected(event: any): void {
     this.selectedEvent = event.row;
-    this.setFormFieldValue(
-      'event_id',
-      event.row.pk
-    );
+    this.formGroup.get('event_id')?.setValue(event.row.pk);
   }
 
   private exitPage(): void {
     this.navigationService.navigateToMenuId(MenuConstants.BOOKING_MANAGEMENT);
   }
 
+//   get eventSelected(): boolean {
+//     return this.getFormFieldValue('event_id') !== EventConstants.CRUISE_NOT_SELECTED;
+//   }
   get eventSelected(): boolean {
-    return this.getFormFieldValue('event_id') !== EventConstants.CRUISE_NOT_SELECTED;
+    return this.formGroup.get('event_id')?.value !== EventConstants.CRUISE_NOT_SELECTED;
   }
-
 
   get totalGuestCount(): number {
     return this.reservationRoomForms.reduce(
@@ -269,5 +279,65 @@ export class Page017Component extends PageBaseComponent {
       option => option.id === categoryId
     );
     return option?.displayValue ?? categoryId;
+  }
+
+  canContinueRoomsAndGuests(): boolean {
+    const hasPrimaryContact = !!this.formGroup.get('contact_person_id')?.value;
+    const hasAdult = this.reservationRoomForms.some(
+      room => Number(room.get('adult_count')?.value || 0) > 0
+    );
+
+    return hasPrimaryContact && hasAdult;
+  }
+
+  canContinueAccommodation(): boolean {
+    return this.reservationRoomForms.every(
+      room =>
+        room.get('category_id')?.value &&
+        room.get('category_id')?.value !==
+        CategoryConstants.BASE_CATEGORY_GRADE_NOT_SELECTED
+    );
+  }
+
+  // onAccommodationContinue(): void {
+  //   console.log(
+  //     'FORM 017:',
+  //     JSON.stringify(this.formGroup.getRawValue(), null, 2)
+  //   );
+  // }
+  onAccommodationContinue(): void {
+    const rooms = this.formGroup.get('reservation_rooms') as FormArray;
+
+    const params = new HttpParams()
+      .set('eventId', this.formGroup.get('event_id')?.value);
+
+    const body = {
+      reservation_rooms: rooms.controls.map(room => ({
+        order_by: room.get('order_by')?.value,
+        category_id: room.get('category_id')?.value,
+        adult_count: room.get('adult_count')?.value,
+        child_count: room.get('child_count')?.value,
+        infant_count: room.get('infant_count')?.value
+      }))
+    };
+    console.log(body);
+
+    this.reservationService.calculatePricing(body, params).subscribe({
+      next: response => {
+        if (!response.success) {
+          console.error(
+            'calculatePricing failed:',
+            response.message,
+            response.errors
+          );
+        } else {
+          console.log('PRICING:', response.data);
+        }
+      },
+      error: err => {
+        const message = err.error.message;
+        this.snackBar.open(message, 'OK', {duration: 7000});
+      }
+    });
   }
 }

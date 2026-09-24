@@ -15,6 +15,7 @@
       [placeholder]="field.placeholder || ''"
       [readonly]="field.readonly"
       [tabIndex]="field.readonly ? -1 : 0"
+      [attr.data-1p-ignore]="field.data1pFlag !== 'Y' ? '' : null"
       [matAutocomplete]="auto">
 
     <mat-autocomplete

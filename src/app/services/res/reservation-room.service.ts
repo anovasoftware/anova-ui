@@ -18,7 +18,8 @@ export class ReservationRoomService {
     const room: ReservationRoom = {
       ...RESERVATION_ROOM_DEFAULT,
       orderBy: String(roomNumber).padStart(2, '0'),
-      adultCount: roomNumber === 1 ? 2 : 0
+      // adultCount: roomNumber === 1 ? 2 : 0
+      adultCount: 2
     };
 
     const roomForm = this.createReservationRoomFormGroupFromRoom(room);
@@ -84,9 +85,7 @@ export class ReservationRoomService {
     });
   }
 
-  createReservationRoomFormGroupFromRoom(
-    room: ReservationRoom
-  ): FormGroup {
+  createReservationRoomFormGroupFromRoom(room: ReservationRoom): FormGroup {
     return this.fb.group({
       reservation_room_id: [room.reservationRoomId],
       status_id: [room.statusId],
@@ -109,8 +108,7 @@ export class ReservationRoomService {
     const rooms = formGroup.get('reservation_rooms') as FormArray;
 
     rooms.push(this.createReservationRoomFormGroup(rooms.length + 1));
-    console.log(rooms);
-    formGroup.get('room_count')?.setValue(rooms.length);
+      formGroup.get('room_count')?.setValue(rooms.length);
   }
 
   removeRoom(formGroup: FormGroup, index: number): void {

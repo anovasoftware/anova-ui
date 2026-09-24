@@ -38,18 +38,15 @@
 
             <div class="step-footer">
               <div class="step-actions">
-                <button
-                  mat-raised-button
-                  matStepperPrevious
-                  type="button">
+                <button mat-raised-button matStepperPrevious type="button">
                   Back
                 </button>
 
-                <button
-                  mat-raised-button
-                  matStepperNext
-                  color="primary"
-                  type="button">
+                <button mat-raised-button
+                        matStepperNext
+                        color="primary"
+                        type="button"
+                        [disabled]="!canContinueRoomsAndGuests()">
                   Continue
                 </button>
               </div>
@@ -82,9 +79,15 @@
               <button mat-raised-button matStepperPrevious type="button">
                 Back
               </button>
-              <button mat-raised-button matStepperNext color="primary" type="button">
+              <button mat-raised-button
+                      matStepperNext
+                      color="primary"
+                      type="button"
+                      [disabled]="!canContinueAccommodation()"
+                      (click)="onAccommodationContinue()">
                 Continue
               </button>
+
             </div>
           </div>
         </mat-step>
@@ -93,7 +96,7 @@
           <h3>Pricing</h3>
 
           <div class="step-actions">
-            <button mat-raised-button matStepperNext>
+            <button mat-raised-button matStepperPrevious type="button">
               Back
             </button>
 
