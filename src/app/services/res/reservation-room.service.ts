@@ -10,7 +10,6 @@ import {TypeConstants} from '../../../constants/type_constants';
   providedIn: 'root'
 })
 export class ReservationRoomService {
-
   constructor(private fb: FormBuilder) {
   }
 
@@ -119,38 +118,6 @@ export class ReservationRoomService {
     formGroup.get('room_count')?.setValue(rooms.length);
   }
 
-  // getGuestCount(roomForm: FormGroup): number {
-  //   const adultCount = Number(roomForm.get('adult_count')?.value || 0);
-  //   const childCount = Number(roomForm.get('child_count')?.value || 0);
-  //   const infantCount = Number(roomForm.get('infant_count')?.value || 0);
-  //
-  //   return adultCount + childCount + infantCount;
-  // }
-
-//   syncReservationRoomGuestCount(roomForm: FormGroup): void {
-//     console.log('room controls:', Object.keys(roomForm.controls));
-//     console.log(
-//       'guest control:',
-//       roomForm.get('reservation_room_guests')
-//     );
-//     const guests = roomForm.get('reservation_room_guests') as FormArray;
-//     const guestCount = this.getGuestCount(roomForm);
-//
-//     // Add guests
-//     while (guests.length < guestCount) {
-//       const guest: ReservationRoomGuest = {
-//         ...RESERVATION_ROOM_GUEST_DEFAULT
-//       };
-//       guests.push(
-//         this.createReservationRoomGuestFormGroup(guest)
-//       );
-//     }
-//
-//     // Remove guests
-//     while (guests.length > guestCount) {
-//       guests.removeAt(guests.length - 1);
-//     }
-//   }
   private syncReservationRoomGuestsByOccupancyType(
     guests: FormArray,
     occupancyTypeId: string,

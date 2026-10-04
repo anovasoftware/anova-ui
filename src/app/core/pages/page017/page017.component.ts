@@ -28,6 +28,9 @@ import {
 import {CategoryConstants} from '../../../../constants/category_constants';
 import {ReservationService} from '../../../services/res/reservation.service';
 import {HttpParams} from '@angular/common/http';
+import {CurrencyConstants} from '../../../../constants/currency_constants';
+import {ReservationPricing} from '../../../models/event-category-price';
+import {ReservationPrice} from '../../../models/reservation-price';
 
 
 @Component({
@@ -67,6 +70,8 @@ export class Page017Component extends PageBaseComponent {
   formId = FormConstants.BOOKING;
   form?: Form;
   reservationRooms: ReservationRoom[] = [];
+  reservationPrices: ReservationPrice[] = [];
+  reservationPricing: ReservationPricing | null = null;
 
   header: string = '';
   message: string = '';
@@ -129,13 +134,19 @@ export class Page017Component extends PageBaseComponent {
 
         if (this.form) {
           const reservationRoomField = this.getFormField('reservation_rooms');
+          const reservationPriceField = this.getFormField('reservation_prices');
+
           this.reservationRooms = reservationRoomField?.collection ?? [];
+          this.reservationPrices = reservationPriceField?.collection ?? [];
+
+
           this.categoryField = this.getFormField('category_id');
 
           this.reservationRoomService.syncRooms(
             this.formGroup,
             this.reservationRooms
           );
+          console.log(this.reservationRooms);
           this.subscribeToRoomCount();
           this.componentLoaded = true;
         }
@@ -309,18 +320,21 @@ export class Page017Component extends PageBaseComponent {
     const rooms = this.formGroup.get('reservation_rooms') as FormArray;
 
     const params = new HttpParams()
-      .set('eventId', this.formGroup.get('event_id')?.value);
+      .set('typeId', TypeConstants.EVENT_CATEGORY_PRICE_STANDARD)
+      .set('rateTypeId', TypeConstants.EVENT_CATEGORY_PRICE_RATE_FIT)
+      .set('eventId', this.formGroup.get('event_id')?.value)
+      .set('currencyId', CurrencyConstants.USD)
 
     const body = {
       reservation_rooms: rooms.controls.map(room => ({
         order_by: room.get('order_by')?.value,
         category_id: room.get('category_id')?.value,
+        currency_id: CurrencyConstants.USD,
         adult_count: room.get('adult_count')?.value,
         child_count: room.get('child_count')?.value,
         infant_count: room.get('infant_count')?.value
       }))
     };
-    console.log(body);
 
     this.reservationService.calculatePricing(body, params).subscribe({
       next: response => {
@@ -331,7 +345,8 @@ export class Page017Component extends PageBaseComponent {
             response.errors
           );
         } else {
-          console.log('PRICING:', response.data);
+          this.reservationPricing = response.data;
+          console.log('PRICING:', this.reservationPricing);
         }
       },
       error: err => {
