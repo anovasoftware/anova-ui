@@ -24,8 +24,9 @@ export abstract class PageBaseComponent implements OnInit {
   selectedTabIndex = 0;
   protected tabIndexKey = '';
 
-  protected constructor(
-  ) {
+  lookups: any = {};
+
+  protected constructor() {
   }
 
   ngOnInit(): void {
@@ -101,17 +102,34 @@ export abstract class PageBaseComponent implements OnInit {
       sessionStorage.setItem(this.tabIndexKey, index.toString());
     }
   }
+
   protected get user(): User | null {
     return this.globalService?.currentUser;
   }
+
   protected get hotelId(): string {
     return this.globalService.currentHotelId;
   }
+
   protected get clientId(): string {
     return <string>this.globalService.currentClient?.clientId;
   }
+
   protected get clientExtensionId(): string {
     return <string>this.globalService.currentClient?.clientExtension?.clientExtensionId;
   }
 
+  getLookupDescription(
+    lookupName: string,
+    id: string
+  ): string {
+
+    const options = this.lookups?.[lookupName]?.options ?? [];
+
+    const option = options.find(
+      (item: any) => item.id === id
+    );
+
+    return option?.description ?? id;
+  }
 }

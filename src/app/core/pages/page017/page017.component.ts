@@ -361,12 +361,14 @@ export class Page017Component extends PageBaseComponent {
           );
         } else {
           this.reservationPricing = response.data;
+          this.lookups = response.data.lookups ?? {};
           console.log('PRICING:', this.reservationPricing);
           this.reservationPriceService.syncReservationPrices(
             this.formGroup,
             response.data
           );
           console.log('FORM:', this.formGroup.getRawValue());
+          console.log('LOOKUPS:', this.lookups);
         }
       },
       error: err => {

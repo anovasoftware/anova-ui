@@ -1,26 +1,80 @@
-<h3>Pricing</h3>
+<div class="pricing-container">
 
-@if (reservationPricing) {
+  <div class="pricing-header">
+    <div>
+      <h3>Pricing</h3>
+      <p>Review the calculated cruise fare before continuing.</p>
+    </div>
+  </div>
 
-  @for (
-    room of reservationPricing.reservationRooms;
-    track room.roomNumber
-  ) {
+  @if (reservationPricing) {
+    @for (room of reservationPricing.reservationRooms;
+      track room.roomNumber) {
+      <mat-card class="room-card">
+        <mat-card-header>
+          @if (reservationPricing.reservationRooms.length > 1) {
+            <mat-card-title>
+              Room {{ room.roomNumber }}
+            </mat-card-title>
+          }
 
-    <h4>Room {{ room.roomNumber }}</h4>
+          <mat-card-subtitle title="ID={{ room.categoryId }}">
+            Cabin Grade: {{ lookupService.getDescription(lookups, 'category', room.categoryId) }}
+          </mat-card-subtitle>
+        </mat-card-header>
 
-    @for (
-      guest of room.reservationRoomGuests;
-      track guest.guestNumber
-    ) {
+        <mat-card-content>
 
-      <div>
-        Guest {{ guest.guestNumber }}:
-        {{ guest.eventCategoryPrice.price | currency:'USD' }}
-      </div>
+          <div class="pricing-table">
+
+            <div class="pricing-row pricing-row-header">
+              <span>Guest</span>
+              <span>Fare Type</span>
+              <span class="amount">Price</span>
+            </div>
+
+            @for (guest of room.reservationRoomGuests;
+              track guest.guestNumber) {
+
+              <div class="pricing-row">
+                <span>
+                  Guest {{ guest.guestNumber }}
+                </span>
+                <span>
+                  {{ lookupService.getDescription(lookups, 'occupancyType', guest.eventCategoryPrice.occupancyTypeId) }}
+                </span>
+                <span class="amount">
+                  {{ guest.eventCategoryPrice.price | currency:'USD':'symbol':'1.2-2' }}
+                </span>
+              </div>
+
+            }
+
+          </div>
+
+        </mat-card-content>
+
+      </mat-card>
 
     }
 
+    <div class="pricing-total">
+      <span>Total</span>
+
+      <span>
+        {{
+          getTotal()
+            | currency:'USD':'symbol':'1.2-2'
+        }}
+      </span>
+    </div>
+
+  } @else {
+
+    <div class="no-pricing">
+      Pricing has not been calculated.
+    </div>
+
   }
 
-}
+</div>
