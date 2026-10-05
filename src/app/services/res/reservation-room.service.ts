@@ -72,6 +72,7 @@ export class ReservationRoomService {
   createReservationRoomGuestFormGroup(guest: ReservationRoomGuest): FormGroup {
     return this.fb.group({
       reservation_room_guest_id: [guest.reservationRoomGuestId],
+      guest_number: [guest.guestNumber],
       type_id: [guest.typeId],
       status_id: [guest.statusId],
       person_id: [guest.personId],
@@ -107,7 +108,7 @@ export class ReservationRoomService {
     const rooms = formGroup.get('reservation_rooms') as FormArray;
 
     rooms.push(this.createReservationRoomFormGroup(rooms.length + 1));
-      formGroup.get('room_count')?.setValue(rooms.length);
+    formGroup.get('room_count')?.setValue(rooms.length);
   }
 
   removeRoom(formGroup: FormGroup, index: number): void {
@@ -179,6 +180,14 @@ export class ReservationRoomService {
       TypeConstants.RESERVATION_ROOM_GUEST_INFANT,
       Number(roomForm.get('infant_count')?.value || 0)
     );
+    this.syncGuestNumbers(guests);
   }
 
+  private syncGuestNumbers(guests: FormArray): void {
+    guests.controls.forEach((guest, index) => {
+      guest.get('guest_number')?.setValue(
+        String(index + 1).padStart(2, '0')
+      );
+    });
+  }
 }

@@ -31,6 +31,8 @@ import {HttpParams} from '@angular/common/http';
 import {CurrencyConstants} from '../../../../constants/currency_constants';
 import {ReservationPricing} from '../../../models/event-category-price';
 import {ReservationPrice} from '../../../models/reservation-price';
+import {ReservationPriceService} from '../../../services/res/reservation-price.service';
+import {PricingComponent} from './pricing/pricing.component';
 
 
 @Component({
@@ -51,6 +53,7 @@ import {ReservationPrice} from '../../../models/reservation-price';
     MatIcon,
     WidgetSelect1Component,
     WidgetReservationRoomGuestComponent,
+    PricingComponent,
   ],
   templateUrl: './page017.component.html',
   styleUrl: './page017.component.scss'
@@ -88,6 +91,7 @@ export class Page017Component extends PageBaseComponent {
     private fb: FormBuilder,
     private reservationRoomService: ReservationRoomService,
     private reservationService: ReservationService,
+    private reservationPriceService: ReservationPriceService
   ) {
     super();
     this.formGroup = this.fb.group({});
@@ -310,12 +314,6 @@ export class Page017Component extends PageBaseComponent {
     );
   }
 
-  // onAccommodationContinue(): void {
-  //   console.log(
-  //     'FORM 017:',
-  //     JSON.stringify(this.formGroup.getRawValue(), null, 2)
-  //   );
-  // }
   onAccommodationContinue(): void {
     const rooms = this.formGroup.get('reservation_rooms') as FormArray;
 
@@ -325,17 +323,34 @@ export class Page017Component extends PageBaseComponent {
       .set('eventId', this.formGroup.get('event_id')?.value)
       .set('currencyId', CurrencyConstants.USD)
 
+    // const body = {
+    //   reservation_rooms: rooms.controls.map(room => ({
+    //     order_by: room.get('order_by')?.value,
+    //     category_id: room.get('category_id')?.value,
+    //     currency_id: CurrencyConstants.USD,
+    //     adult_count: room.get('adult_count')?.value,
+    //     child_count: room.get('child_count')?.value,
+    //     infant_count: room.get('infant_count')?.value
+    //   }))
+    // };
     const body = {
-      reservation_rooms: rooms.controls.map(room => ({
-        order_by: room.get('order_by')?.value,
-        category_id: room.get('category_id')?.value,
-        currency_id: CurrencyConstants.USD,
-        adult_count: room.get('adult_count')?.value,
-        child_count: room.get('child_count')?.value,
-        infant_count: room.get('infant_count')?.value
-      }))
-    };
+      reservation_rooms: rooms.controls.map(room => {
+        const guests =
+          room.get('reservation_room_guests') as FormArray;
 
+        return {
+          order_by: room.get('order_by')?.value,
+          category_id: room.get('category_id')?.value,
+          currency_id: CurrencyConstants.USD,
+
+          reservation_room_guests: guests.controls.map(guest => ({
+            guest_number: guest.get('guest_number')?.value,
+            occupancy_type_id: guest.get('occupancy_type_id')?.value
+          }))
+        };
+      })
+    };
+    console.log(body);
     this.reservationService.calculatePricing(body, params).subscribe({
       next: response => {
         if (!response.success) {
@@ -347,6 +362,11 @@ export class Page017Component extends PageBaseComponent {
         } else {
           this.reservationPricing = response.data;
           console.log('PRICING:', this.reservationPricing);
+          this.reservationPriceService.syncReservationPrices(
+            this.formGroup,
+            response.data
+          );
+          console.log('FORM:', this.formGroup.getRawValue());
         }
       },
       error: err => {

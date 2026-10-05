@@ -93,16 +93,22 @@
         </mat-step>
 
         <mat-step label="Pricing">
-          <h3>Pricing</h3>
-
+          <app-pricing
+            [reservationPricing]="reservationPricing">
+          </app-pricing>
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious type="button">
               Back
             </button>
 
-            <button mat-raised-button matStepperNext [disabled]="!selectedEvent">
-              Continue
-            </button>
+              <button mat-raised-button
+                      matStepperNext
+                      color="primary"
+                      type="button"
+                      [disabled]="!canContinueAccommodation()"
+                      (click)="onAccommodationContinue()">
+                Continue
+              </button>
           </div>
         </mat-step>
 

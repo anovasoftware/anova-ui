@@ -1,0 +1,26 @@
+<h3>Pricing</h3>
+
+@if (reservationPricing) {
+
+  @for (
+    room of reservationPricing.reservationRooms;
+    track room.roomNumber
+  ) {
+
+    <h4>Room {{ room.roomNumber }}</h4>
+
+    @for (
+      guest of room.reservationRoomGuests;
+      track guest.guestNumber
+    ) {
+
+      <div>
+        Guest {{ guest.guestNumber }}:
+        {{ guest.eventCategoryPrice.price | currency:'USD' }}
+      </div>
+
+    }
+
+  }
+
+}

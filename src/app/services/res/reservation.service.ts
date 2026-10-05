@@ -16,10 +16,7 @@ export class ReservationService {
   }
 
   calculatePricing(body: any, params: HttpParams ): Observable<any> {
-    return this.api.post('reservation/pricing/',
-      body,
-      params
-    );
+    return this.api.post('reservation/pricing/', body, params);
 
   }
 }
