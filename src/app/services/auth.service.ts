@@ -4,7 +4,7 @@ import {tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {BehaviorSubject} from 'rxjs';
 import {User} from '../models/user';
-import {normalizeUser} from '../core/utilities/common';
+import {normalizeUser} from '../core/utilities/user-utilities';
 import {TypeConstants} from '../../constants/type_constants';
 import {MenuConstants} from '../../constants/menu_constants';
 import {HotelConstants} from '../../constants/hotel_constants';

@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
-import {ReservationRoom} from '../../models/reservation-room';
-import {ReservationRoomGuest} from '../../models/reservation-room-guest.model';
+import {ReservationRoom, ReservationRoomSnake} from '../../models/reservation-room';
+import {ReservationRoomGuest, ReservationRoomGuestSnake} from '../../models/reservation-room-guest.model';
 import {RESERVATION_ROOM_GUEST_DEFAULT} from '../../models-auto/res/reservation-room-guest.model';
 import {RESERVATION_ROOM_DEFAULT} from '../../models-auto/res/reservation-room.model';
 import {TypeConstants} from '../../../constants/type_constants';
+import {CaseUtility} from '../../core/utilities/case-utilities';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,11 @@ export class ReservationRoomService {
   }
 
   createReservationRoomFormGroup(roomNumber: number): FormGroup {
-    const room: ReservationRoom = {
+    const room: ReservationRoomSnake = {
       ...RESERVATION_ROOM_DEFAULT,
-      orderBy: String(roomNumber).padStart(2, '0'),
+      order_by: String(roomNumber).padStart(2, '0'),
       // adultCount: roomNumber === 1 ? 2 : 0
-      adultCount: 2
+      adult_count: 2
     };
 
     const roomForm = this.createReservationRoomFormGroupFromRoom(room);
@@ -42,11 +43,10 @@ export class ReservationRoomService {
 
     // Load existing rooms from API
     for (const reservationRoom of reservationRooms) {
-      roomArray.push(
-        this.createReservationRoomFormGroupFromRoom(reservationRoom)
+      const reservationRoomSnake = CaseUtility.toSnakeCase<ReservationRoomSnake>(reservationRoom);
+      roomArray.push(this.createReservationRoomFormGroupFromRoom(reservationRoomSnake)
       );
     }
-
     // Make sure we have the requested number of rooms
     const roomCount = Number(
       formGroup.get('room_count')?.value || 1
@@ -69,40 +69,79 @@ export class ReservationRoomService {
     }
   }
 
-  createReservationRoomGuestFormGroup(guest: ReservationRoomGuest): FormGroup {
+  createReservationRoomGuestFormGroup(guest: ReservationRoomGuestSnake): FormGroup {
     return this.fb.group({
-      reservation_room_guest_id: [guest.reservationRoomGuestId],
-      guest_number: [guest.guestNumber],
-      type_id: [guest.typeId],
-      status_id: [guest.statusId],
-      person_id: [guest.personId],
+      reservation_room_guest_id: [guest.reservation_room_guest_id],
+      guest_number: [guest.guest_number],
+      type_id: [guest.type_id],
+      status_id: [guest.status_id],
+      person_id: [guest.person_id],
       responsible_reservation_room_guest_id: [
-        guest.responsibleReservationRoomGuestId
+        guest.responsible_reservation_room_guest_id
       ],
-      occupancy_type_id: [guest.occupancyTypeId],
-      booking_first_name: [guest.bookingFirstName],
-      booking_last_name: [guest.bookingLastName]
+      occupancy_type_id: [guest.occupancy_type_id],
+      booking_first_name: [guest.booking_first_name],
+      booking_last_name: [guest.booking_last_name]
     });
   }
 
-  createReservationRoomFormGroupFromRoom(room: ReservationRoom): FormGroup {
+  createReservationRoomFormGroupFromRoom(room: ReservationRoomSnake): FormGroup {
     return this.fb.group({
-      reservation_room_id: [room.reservationRoomId],
-      status_id: [room.statusId],
-      order_by: [room.orderBy],
-      adult_count: [room.adultCount],
-      child_count: [room.childCount],
-      infant_count: [room.infantCount],
-      category_id: [room.categoryId],
-      room_id: [room.roomId],
+      reservation_room_id: [room.reservation_room_id],
+      status_id: [room.status_id],
+      order_by: [room.order_by],
+      adult_count: [room.adult_count],
+      child_count: [room.child_count],
+      infant_count: [room.infant_count],
+      category_id: [room.category_id],
+      room_id: [room.room_id],
 
       reservation_room_guests: this.fb.array(
-        (room.reservationRoomGuests ?? []).map(guest =>
+        (room.reservation_room_guests ?? []).map(guest =>
           this.createReservationRoomGuestFormGroup(guest)
         )
       )
     });
   }
+//   createReservationRoomFormGroupFromRoom(
+//     room: ReservationRoom
+//   ): FormGroup {
+//     return this.fb.group({
+//       reservation_room_id: [room.reservationRoomId],
+//       status_id: [room.statusId],
+//       order_by: [room.orderBy],
+//       adult_count: [room.adultCount],
+//       child_count: [room.childCount],
+//       infant_count: [room.infantCount],
+//       category_id: [room.categoryId],
+//       room_id: [room.roomId],
+//
+//       reservation_room_guests: this.fb.array(
+//         (room.reservationRoomGuests ?? []).map(
+//           guest => this.createReservationRoomGuestFormGroupFromApi(guest)
+//         )
+//       )
+//     });
+//   }
+//
+//   createReservationRoomGuestFormGroupFromApi(
+//     guest: ReservationRoomGuest
+//   ): FormGroup {
+//     return this.fb.group({
+//       reservation_room_guest_id: [guest.reservationRoomGuestId],
+//       guest_number: [guest.guestNumber],
+//       type_id: [guest.typeId],
+//       status_id: [guest.statusId],
+//       person_id: [guest.personId],
+//       responsible_reservation_room_guest_id: [
+//         guest.responsibleReservationRoomGuestId
+//       ],
+//       occupancy_type_id: [guest.occupancyTypeId],
+//       booking_first_name: [guest.bookingFirstName],
+//       booking_last_name: [guest.bookingLastName]
+//     });
+//   }
+//
 
   addRoom(formGroup: FormGroup): void {
     const rooms = formGroup.get('reservation_rooms') as FormArray;
@@ -131,9 +170,9 @@ export class ReservationRoomService {
     );
 
     while (matchingGuests.length < count) {
-      const guest: ReservationRoomGuest = {
+      const guest: ReservationRoomGuestSnake = {
         ...RESERVATION_ROOM_GUEST_DEFAULT,
-        occupancyTypeId: occupancyTypeId
+        occupancy_type_id: occupancyTypeId
       };
 
       const guestForm =

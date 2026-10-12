@@ -17,7 +17,7 @@ import {ApiMeta} from '../models/api-response';
 import {Hotel} from '../models/hotel';
 import {Client} from '../models/client';
 
-import {normalizeUser} from '../core/utilities/common';
+import {normalizeUser} from '../core/utilities/user-utilities';
 
 import {MenuConstants} from '../../constants/menu_constants';
 import {HotelConstants} from '../../constants/hotel_constants';

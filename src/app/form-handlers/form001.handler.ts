@@ -1,7 +1,7 @@
 import {Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {GlobalService} from '../services/global.service';
-import {normalizeUser} from '../core/utilities/common';
+import {normalizeUser} from '../core/utilities/user-utilities';
 import {HotelConstants} from '../../constants/hotel_constants';
 
 export function handleForm001Response(

@@ -33,7 +33,15 @@ import {ReservationPricing} from '../../../models/event-category-price';
 import {ReservationPrice} from '../../../models/reservation-price';
 import {ReservationPriceService} from '../../../services/res/reservation-price.service';
 import {PricingComponent} from './pricing/pricing.component';
+import {Lookups} from '../../../models/grid';
+import {CaseUtility} from '../../utilities/case-utilities';
 
+export interface PricingContext {
+  reservationRooms: ReservationRoom[];
+  reservationPrices: ReservationPrice[];
+  reservationPricing: ReservationPricing | null;
+  lookups: Lookups;
+}
 
 @Component({
   selector: 'app-page017',
@@ -81,6 +89,12 @@ export class Page017Component extends PageBaseComponent {
   formGroup: FormGroup;
   categoryField!: FormField;
 
+  pricingContext: PricingContext = {
+    reservationRooms: [],
+    reservationPrices: [],
+    reservationPricing: null,
+    lookups: {}
+  };
 
   constructor(
     // private api: ApiService,
@@ -227,13 +241,6 @@ export class Page017Component extends PageBaseComponent {
     )?.displayValue ?? '';
   }
 
-  // onEventSelected(event: any): void {
-  //   this.selectedEvent = event.row;
-  //   this.setFormFieldValue(
-  //     'event_id',
-  //     event.row.pk
-  //   );
-  // }
   onEventSelected(event: any): void {
     this.selectedEvent = event.row;
     this.formGroup.get('event_id')?.setValue(event.row.pk);
@@ -323,16 +330,6 @@ export class Page017Component extends PageBaseComponent {
       .set('eventId', this.formGroup.get('event_id')?.value)
       .set('currencyId', CurrencyConstants.USD)
 
-    // const body = {
-    //   reservation_rooms: rooms.controls.map(room => ({
-    //     order_by: room.get('order_by')?.value,
-    //     category_id: room.get('category_id')?.value,
-    //     currency_id: CurrencyConstants.USD,
-    //     adult_count: room.get('adult_count')?.value,
-    //     child_count: room.get('child_count')?.value,
-    //     infant_count: room.get('infant_count')?.value
-    //   }))
-    // };
     const body = {
       reservation_rooms: rooms.controls.map(room => {
         const guests =
@@ -350,7 +347,7 @@ export class Page017Component extends PageBaseComponent {
         };
       })
     };
-    console.log(body);
+
     this.reservationService.calculatePricing(body, params).subscribe({
       next: response => {
         if (!response.success) {
@@ -362,7 +359,13 @@ export class Page017Component extends PageBaseComponent {
         } else {
           this.reservationPricing = response.data;
           this.lookups = response.data.lookups ?? {};
+
+          console.log('response.data:', response.data);
           console.log('PRICING:', this.reservationPricing);
+
+          this.updatePricingContext();
+          console.log('PRICING_CONTEXT:', this.pricingContext);
+
           this.reservationPriceService.syncReservationPrices(
             this.formGroup,
             response.data
@@ -377,4 +380,29 @@ export class Page017Component extends PageBaseComponent {
       }
     });
   }
+
+  // updatePricingContext(): void {
+  //   this.pricingContext = {
+  //     reservationRooms:
+  //       this.formGroup.get('reservation_rooms')?.getRawValue() ?? [],
+  //     reservationPrices: this.reservationPrices,
+  //     reservationPricing: this.reservationPricing,
+  //     lookups: this.lookups
+  //   };
+  //   console.log('PRICING_CONTEXT3', this.pricingContext);
+  // }
+  //
+  updatePricingContext(): void {
+    this.pricingContext = {
+      reservationRooms: CaseUtility.toCamelCase<ReservationRoom[]>(
+        this.formGroup.get('reservation_rooms')?.getRawValue() ?? []
+      ),
+      reservationPrices: this.reservationPrices,
+      reservationPricing: this.reservationPricing,
+      lookups: this.lookups
+    };
+
+    console.log('PRICING_CONTEXT3', this.pricingContext);
+  }
+
 }
