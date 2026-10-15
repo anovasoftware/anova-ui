@@ -1,0 +1,11 @@
+@use 'sass:map';
+@use 'styles/variables';
+@use 'styles/themes' as theme;
+
+mat-card.app-card {
+  margin-bottom: 20px;
+  border: 1px solid map.get(theme.$neutral-palette, 90);
+  background-color: map.get(theme.$neutral-palette, 100);
+  border-radius: 6px;
+
+}

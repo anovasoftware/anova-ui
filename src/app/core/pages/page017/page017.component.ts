@@ -8,7 +8,7 @@ import {FormConstants} from '../../../../constants/form_constants';
 import {Client} from '../../../models/client';
 import {TypeConstants} from '../../../../constants/type_constants';
 import {MatStep, MatStepper, MatStepperNext, MatStepperPrevious} from '@angular/material/stepper';
-import {Event} from '../../../models/event';
+import {Event} from '../../../models/event.model';
 import {FormService} from '../../../services/form.service';
 import {NavigationService} from '../../../services/navigation.service';
 import {MenuConstants} from '../../../../constants/menu_constants';
@@ -33,15 +33,10 @@ import {ReservationPricing} from '../../../models/event-category-price';
 import {ReservationPrice} from '../../../models/reservation-price';
 import {ReservationPriceService} from '../../../services/res/reservation-price.service';
 import {PricingComponent} from './pricing/pricing.component';
-import {Lookups} from '../../../models/grid';
 import {CaseUtility} from '../../utilities/case-utilities';
-
-export interface PricingContext {
-  reservationRooms: ReservationRoom[];
-  reservationPrices: ReservationPrice[];
-  reservationPricing: ReservationPricing | null;
-  lookups: Lookups;
-}
+import {ReviewComponent} from './review/review.component';
+import {PricingContext, ReviewContext} from './reservation-contexts';
+import {ReservationSnake} from '../../../models/reservation.model';
 
 @Component({
   selector: 'app-page017',
@@ -62,6 +57,7 @@ export interface PricingContext {
     WidgetSelect1Component,
     WidgetReservationRoomGuestComponent,
     PricingComponent,
+    ReviewComponent,
   ],
   templateUrl: './page017.component.html',
   styleUrl: './page017.component.scss'
@@ -94,6 +90,12 @@ export class Page017Component extends PageBaseComponent {
     reservationPrices: [],
     reservationPricing: null,
     lookups: {}
+  };
+
+  reviewContext: ReviewContext = {
+    reservation: {} as ReservationSnake,
+    event: null,
+    pricingContext: this.pricingContext
   };
 
   constructor(
@@ -164,7 +166,6 @@ export class Page017Component extends PageBaseComponent {
             this.formGroup,
             this.reservationRooms
           );
-          console.log(this.reservationRooms);
           this.subscribeToRoomCount();
           this.componentLoaded = true;
         }
@@ -313,12 +314,17 @@ export class Page017Component extends PageBaseComponent {
   }
 
   canContinueAccommodation(): boolean {
-    return this.reservationRoomForms.every(
-      room =>
-        room.get('category_id')?.value &&
-        room.get('category_id')?.value !==
-        CategoryConstants.BASE_CATEGORY_GRADE_NOT_SELECTED
-    );
+    let valid = this.formGroup.get('contact_person_id')?.valid ?? false;
+
+    if (valid) {
+      valid = this.reservationRoomForms.every(
+        room =>
+          !!room.get('category_id')?.value &&
+          room.get('category_id')?.value !==
+          CategoryConstants.BASE_CATEGORY_GRADE_NOT_SELECTED
+      );
+    }
+    return valid;
   }
 
   onAccommodationContinue(): void {
@@ -360,18 +366,13 @@ export class Page017Component extends PageBaseComponent {
           this.reservationPricing = response.data;
           this.lookups = response.data.lookups ?? {};
 
-          console.log('response.data:', response.data);
-          console.log('PRICING:', this.reservationPricing);
-
           this.updatePricingContext();
-          console.log('PRICING_CONTEXT:', this.pricingContext);
 
           this.reservationPriceService.syncReservationPrices(
             this.formGroup,
             response.data
           );
           console.log('FORM:', this.formGroup.getRawValue());
-          console.log('LOOKUPS:', this.lookups);
         }
       },
       error: err => {
@@ -381,17 +382,17 @@ export class Page017Component extends PageBaseComponent {
     });
   }
 
-  // updatePricingContext(): void {
-  //   this.pricingContext = {
-  //     reservationRooms:
-  //       this.formGroup.get('reservation_rooms')?.getRawValue() ?? [],
-  //     reservationPrices: this.reservationPrices,
-  //     reservationPricing: this.reservationPricing,
-  //     lookups: this.lookups
-  //   };
-  //   console.log('PRICING_CONTEXT3', this.pricingContext);
-  // }
-  //
+  canContinuePricing(): boolean {
+    return this.canContinueAccommodation();
+  }
+
+  onPricingContinue(): void {
+    console.log('Pricing Continue clicked');
+    this.updatePricingContext();
+    this.updateReviewContext();
+    console.log('ReviewContext:', this.reviewContext);
+  }
+
   updatePricingContext(): void {
     this.pricingContext = {
       reservationRooms: CaseUtility.toCamelCase<ReservationRoom[]>(
@@ -401,8 +402,14 @@ export class Page017Component extends PageBaseComponent {
       reservationPricing: this.reservationPricing,
       lookups: this.lookups
     };
-
-    console.log('PRICING_CONTEXT3', this.pricingContext);
   }
 
+  updateReviewContext(): void {
+    console.log(this.selectedEvent);
+    this.reviewContext = {
+      reservation: this.formGroup.getRawValue(),
+      event: this.selectedEvent,
+      pricingContext: this.pricingContext
+    };
+  }
 }

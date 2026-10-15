@@ -124,7 +124,7 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 //       });
 //   }
 //
-//   breadcrumbClick(event: Event, menuId: string): void {
+//   breadcrumbClick(event: EventModel, menuId: string): void {
 //     event.preventDefault();
 //
 //     const menu = this.menuService.getMenuById(menuId);

@@ -21,7 +21,6 @@
         </mat-step>
 
         <mat-step label="Rooms and Guests">
-
           <h3>Rooms and Guests</h3>
           <div class="layout-width-md">
             <app-widget-autocomplete
@@ -93,24 +92,42 @@
         </mat-step>
 
         <mat-step label="Pricing">
-          <app-pricing
-            [pricingContext]="pricingContext">
-          </app-pricing>
+          <app-pricing [pricingContext]="pricingContext"></app-pricing>
+
           <div class="step-actions">
             <button mat-raised-button matStepperPrevious type="button">
               Back
             </button>
-
-              <button mat-raised-button
-                      matStepperNext
-                      color="primary"
-                      type="button"
-                      [disabled]="!canContinueAccommodation()"
-                      (click)="onAccommodationContinue()">
-                Continue
-              </button>
+            <button mat-raised-button
+                    matStepperNext
+                    color="primary"
+                    type="button"
+                    [disabled]="!canContinuePricing()"
+                    (click)="onPricingContinue()">
+              Continue
+            </button>
           </div>
         </mat-step>
+
+        <mat-step label="Review">
+          <app-review [reviewContext]="reviewContext">
+          </app-review>
+
+          <div class="step-actions">
+            <button mat-raised-button matStepperPrevious type="button">
+              Back
+            </button>
+            <button mat-raised-button
+                    matStepperNext
+                    color="primary"
+                    type="button"
+                    [disabled]="!canContinueAccommodation()"
+                    (click)="onAccommodationContinue()">
+              Complete Booking
+            </button>
+          </div>
+        </mat-step>
+
 
         <mat-step label="Review">
           <h3>Review Booking</h3>

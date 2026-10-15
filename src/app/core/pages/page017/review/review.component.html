@@ -1,0 +1,23 @@
+<div class="stepper-header">
+  <div>
+    <h3>Booking Review</h3>
+    <p>Review your booking details before completing the booking.</p>
+  </div>
+</div>
+
+
+
+@if (reviewContext?.event; as event) {
+  <mat-card class="app-card">
+    <mat-card-header>
+      <mat-card-title>Cruise</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="review-row">
+        <span class="review-label">Cruise</span>
+        <span>{{ event?.description }} ({{ event?.code }})</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+}

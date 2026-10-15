@@ -3,6 +3,7 @@
 @use 'styles/variables' as *;
 @use 'styles/themes' as theme;
 @use 'styles/toolbar' as *;
+@use 'styles/colors' as *;
 
 
 /***************************************************************
@@ -38,7 +39,7 @@
 .breadcrumb-current {
   text-decoration: none;
   //color: map.get(theme.$primary-palette, 60);
-  color: map.get(theme.$highlight-palette, 50);
+  color: $highlight-color; //map.get(theme.$highlight-palette, 50);
   font: 500 14px/20px Roboto, 'Helvetica Neue', sans-serif;
 }
 .breadcrumb-current-no-highlight {

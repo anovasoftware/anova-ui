@@ -1,13 +1,14 @@
-<div class="pricing-container">
-  <div class="pricing-header">
-    <div>
-      <h3>Pricing</h3>
-      <p>Review the calculated cruise fare before continuing.</p>
-    </div>
+<div class="stepper-header">
+  <div>
+    <h3>Pricing</h3>
+    <p>Review the calculated cruise fare before continuing.</p>
   </div>
+</div>
+
+<div class="pricing-container">
   @if (reservationPricing) {
     @for (room of reservationPricing.reservationRooms; track room.roomNumber) {
-      <mat-card class="room-card">
+      <mat-card class="app-card">
         <mat-card-header>
           @if (reservationPricing.reservationRooms.length > 1) {
             <mat-card-title>
@@ -41,16 +42,25 @@
                 <span class="amount">{{ price.price | currency:currency.code:'symbol':'1.2-2' }}</span>
               </div>
             }
+            <div class="pricing-row pricing-row-total">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span>Total</span>
+              <span class="amount">
+                {{ getTotal() | currency:reservationPricing.currency.code:'symbol':'1.2-2' }}
+              </span>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>
     }
-    <div class="pricing-total">
-      <span>Total</span>
-      <span>
-        {{getTotal() | currency:reservationPricing.currency.code:'symbol':'1.2-2'}}
-      </span>
-    </div>
+<!--    <div class="pricing-total">-->
+<!--      <span>Total</span>-->
+<!--      <span>-->
+<!--        {{ getTotal() | currency:reservationPricing.currency.code:'symbol':'1.2-2' }}-->
+<!--      </span>-->
+<!--    </div>-->
   } @else {
     <div class="no-pricing">
       Pricing has not been calculated.

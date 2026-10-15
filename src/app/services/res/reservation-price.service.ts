@@ -22,9 +22,6 @@ export class ReservationPriceService {
     const priceArray = prices as FormArray;
 
     priceArray.clear();
-console.log('reservationPricing:', reservationPricing);
-console.log('reservation_rooms:', reservationPricing.reservationRooms);
-console.log('reservationRooms:', (reservationPricing as any).reservationRooms);
     for (const roomPricing of reservationPricing.reservationRooms) {
       for (const guestPricing of roomPricing.reservationRoomGuests) {
         const ecp = guestPricing.eventCategoryPrice;

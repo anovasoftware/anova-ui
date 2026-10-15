@@ -4,9 +4,9 @@ import {CurrencyPipe, JsonPipe} from '@angular/common';
 import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
 import {Lookups} from '../../../../models/grid';
 import {LookupService} from '../../../../services/lookup.service';
-import {PricingContext} from '../page017.component';
 import {ReservationRoom} from '../../../../models/reservation-room';
 import {ReservationPrice} from '../../../../models/reservation-price';
+import {PricingContext} from '../reservation-contexts';
 
 @Component({
   selector: 'app-pricing',
@@ -31,10 +31,6 @@ export class PricingComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pricingContext']) {
-      console.log(
-        'PRICING COMPONENT - NEW CONTEXT:',
-        this.pricingContext
-      );
     }
   }
 
