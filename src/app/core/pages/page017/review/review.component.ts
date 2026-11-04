@@ -1,8 +1,9 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
 import {ReviewContext} from '../reservation-contexts';
 import {Event} from '../../../../models/event.model';
-import {JsonPipe} from '@angular/common';
+import {DatePipe, JsonPipe} from '@angular/common';
+import {MatDivider} from '@angular/material/list';
 
 @Component({
   selector: 'app-review',
@@ -13,6 +14,9 @@ import {JsonPipe} from '@angular/common';
     MatCardHeader,
     MatCardTitle,
     MatCardContent,
+    MatCardSubtitle,
+    DatePipe,
+    MatDivider,
   ],
   styleUrl: './review.component.scss'
 })

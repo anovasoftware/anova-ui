@@ -6,18 +6,79 @@
 </div>
 
 
+<div class="container-stepper">
+  @if (reviewContext?.event; as event) {
+    <mat-card class="app-card">
+      <mat-card-header>
+        <mat-card-title>Cruise Details</mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
 
-@if (reviewContext?.event; as event) {
-  <mat-card class="app-card">
-    <mat-card-header>
-      <mat-card-title>Cruise</mat-card-title>
-    </mat-card-header>
+      <mat-card-content>
+        <div class="review-row">
+          <span class="review-label">Cruise Name</span>
+          <span>{{ event.description }}</span>
+        </div>
 
-    <mat-card-content>
-      <div class="review-row">
-        <span class="review-label">Cruise</span>
-        <span>{{ event?.description }} ({{ event?.code }})</span>
-      </div>
-    </mat-card-content>
-  </mat-card>
-}
+        <div class="review-row">
+          <span class="review-label">Cruise Code</span>
+          <span>{{ event.code }}</span>
+        </div>
+
+        <div class="review-row">
+          <span class="review-label">Cruise Dates</span>
+          <span>
+            {{ event.eventStartDate | date:'MMM d, yyyy' }}
+            -
+            {{ event.eventEndDate | date:'MMM d, yyyy' }}
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+
+<div class="container-stepper">
+  @if (reviewContext?.event; as event) {
+    <mat-card class="app-card">
+      <mat-card-header>
+        <mat-card-title>Accommodation Details</mat-card-title>
+      </mat-card-header>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+
+<div class="container-stepper">
+  @if (reviewContext?.event; as event) {
+    <mat-card class="app-card">
+      <mat-card-header>
+        <mat-card-title>Guest Details</mat-card-title>
+      </mat-card-header>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+
+<div class="container-stepper">
+  @if (reviewContext?.event; as event) {
+    <mat-card class="app-card">
+      <mat-card-header>
+        <mat-card-title>Pricing Summary</mat-card-title>
+      </mat-card-header>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

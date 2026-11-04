@@ -8,4 +8,21 @@ mat-card.app-card {
   background-color: map.get(theme.$neutral-palette, 100);
   border-radius: 6px;
 
+  mat-card-header {
+    padding-bottom: 8px;
+  }
+
+  mat-card-title {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  mat-divider {
+    margin: 0 8px 8px;
+    border-top-color: map.get(theme.$neutral-palette, 90);
+  }
+
+  mat-card-content {
+    padding-top: 8px;
+  }
 }
