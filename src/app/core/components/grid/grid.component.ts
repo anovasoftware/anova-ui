@@ -26,6 +26,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {Column, Grid} from '../../../models/grid';
 import {MatInput} from '@angular/material/input';
+import {MatIcon} from '@angular/material/icon';
 
 interface GridCellChange {
   recordId: string;
@@ -66,7 +67,8 @@ export interface GridAddEvent {
     CommonModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatInput
+    MatInput,
+    MatIcon
   ],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
@@ -198,6 +200,7 @@ export class GridComponent implements OnChanges {
 //     this.openGridRecord(grid, 'new', 'create', null);
 //   }
   onAddClick(grid: any): void {
+    console.log(grid);
     const event: GridAddEvent = {
       grid,
       cancel: false
@@ -208,6 +211,10 @@ export class GridComponent implements OnChanges {
     if (!event.cancel) {
       this.openGridRecord(grid, 'new', 'create', null);
     }
+  }
+
+  onImportClick(grid: any): void {
+    console.log('under construction');
   }
 
   onRowClick(grid: any, row: any): void {

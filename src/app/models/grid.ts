@@ -39,6 +39,7 @@ export interface Grid {
   columns: Column[];
   rows: Row[];
   canCreate: boolean;
+  canImport: boolean;
   displayPk: boolean;
   lookups?: Lookups;
   createButtonLabel?:string;

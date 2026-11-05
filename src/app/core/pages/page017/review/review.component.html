@@ -38,8 +38,9 @@
   }
 </div>
 
+
 <div class="container-stepper">
-  @if (reviewContext?.event; as event) {
+  @if (reviewContext?.pricingContext; as pricing) {
     <mat-card class="app-card">
       <mat-card-header>
         <mat-card-title>Accommodation Details</mat-card-title>
@@ -48,10 +49,47 @@
       <mat-divider></mat-divider>
 
       <mat-card-content>
+        @for (room of pricing.reservationRooms; track room.orderBy) {
+          <div class="room-review">
+            @if (pricing.reservationRooms.length > 1) {
+            <div class="room-header">
+              <strong>Room {{ $index + 1 }}</strong>
+            </div>
+            }
+            <div class="review-row">
+              <span class="review-label">Cabin Grade</span>
+              <span title="{{ room.categoryId }}">
+                {{ lookupService.getDescription(lookups, 'category', room.categoryId) }}
+              </span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Adults</span>
+              <span>{{ room.adultCount }}</span>
+            </div>
+            @if (room.childCount > 0) {
+              <div class="review-row">
+                <span class="review-label">Children</span>
+                <span>{{ room.childCount }}</span>
+              </div>
+            }
+            @if (room.infantCount > 0) {
+              <div class="review-row">
+                <span class="review-label">Infants</span>
+                <span>{{ room.infantCount }}</span>
+              </div>
+            }
+          </div>
+
+
+          @if (!$last) {
+            <mat-divider></mat-divider>
+          }
+        }
       </mat-card-content>
     </mat-card>
   }
 </div>
+
 
 <div class="container-stepper">
   @if (reviewContext?.event; as event) {

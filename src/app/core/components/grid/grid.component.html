@@ -23,44 +23,56 @@
       <div class="grid-header">
         <h3 [matTooltip]="gridId" class="grid-title">{{ grid.title }}</h3>
         <div class="grid-actions">
-          <button
-            *ngIf="grid.canCreate"
-            mat-raised-button
-            color="primary"
-            type="button"
-            (click)="onAddClick(grid)">
-            {{ grid.createButtonLabel }}
-          </button>
+          @if (grid.canImport) {
+            <button
+              mat-stroked-button
+              color="primary"
+              type="button"
+              (click)="onImportClick(grid)">
+              <mat-icon>upload_file</mat-icon>
+              Import
+            </button>
+          }
 
-          <button
-            *ngIf="hasPendingChanges()"
-            mat-raised-button
-            color="accent"
-            type="button"
-            (click)="onSaveChanges(grid)">
-            Save
-          </button>
+          @if (grid.canCreate) {
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="onAddClick(grid)">
+              {{ grid.createButtonLabel }}
+            </button>
+          }
+
+          @if (hasPendingChanges()) {
+            <button
+              mat-raised-button
+              color="accent"
+              type="button"
+              (click)="onSaveChanges(grid)">
+              Save
+            </button>
+          }
+
         </div>
-        <!--        <div class="grid-actions">-->
         <!--          <button-->
         <!--            *ngIf="grid.canCreate"-->
         <!--            mat-raised-button-->
         <!--            color="primary"-->
         <!--            type="button"-->
         <!--            (click)="onAddClick(grid)">-->
-        <!--            Add-->
+        <!--            {{ grid.createButtonLabel }}-->
         <!--          </button>-->
-        <!--          <button-->
-        <!--            *ngIf="hasCheckboxChanges()"-->
-        <!--            mat-raised-button-->
-        <!--            color="accent"-->
-        <!--            type="button"-->
-        <!--            (click)="onSaveCheckboxChanges(grid)">-->
-        <!--            Save-->
-        <!--          </button>-->
-        <!--        </div>-->
-      </div>
 
+        <button
+          *ngIf="hasPendingChanges()"
+          mat-raised-button
+          color="accent"
+          type="button"
+          (click)="onSaveChanges(grid)">
+          Save
+        </button>
+      </div>
       <div class="lookup-row">
         <mat-form-field
           *ngFor="let entry of grid.lookups | keyvalue"
@@ -137,9 +149,9 @@
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="grid.displayedColumns"></tr>
           <tr mat-row
-             *matRowDef="let row; columns: grid.displayedColumns;"
-             class="clickable-row"
-             (click)="onRowClick(grid, row)">
+              *matRowDef="let row; columns: grid.displayedColumns;"
+              class="clickable-row"
+              (click)="onRowClick(grid, row)">
           </tr>
         </table>
       </div>

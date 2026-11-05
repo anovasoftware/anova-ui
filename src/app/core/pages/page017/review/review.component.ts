@@ -4,6 +4,8 @@ import {ReviewContext} from '../reservation-contexts';
 import {Event} from '../../../../models/event.model';
 import {DatePipe, JsonPipe} from '@angular/common';
 import {MatDivider} from '@angular/material/list';
+import {LookupService} from '../../../../services/lookup.service';
+import {Lookups} from '../../../../models/grid';
 
 @Component({
   selector: 'app-review',
@@ -20,8 +22,17 @@ import {MatDivider} from '@angular/material/list';
   ],
   styleUrl: './review.component.scss'
 })
-export class ReviewComponent{
+export class ReviewComponent {
   @Input() reviewContext: ReviewContext | null = null;
+
+  constructor(
+    public lookupService: LookupService
+  ) {
+  }
+
+  get lookups(): Lookups {
+    return this.reviewContext!.pricingContext.lookups;
+  }
 
   // ngOnChanges(changes: SimpleChanges): void {
   //   if (changes['reviewContext']) {
